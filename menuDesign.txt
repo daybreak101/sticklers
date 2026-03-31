@@ -1,0 +1,42 @@
+1. Configurable product system
+
+Base Sandwich Item example
+Turkey Breast
+{
+    name: "Turkey Breast",
+    desciption: "Turkey and swiss, your choice of toppings",
+    basePrice: 7.99,
+    categoryId: "sandwiches",
+    imageUrl: "...",
+    isAvailable: true
+}
+
+Modifiers
+Add a field:
+    modifierGroups: ["bread", "extras", "sauces"]
+
+Modifier Groups collection
+Example: bread
+{
+    name: "Choose Bread",
+    type: "single",
+    required: true,
+    options: [
+        { name: "French Bread", price: 0 },
+        { name: "Wheat Bread", price: 0 },
+        { name: "Gluten-Free Bread", price: 0 },
+        { name: "Spinach Wrap", price: 0 },
+    ]
+}
+
+Example: extras
+{
+    name: "Extras",
+    type: "multiple",
+    required: false,
+    options: [
+        { name: "Extra Cheese", price: 1.99}
+        { name: "Extra Meat", price: 3.99 }
+        { name: "Avocado" , price: 1.99 }
+    ]
+}
