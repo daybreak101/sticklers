@@ -1,0 +1,13 @@
+Check salad toppings
+Update sandwich modifiers from names to ids
+Add order to modifiers
+Rest of the menu:
+  - Breakfast
+  - Soups
+  - Sides
+  - Desserts
+  - Beverages (coolers, specialty bottled soda, fountain)
+  - Coffees and Teas
+  - Ice Cream
+  - Platters
+  - Combos

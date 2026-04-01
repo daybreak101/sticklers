@@ -1,0 +1,371 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import dotenv from "dotenv";
+dotenv.config();
+
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const sandwiches = {
+  name: "Oven Toasted Sandwiches",
+  description:
+    "Sandwiches are Served Oven Toasted on Freshly Baked French or Whole Wheat rolls with Mayo, Spicy Brown Mustard, Hot Peppers, Lettuce, Tomato, Onion, Pickles, Oil and Italian Seasonings",
+  order: 0,
+  items: [
+    {
+      itemId: "tba_sandwich",
+      name: "Turkey Bacon Avocado Sandwich",
+      description:
+        "Lean Pan-Roasted Turkey Breast, Bacon, Fresh Avocado & Swiss Cheese with your choice of toppings.",
+      basePrice: 11.8,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Turkey"],
+        cheese: ["Swiss"],
+        extras: ["Avocado"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 10,
+    },
+    {
+      itemId: "ty_sandwich",
+      name: "Turkey Breast Sandwich",
+      description:
+        "99% Lean, Pan Roasted Turkey Breast & Swiss Cheese with your choice of toppings.",
+      basePrice: 10.85,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Turkey"],
+        cheese: ["Swiss"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 20,
+    },
+    {
+      itemId: "h_sandwich",
+      name: "Honey Baked Ham Sandwich",
+      description: "98% lean honey baked ham and Swiss.",
+      basePrice: 10.85,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Ham"],
+        cheese: ["Swiss"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 30,
+    },
+    {
+      itemId: "tj_sandwich",
+      name: "Traffic Jam Sandwich",
+      description:
+        "Hard Salami, Turkey Breast, Honey Baked Ham, Roast Beef & Swiss.",
+      basePrice: 11.2,
+      modifierGroupIds: ["bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Salami", "Turkey", "Ham", "Roast Beef"],
+        cheese: ["Swiss"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 40,
+    },
+    {
+      itemId: "itl_sandwich",
+      name: "Italian Sandwich",
+      description:
+        "Spicy Capicola, Mortadella, Hard Salami, Pepperoni & Provolone.",
+      basePrice: 11.2,
+      modifierGroupIds: ["bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Salami", "Mortadella", "Pepperoni", "Capicola"],
+        cheese: ["Provolone"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 50,
+    },
+    {
+      itemId: "mb_sandwich",
+      name: "Italian Sandwich",
+      description:
+        "Four Meatballs & Marinara & Provolone. (Three Meatballs for Half-Sandwich)",
+      basePrice: 9.99,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Meatballs"],
+        cheese: ["Provolone"],
+        extras: ["Marinara"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 60,
+    },
+    {
+      itemId: "blt_sandwich",
+      name: "BLT Sandwich",
+      description: "Bacon, Lettuce, Tomato & Swiss",
+      basePrice: 9.99,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Bacon"],
+        cheese: ["Swiss"],
+        extras: ["Lettuce", "Tomato"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 70,
+    },
+    {
+      itemId: "rb_sandwich",
+      name: "Roast Beef Sandwich",
+      description: "97% Lean, Oven Roasted Black Angus Beef & Provolone.",
+      basePrice: 11.0,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Roast Beef"],
+        cheese: ["Provolone"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 80,
+    },
+    {
+      itemId: "tuna_sandwich",
+      name: "Tuna Salad Sandwich",
+      description: "Albacore Tuna, Celery, Mayo, Seasoning & Swiss.",
+      basePrice: 10.85,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Tuna"],
+        cheese: ["Swiss"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 90,
+    },
+    {
+      itemId: "cs_sandwich",
+      name: "Chicken Salad Sandwich",
+      description:
+        "All-Natural White Meat Chicken, Celery, Mayo, Seasoning & Provolone.",
+      basePrice: 9.99,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Chicken Salad"],
+        cheese: ["Provolone"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 100,
+    },
+    {
+      itemId: "veggie_sandwich",
+      name: "Vegetarian Sandwich",
+      description:
+        "Green Peppers, Mushrooms, Swiss, Provolone & American Cheese.",
+      basePrice: 9.1,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: [],
+        cheese: ["Swiss", "Provolone", "American"],
+        extras: ["Green Peppers", "Mushrooms"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 110,
+    },
+    {
+      itemId: "tcb_sandwich",
+      name: "Turkey Cheddar Bacon Sandwich",
+      description: "99% Lean Pan-Roasted Turkey Breast, Cheddar & Bacon.",
+      basePrice: 11.8,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Turkey", "Bacon"],
+        cheese: ["Cheddar"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 120,
+    },
+    {
+      itemId: "cbr_sandwich",
+      name: "Chicken Bacon Ranch Sandwich",
+      description: "All-Natural White Meat Chicken, Bacon, Ranch & Cheddar.",
+      basePrice: 10.5,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Chicken", "Bacon"],
+        cheese: ["Cheddar"],
+        extras: ["Ranch"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 130,
+    },
+    {
+      itemId: "buff_sandwich",
+      name: "Chicken Buffalo Sandwich",
+      description:
+        "All-Natural White Meat Chicken with Buffalo Sauce and Cheddar.",
+      basePrice: 10.5,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Chicken"],
+        cheese: ["Cheddar"],
+        extras: ["Buffalo"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 140,
+    },
+    {
+      itemId: "pas_sandwich",
+      name: "Pastrami Sandwich",
+      description: "Pastrami and Swiss.",
+      basePrice: 10.1,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Pastrami"],
+        cheese: ["Swiss"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 150,
+    },
+    {
+      itemId: "az_sandwich",
+      name: "Arizona Club Sandwich",
+      description: "Chicken Salad, Bacon, Avocado and Pepper Jack Cheese",
+      basePrice: 11.8,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Chicken Salad", "Bacon"],
+        cheese: ["Pepper Jack"],
+        extras: ["Avocado"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 160,
+    },
+    {
+      itemId: "blta_sandwich",
+      name: "BLT Avocado Sandwich",
+      description: "Bacon, Lettuce, Tomato, Avocado & Swiss",
+      basePrice: 10.99,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Bacon"],
+        cheese: ["Swiss"],
+        extras: ["Lettuce", "Tomato", "Avocado"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 170,
+    },
+    {
+      itemId: "gc_sandwich",
+      name: "Grilled Cheese Sandwich",
+      description: "Classic Melted Cheddar Cheese Sandwich",
+      basePrice: 5.75,
+      modifierGroupIds: ["bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: [],
+        cheese: ["Cheddar"],
+        extras: [],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 180,
+    },
+    {
+      itemId: "parm_sandwich",
+      name: "Chicken Parm Sandwich",
+      description:
+        "All-Natural White Meat Chicken with Marinara Sauce and Provolone",
+      basePrice: 5.75,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: ["Chicken"],
+        cheese: ["Provolone"],
+        extras: ["Marinara"],
+        bread: ["French"],
+      },
+      status: "available",
+      order: 190,
+    },
+    {
+      itemId: "pick2_sandwich",
+      name: "Pick Two! Sandwich",
+      description:
+        "Pick Two Meats: Turkey, Honey Baked Ham, Roast Beef, and/or Hard Salami with Provolone.",
+      basePrice: 10.85,
+      modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
+      defaults: {
+        size: ["Full"],
+        protein: [],
+        cheese: ["Provolone"],
+        extras: [],
+        bread: ["French"],
+      },
+      constraints: {
+        protein: {
+          minSelect: 2,
+          maxSelect: null,
+        },
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 2,
+          extraItemPrice: 1.5,
+        },
+      },
+      status: "available",
+      order: 200,
+    },
+  ],
+};
+
+async function seed() {
+  await setDoc(doc(db, "menuCategories", "sandwiches"), sandwiches);
+  console.log("Menu seeded");
+}
+
+seed();

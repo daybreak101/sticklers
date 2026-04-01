@@ -58,3 +58,29 @@ Strategies to limit read requests
       Firestore security rules:
             allow read: if request.auth != null;
 
+
+
+sandwiches
+turkey
+ham
+roast beef
+pastrami
+tuna salad
+chicken salad
+meatball
+
+- pick2
+grilled cheese
+
+blt
+blta
+tba
+tcb
+cbr
+chx buffalo
+chx parm
+
+az club
+tj
+italian
+veggie
