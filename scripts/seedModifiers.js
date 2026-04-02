@@ -130,6 +130,7 @@ const saladToppingsModifiers = {
     { id: "peas", name: "Peas", price: 0, status: "available" },
     { id: "black_olives", name: "Black Olives", price: 0, status: "available" },
     { id: "artichoke_hearts", name: "Artichoke Hearts", price: 0, status: "available" },
+    { id: "radish", name: "Radish", price: 0, status: "available" },
 
     { id: "bacon_bits", name: "Bacon Bits", price: 0, status: "available" },
     { id: "pepperoni", name: "Pepperoni", price: 0, status: "available" },
@@ -147,6 +148,7 @@ const saladToppingsModifiers = {
     { id: "raisins", name: "Raisins", price: 0, status: "available" },
     { id: "cranberries", name: "Cranberries", price: 0, status: "available" },
     { id: "chow_mein_noodles", name: "Chow Mein Noodles", price: 0, status: "available" },
+    { id: "croutons", name: "Croutons", price: 0, status: "available" },
   ],
 };
 
