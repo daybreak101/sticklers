@@ -16,7 +16,7 @@ const iced = {
     id: "iced_coffee",
     name: "Iced Coffee",
     type: "single",
-    options: [
+    items: [
       {
         id: "iced_coffee",
         name: "Iced Coffee",
