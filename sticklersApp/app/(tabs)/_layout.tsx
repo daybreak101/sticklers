@@ -6,7 +6,7 @@ export default function TabsLayout() {
     <Tabs screenOptions={{ 
       headerShown: false }}>
       <Tabs.Screen
-        name="index"
+        name="menu"
         options={{
           tabBarLabel: "Menu",
           tabBarIcon: ({ color, size }) => (

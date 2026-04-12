@@ -1,0 +1,53 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebaseConfig";
+import { Category } from "@/types/menu";
+
+const STORAGE_KEY = "menu_categories";
+
+export async function getMenuCategories() {
+  try {
+   // await AsyncStorage.removeItem(STORAGE_KEY);
+    const CACHE_TTL = 1000 * 60 * 10; // 10 min
+
+    // 1. Check cache
+    const cached = await AsyncStorage.getItem(STORAGE_KEY);
+
+    if (cached) {
+      const parsed = JSON.parse(cached);
+
+      const isValid =
+        parsed?.timestamp && parsed?.data && Array.isArray(parsed.data);
+
+      if (isValid) {
+        const isFresh = Date.now() - parsed.timestamp < CACHE_TTL;
+
+        if (isFresh) {
+          return parsed.data; 
+        }
+      }
+    }
+
+    // 2. Fetch from Firestore
+    const snapshot = await getDocs(collection(db, "menuCategories"));
+
+    const data = snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as Category,
+    ).sort((a, b) => a.order - b.order);
+
+    // 3. Save to storage
+    await AsyncStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ timestamp: Date.now(), data }),
+    );
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+    return [];
+  }
+}

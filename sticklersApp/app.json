@@ -8,6 +8,16 @@
     "scheme": "sticklersapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
+    "extra": {
+      "firebaseApiKey": "AIzaSyCFEqM43LEJnEUvS1n2rAfeRgOWBKfEWAo",
+      "firebaseAuthDomain": "sticklers.firebaseapp.com",
+      "firebaseProjectId": "sticklers",
+      "firebaseStorageBucket": "sticklers.firebasestorage.app",
+      "firebaseMessagingSenderId": "1093354481594",
+      "firebaseAppId": "1:1093354481594:web:415c4e7ee209b1ab4b9f83"
+    },
+
     "ios": {
       "supportsTablet": true
     },
