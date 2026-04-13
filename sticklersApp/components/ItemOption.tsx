@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     fontWeight: 900,
     textAlign: "center",
     paddingBottom: 5,
+    paddingHorizontal: 5,
   },
   price: {
     color: "white",
