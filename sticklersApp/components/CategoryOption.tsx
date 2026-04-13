@@ -10,22 +10,25 @@ import React, { useEffect } from "react";
 import { Category } from "@/types/menu";
 import { ThemedText } from "./defaults/themed-text";
 import { useRouter } from "expo-router";
+import { images } from "@/constants/images";
 
 export default function CategoryOption({ category }: { category: Category }) {
   const router = useRouter();
+  const imageKey: string | undefined = category.image;
+
   return (
     <Pressable
       style={styles.container}
       onPress={() =>
         router.push({
-          pathname: "/menu/[id]",
-          params: { id: category.id },
+          pathname: "/menu/[categoryId]",
+          params: { categoryId: category.id },
         })
       }
     >
       <View style={styles.imageWrapper}>
         <ImageBackground
-          source={require("../assets/sandwiches.png")}
+          source={images[imageKey ?? "logo"]}
           style={styles.image}
         >
           <View style={styles.textBackground}>
@@ -47,7 +50,7 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     borderRadius: 10,
-    overflow: "hidden", // 🔥 clips image properly
+    overflow: "hidden",
   },
 
   image: {

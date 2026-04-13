@@ -22,4 +22,5 @@ export type Item = {
     defaults?: any;
     order: number;
     status: "available" | "sold-out" | "hidden";
+    image?: string;
 }

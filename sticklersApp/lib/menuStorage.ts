@@ -5,10 +5,10 @@ import { Category } from "@/types/menu";
 
 const STORAGE_KEY = "menu_categories";
 
-export async function getMenuCategories() {
+export async function getMenuCategories(): Promise<Category[]> {
   try {
    // await AsyncStorage.removeItem(STORAGE_KEY);
-    const CACHE_TTL = 1000 * 60 * 10; // 10 min
+    const CACHE_TTL = 1000 * 60 * 100; // 10 min //TODO: reset this
 
     // 1. Check cache
     const cached = await AsyncStorage.getItem(STORAGE_KEY);

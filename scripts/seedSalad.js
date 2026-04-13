@@ -16,6 +16,7 @@ const salads = {
   name: "Salads",
   description: "Salads are a great way to start your day.",
   order: 10,
+  image: "salads",
   items: [
     {
       itemId: "sm_salad",

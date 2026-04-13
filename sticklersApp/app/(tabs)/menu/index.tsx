@@ -25,7 +25,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={globalStyles.safeArea}>
       <ThemedView style={globalStyles.page}>
-        <ThemedText style={styles.title}>CATEGORIES</ThemedText>
+        <ThemedText style={[globalStyles.title, { paddingTop: 10, paddingHorizontal: 10 }]}>CATEGORIES</ThemedText>
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
@@ -36,11 +36,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  title: {
-    paddingLeft: 10,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-});

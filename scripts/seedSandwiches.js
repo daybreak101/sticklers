@@ -13,14 +13,15 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const sandwiches = {
-  name: "Oven Toasted Sandwiches",
+  name: "Oven Toasted Sandwich",
   description:
     "Sandwiches are Served Oven Toasted on Freshly Baked French or Whole Wheat rolls with Mayo, Spicy Brown Mustard, Hot Peppers, Lettuce, Tomato, Onion, Pickles, Oil and Italian Seasonings",
   order: 0,
+  image: "sandwiches",
   items: [
     {
       itemId: "tba_sandwich",
-      name: "Turkey Bacon Avocado Sandwich",
+      name: "Turkey Bacon Avocado",
       description:
         "Lean Pan-Roasted Turkey Breast, Bacon, Fresh Avocado & Swiss Cheese with your choice of toppings.",
       basePrice: 11.8,
@@ -37,7 +38,7 @@ const sandwiches = {
     },
     {
       itemId: "ty_sandwich",
-      name: "Turkey Breast Sandwich",
+      name: "Turkey Breast",
       description:
         "99% Lean, Pan Roasted Turkey Breast & Swiss Cheese with your choice of toppings.",
       basePrice: 10.85,
@@ -54,7 +55,7 @@ const sandwiches = {
     },
     {
       itemId: "h_sandwich",
-      name: "Honey Baked Ham Sandwich",
+      name: "Honey Baked Ham",
       description: "98% lean honey baked ham and Swiss.",
       basePrice: 10.85,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -70,7 +71,7 @@ const sandwiches = {
     },
     {
       itemId: "tj_sandwich",
-      name: "Traffic Jam Sandwich",
+      name: "Traffic Jam",
       description:
         "Hard Salami, Turkey Breast, Honey Baked Ham, Roast Beef & Swiss.",
       basePrice: 11.2,
@@ -84,10 +85,11 @@ const sandwiches = {
       },
       status: "available",
       order: 40,
+      image: "trafficJam"
     },
     {
       itemId: "itl_sandwich",
-      name: "Italian Sandwich",
+      name: "Italian",
       description:
         "Spicy Capicola, Mortadella, Hard Salami, Pepperoni & Provolone.",
       basePrice: 11.2,
@@ -104,7 +106,7 @@ const sandwiches = {
     },
     {
       itemId: "mb_sandwich",
-      name: "Italian Sandwich",
+      name: "Meatball",
       description:
         "Four Meatballs & Marinara & Provolone. (Three Meatballs for Half-Sandwich)",
       basePrice: 9.99,
@@ -121,7 +123,7 @@ const sandwiches = {
     },
     {
       itemId: "blt_sandwich",
-      name: "BLT Sandwich",
+      name: "BLT",
       description: "Bacon, Lettuce, Tomato & Swiss",
       basePrice: 9.99,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -137,7 +139,7 @@ const sandwiches = {
     },
     {
       itemId: "rb_sandwich",
-      name: "Roast Beef Sandwich",
+      name: "Roast Beef",
       description: "97% Lean, Oven Roasted Black Angus Beef & Provolone.",
       basePrice: 11.0,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -153,7 +155,7 @@ const sandwiches = {
     },
     {
       itemId: "tuna_sandwich",
-      name: "Tuna Salad Sandwich",
+      name: "Tuna Salad",
       description: "Albacore Tuna, Celery, Mayo, Seasoning & Swiss.",
       basePrice: 10.85,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -169,7 +171,7 @@ const sandwiches = {
     },
     {
       itemId: "cs_sandwich",
-      name: "Chicken Salad Sandwich",
+      name: "Chicken Salad",
       description:
         "All-Natural White Meat Chicken, Celery, Mayo, Seasoning & Provolone.",
       basePrice: 9.99,
@@ -186,7 +188,7 @@ const sandwiches = {
     },
     {
       itemId: "veggie_sandwich",
-      name: "Vegetarian Sandwich",
+      name: "Vegetarian",
       description:
         "Green Peppers, Mushrooms, Swiss, Provolone & American Cheese.",
       basePrice: 9.1,
@@ -203,7 +205,7 @@ const sandwiches = {
     },
     {
       itemId: "tcb_sandwich",
-      name: "Turkey Cheddar Bacon Sandwich",
+      name: "Turkey Cheddar Bacon",
       description: "99% Lean Pan-Roasted Turkey Breast, Cheddar & Bacon.",
       basePrice: 11.8,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -219,7 +221,7 @@ const sandwiches = {
     },
     {
       itemId: "cbr_sandwich",
-      name: "Chicken Bacon Ranch Sandwich",
+      name: "Chicken Bacon Ranch",
       description: "All-Natural White Meat Chicken, Bacon, Ranch & Cheddar.",
       basePrice: 10.5,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -235,7 +237,7 @@ const sandwiches = {
     },
     {
       itemId: "buff_sandwich",
-      name: "Chicken Buffalo Sandwich",
+      name: "Chicken Buffalo",
       description:
         "All-Natural White Meat Chicken with Buffalo Sauce and Cheddar.",
       basePrice: 10.5,
@@ -252,7 +254,7 @@ const sandwiches = {
     },
     {
       itemId: "pas_sandwich",
-      name: "Pastrami Sandwich",
+      name: "Pastrami",
       description: "Pastrami and Swiss.",
       basePrice: 10.1,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -268,7 +270,7 @@ const sandwiches = {
     },
     {
       itemId: "az_sandwich",
-      name: "Arizona Club Sandwich",
+      name: "Arizona Club",
       description: "Chicken Salad, Bacon, Avocado and Pepper Jack Cheese",
       basePrice: 11.8,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -284,7 +286,7 @@ const sandwiches = {
     },
     {
       itemId: "blta_sandwich",
-      name: "BLT Avocado Sandwich",
+      name: "BLT Avocado",
       description: "Bacon, Lettuce, Tomato, Avocado & Swiss",
       basePrice: 10.99,
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
@@ -300,7 +302,7 @@ const sandwiches = {
     },
     {
       itemId: "gc_sandwich",
-      name: "Grilled Cheese Sandwich",
+      name: "Grilled Cheese",
       description: "Classic Melted Cheddar Cheese Sandwich",
       basePrice: 5.75,
       modifierGroupIds: ["bread", "protein", "cheese", "extras"],
@@ -316,7 +318,7 @@ const sandwiches = {
     },
     {
       itemId: "parm_sandwich",
-      name: "Chicken Parm Sandwich",
+      name: "Chicken Parm",
       description:
         "All-Natural White Meat Chicken with Marinara Sauce and Provolone",
       basePrice: 5.75,
@@ -333,7 +335,7 @@ const sandwiches = {
     },
     {
       itemId: "pick2_sandwich",
-      name: "Pick Two! Sandwich",
+      name: "Pick Two!",
       description:
         "Pick Two Meats: Turkey, Honey Baked Ham, Roast Beef, and/or Hard Salami with Provolone.",
       basePrice: 10.85,

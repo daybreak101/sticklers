@@ -9,4 +9,9 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     padding: 1,
   },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
 });
