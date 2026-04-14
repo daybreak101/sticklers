@@ -51,5 +51,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    fontWeight: 300,
   }
 })
