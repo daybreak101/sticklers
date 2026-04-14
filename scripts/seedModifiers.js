@@ -16,7 +16,7 @@ const breadModifiers = {
   id: "bread",
   name: "Bread",
   type: "single",
-  items: [
+  options: [
     { id: "french", name: "French", price: 0, status: "available" },
     { id: "wheat", name: "Wheat", price: 0, status: "available" },
     { id: "gluten_free", name: "Gluten-Free", price: 0, status: "available" },
