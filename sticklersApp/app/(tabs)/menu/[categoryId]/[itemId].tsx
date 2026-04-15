@@ -1,5 +1,5 @@
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
@@ -8,10 +8,15 @@ import { useLocalSearchParams } from "expo-router";
 import { getMenuCategories } from "@/lib/menuStorage";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
+import ModifiersList from "@/components/ModifiersList";
+import { SelectedModifiers } from "@/types/cart";
+
 
 export default function ItemPage() {
-  const [item, setItem] = React.useState<Item | null>(null);
-  const [category, setCategory] = React.useState<Category | null>(null);
+  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>({});
+
+  const [item, setItem] = useState<Item | null>(null);
+  const [category, setCategory] = useState<Category | null>(null);
   const { categoryId, itemId } = useLocalSearchParams();
 
   useEffect(() => {
@@ -32,19 +37,26 @@ export default function ItemPage() {
 
   return (
     <SafeAreaView style={globalStyles.safeArea}>
-      <ThemedView style={[globalStyles.page, { position: "relative" }]}>
-        <ImageBackground
-          source={images[imageKey ?? "logo"]}
-          style={styles.image}
-          resizeMode="cover"
-        ></ImageBackground>
-        <ThemedText style={[globalStyles.title, styles.title]}>
-          {item.name}
-        </ThemedText>
-        <ThemedText style={styles.description}>{item.description}</ThemedText>
-        <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>
+      <ThemedView
+        style={[
+          globalStyles.page,
+          { position: "relative", justifyContent: "space-between" },
+        ]}
+      >
+        <ScrollView>
+          <ImageBackground
+            source={images[imageKey ?? "logo"]}
+            style={styles.image}
+            resizeMode="cover"
+          ></ImageBackground>
+          <ThemedText style={[globalStyles.title, styles.title]}>
+            {item.name}
+          </ThemedText>
+          <ThemedText style={styles.description}>{item.description}</ThemedText>
+          <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>
+          <ModifiersList selectedModifiers={selectedModifiers} item={item} setSelectedModifiers={setSelectedModifiers} />
+        </ScrollView>
 
-        {/*  */}
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Add to Order</Text>

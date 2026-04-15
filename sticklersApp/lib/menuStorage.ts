@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
-import { Category } from "@/types/menu";
+import { Category, ModifierGroup } from "@/types/menu";
 
 const STORAGE_KEY = "menu_categories";
 
@@ -53,7 +53,7 @@ export async function getMenuCategories(): Promise<Category[]> {
 }
 
 const MODIFIER_KEY = "menu_modifiers";
-export async function getModifierGroups(): Promise<Category[]> {
+export async function getModifierGroups(): Promise<ModifierGroup[]> {
   try {
    // await AsyncStorage.removeItem(STORAGE_KEY);
     const CACHE_TTL = 1000 * 60 * 100; // 10 min //TODO: reset this
@@ -84,18 +84,18 @@ export async function getModifierGroups(): Promise<Category[]> {
         ({
           id: doc.id,
           ...doc.data(),
-        }) as Category,
-    ).sort((a, b) => a.order - b.order);
+        }) as ModifierGroup,
+    )//.sort((a, b) => a.order - b.order);
 
     // 3. Save to storage
     await AsyncStorage.setItem(
-      STORAGE_KEY,
+      MODIFIER_KEY,
       JSON.stringify({ timestamp: Date.now(), data }),
     );
 
     return data;
   } catch (err) {
-    console.error("Error fetching categories:", err);
+    console.error("Error fetching modifiers:", err);
     return [];
   }
 }

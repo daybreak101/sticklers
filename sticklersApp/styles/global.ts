@@ -14,4 +14,13 @@ export const globalStyles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
   },
+  themeRed: {
+    color: "rgba(104, 33, 29)"
+  },
+  themeYellow: {
+    color: "rgba(255, 244, 5)"
+  },
+  themeBlack: {
+    color: "rgba(1, 1, 0)"
+  }
 });
