@@ -1,4 +1,4 @@
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/defaults/themed-view";
@@ -14,6 +14,7 @@ import { SelectedModifiers } from "@/types/cart";
 
 export default function ItemPage() {
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>({});
+  const [quantity, setQuantity] = useState(1);
 
   const [item, setItem] = useState<Item | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
@@ -58,8 +59,10 @@ export default function ItemPage() {
         </ScrollView>
 
         <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Add to Order</Text>
+          <View style={[styles.button, { flexDirection: "row", gap: 10 }]}>
+            <Pressable onPress={() => setQuantity(quantity - 1)}><Text style={styles.buttonText}>-</Text></Pressable>
+            <Text style={styles.buttonText}>{quantity}</Text>
+            <Pressable onPress={() => setQuantity(quantity + 1)}><Text style={styles.buttonText}>+</Text></Pressable>
           </View>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Add to Order</Text>
