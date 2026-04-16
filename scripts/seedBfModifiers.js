@@ -16,6 +16,7 @@ const bagelModifiers = {
   id: "bagel",
   name: "Bagel",
   type: "single",
+  priceType: "add",
   options: [
     {
       id: "plain",
@@ -81,6 +82,7 @@ const creamCheeseModifiers = {
   id: "cream_cheese",
   name: "Cream Cheese",
   type: "single",
+  priceType: "add",
   options: [
     { id: "cream_cheese", name: "Cream Cheese", price: 0, status: "available" },
     {
@@ -111,6 +113,7 @@ const breakfastProteinModifiers = {
   id: "breakfast_protein",
   name: "Meats",
   type: "multi",
+  priceType: "add",
   options: [
     { id: "turkey", name: "Turkey", price: 0, status: "available" },
     { id: "ham", name: "Ham", price: 0, status: "available" },
@@ -136,6 +139,7 @@ const breakfastExtrasModifiers = {
   id: "breakfast_extras",
   name: "Extras",
   type: "multi",
+  priceType: "add",
   options: [
     {
       id: "strawberry_jelly",
@@ -165,6 +169,7 @@ const breakfastSidesModifiers = {
   id: "breakfast_sides",
   name: "Breakfast Sides",
   type: "multi",
+  priceType: "add",
   options: [
     {
       id: "hashbrown",
@@ -180,6 +185,7 @@ const oatmealSizeModifiers = {
   id: "oatmeal_size",
   name: "Oatmeal Size",
   type: "single",
+  priceType: "override",
   options: [
     {
       id: "small",
@@ -202,6 +208,7 @@ const oatmealToppingsModifiers = {
   id: "oatmeal_toppings",
   name: "Oatmeal Toppings",
   type: "multi",
+  priceType: "add",
   options: [
     {
       id: "brown_sugar",

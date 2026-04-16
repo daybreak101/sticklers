@@ -29,7 +29,7 @@ export default function ModifierGroupComponent({
               <ThemedText style={styles.optionText}>{option.name}</ThemedText>
 
               {option.price && option.price !== 0  && (
-                <ThemedText style={styles.optionPrice}>{group.pricingType === "add" ? "+" : ""}${option.price.toFixed(2)}</ThemedText>
+                <ThemedText style={styles.optionPrice}>{group.priceType === "add" ? "+" : ""}${option.price.toFixed(2)}</ThemedText>
               )}
             </View>
 

@@ -58,6 +58,6 @@ export type ModifierGroup = {
   id: ModifierGroupId;
   name: string;
   type: "single" | "multi";
-  pricingType?: "add" | "override";
+  priceType?: "add" | "override";
   options: ModifierOption[];
 };

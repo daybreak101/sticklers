@@ -16,6 +16,7 @@ const breadModifiers = {
   id: "bread",
   name: "Bread",
   type: "single",
+  priceType: "add",
   options: [
     {
       id: "french",
