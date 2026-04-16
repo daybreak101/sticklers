@@ -13,10 +13,10 @@ export default function ModifierGroupComponent({
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Pressable key={group.id} onPress={() => setCollapsed((prev) => !prev)}>
-      <View style={styles.groupHeader}>
+    <View key={group.id} >
+      <Pressable style={styles.groupHeader} onPress={() => setCollapsed((prev) => !prev)}>
         <ThemedText>{group.name}</ThemedText>
-      </View>
+      </Pressable>
       <View
         style={[
           styles.groupContainer,
@@ -28,10 +28,8 @@ export default function ModifierGroupComponent({
             <View style={styles.optionRow}>
               <ThemedText style={styles.optionText}>{option.name}</ThemedText>
 
-              {option.price && option.price !== 0 && (
-                <ThemedText style={styles.optionPrice}>
-                  ${option.price.toFixed(2)}
-                </ThemedText>
+              {option.price && option.price !== 0  && (
+                <ThemedText style={styles.optionPrice}>{group.pricingType === "add" ? "+" : ""}${option.price.toFixed(2)}</ThemedText>
               )}
             </View>
 
@@ -41,7 +39,7 @@ export default function ModifierGroupComponent({
           </View>
         ))}
       </View>
-    </Pressable>
+    </View>
   );
 }
 
