@@ -4,7 +4,8 @@ import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
 import { ThemedText } from "./defaults/themed-text";
-import ModifierGroupComponent from "./ModifierGroupComponent";
+import ModifierMultiGroupComponent from "./ModifierMultiGroupComponent";
+import ModifierSingleGroupComponent from "./ModifierSingleGroupComponent";
 
 export default function ModifiersList({
   selectedModifiers,
@@ -60,7 +61,12 @@ export default function ModifiersList({
       </View>
 
       {modifiers.map((group) => (
-        <ModifierGroupComponent key={group.id} group={group} handleSelectionChange={handleSelectionChange} />
+        <ModifierMultiGroupComponent
+          key={group.id}
+          item={item}
+          group={group}
+          handleSelectionChange={handleSelectionChange}
+        />
       ))}
     </View>
   );
@@ -80,6 +86,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: 10,
   },
-
-
 });

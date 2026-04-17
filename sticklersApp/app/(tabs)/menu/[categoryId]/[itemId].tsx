@@ -1,24 +1,53 @@
-import { ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
 import { Category, Item } from "@/types/menu";
-import { useLocalSearchParams } from "expo-router";
+import {
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+} from "expo-router";
 import { getMenuCategories } from "@/lib/menuStorage";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
 import ModifiersList from "@/components/ModifiersList";
 import { SelectedModifiers } from "@/types/cart";
 
-
 export default function ItemPage() {
-  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>({});
+  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
+    {},
+  );
   const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const [item, setItem] = useState<Item | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const { categoryId, itemId } = useLocalSearchParams();
+
+  const navigation = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: { display: "none" },
+      });
+
+      return () => {
+        navigation.getParent()?.setOptions({
+          tabBarStyle: undefined,
+        });
+      };
+    }, [navigation]),
+  );
 
   useEffect(() => {
     loadItem();
@@ -55,17 +84,42 @@ export default function ItemPage() {
           </ThemedText>
           <ThemedText style={styles.description}>{item.description}</ThemedText>
           <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>
-          <ModifiersList selectedModifiers={selectedModifiers} item={item} setSelectedModifiers={setSelectedModifiers} />
+          <ModifiersList
+            selectedModifiers={selectedModifiers}
+            item={item}
+            setSelectedModifiers={setSelectedModifiers}
+          />
         </ScrollView>
 
-        <View style={styles.buttonContainer}>
-          <View style={[styles.button, { flexDirection: "row", gap: 10 }]}>
-            <Pressable onPress={() => setQuantity(quantity - 1)}><Text style={styles.buttonText}>-</Text></Pressable>
-            <Text style={styles.buttonText}>{quantity}</Text>
-            <Pressable onPress={() => setQuantity(quantity + 1)}><Text style={styles.buttonText}>+</Text></Pressable>
+        <View style={styles.bottomBar}>
+          <View style={styles.bottomBarTop}>
+            <ThemedText>Total</ThemedText>
+            <Text style={styles.price}>${totalPrice.toFixed(2)}</Text>
           </View>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Add to Order</Text>
+          <View style={styles.bottomBarBottom}>
+            <View
+              style={[
+                styles.buttonContainer,
+                { flexDirection: "row", gap: 10 },
+              ]}
+            >
+              <Pressable
+                onPress={() => setQuantity(quantity - 1)}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>-</Text>
+              </Pressable>
+              <Text style={[styles.buttonText, { width: 30 }]}>{quantity}</Text>
+              <Pressable
+                onPress={() => setQuantity(quantity + 1)}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>+</Text>
+              </Pressable>
+            </View>
+            <View style={styles.buttonContainer}>
+              <Text style={styles.buttonText}>Add to Order</Text>
+            </View>
           </View>
         </View>
       </ThemedView>
@@ -94,17 +148,36 @@ const styles = StyleSheet.create({
     color: "rgb(232, 70, 70)",
   },
   button: {
-    backgroundColor: "rgb(232, 70, 70)",
-    padding: 10,
-    borderRadius: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.34)",
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
     fontSize: 20,
     fontWeight: 300,
     color: "white",
+    textAlign: "center",
   },
   buttonContainer: {
+    backgroundColor: "rgb(232, 70, 70)",
+    padding: 10,
+    borderRadius: 10,
+  },
+  bottomBar: {
+    borderTopColor: "rgb(249, 249, 249)",
+    borderTopWidth: 0.2,
+  },
+  bottomBarTop: {
+    padding: 10,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  bottomBarBottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
   },
 });

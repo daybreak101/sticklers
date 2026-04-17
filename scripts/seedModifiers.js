@@ -116,7 +116,7 @@ const proteinModifiers = {
 const cheeseModifiers = {
   id: "cheese",
   name: "Cheese",
-  type: "single",
+  type: "multi",
   priceType: "add",
   options: [
     { id: "swiss", name: "Swiss", price: 0, status: "available" },
