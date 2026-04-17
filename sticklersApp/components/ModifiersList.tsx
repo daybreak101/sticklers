@@ -66,6 +66,7 @@ export default function ModifiersList({
           item={item}
           group={group}
           handleSelectionChange={handleSelectionChange}
+          selectedModifiers={selectedModifiers}
         />
       ))}
     </View>

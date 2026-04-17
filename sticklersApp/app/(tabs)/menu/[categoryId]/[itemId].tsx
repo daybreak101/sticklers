@@ -23,9 +23,8 @@ import ModifiersList from "@/components/ModifiersList";
 import { SelectedModifiers } from "@/types/cart";
 
 export default function ItemPage() {
-  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
-    {},
-  );
+  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>({});
+
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -59,7 +58,15 @@ export default function ItemPage() {
     setCategory(found || null);
     const item = found?.items.find((i) => i.itemId === itemId) || null;
     setItem(item || null);
+
+    if (item) {
+      const defaults = item.defaults;
+      if (defaults) {
+        setSelectedModifiers(defaults);
+      }
+    }
   };
+
 
   if (!item) return null;
 
@@ -85,7 +92,7 @@ export default function ItemPage() {
           <ThemedText style={styles.description}>{item.description}</ThemedText>
           <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>
           <ModifiersList
-            selectedModifiers={selectedModifiers}
+            selectedModifiers={selectedModifiers ?? {}}
             item={item}
             setSelectedModifiers={setSelectedModifiers}
           />
@@ -93,7 +100,7 @@ export default function ItemPage() {
 
         <View style={styles.bottomBar}>
           <View style={styles.bottomBarTop}>
-            <ThemedText>Total</ThemedText>
+            <ThemedText style={styles.totalText}>Total</ThemedText>
             <Text style={styles.price}>${totalPrice.toFixed(2)}</Text>
           </View>
           <View style={styles.bottomBarBottom}>
@@ -104,14 +111,18 @@ export default function ItemPage() {
               ]}
             >
               <Pressable
-                onPress={() => setQuantity(quantity - 1)}
+                onPress={() => {
+                  if (quantity > 1) setQuantity(quantity - 1);
+                }}
                 style={styles.button}
               >
                 <Text style={styles.buttonText}>-</Text>
               </Pressable>
               <Text style={[styles.buttonText, { width: 30 }]}>{quantity}</Text>
               <Pressable
-                onPress={() => setQuantity(quantity + 1)}
+                onPress={() => {
+                  if (quantity < 99) setQuantity(quantity + 1);
+                }}
                 style={styles.button}
               >
                 <Text style={styles.buttonText}>+</Text>
@@ -174,10 +185,12 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   bottomBarBottom: {
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
   },
+  totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
 });

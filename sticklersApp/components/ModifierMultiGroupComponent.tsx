@@ -4,15 +4,18 @@ import { ThemedText } from "./defaults/themed-text";
 import { Item, ModifierGroup } from "@/types/menu";
 import ModifierOptionCheckboxComponent from "./ModifierOptionCheckboxComponent";
 import ModifierSingleGroupComponent from "./ModifierSingleGroupComponent";
+import { SelectedModifiers } from "@/types/cart";
 
 export default function ModifierGroupComponent({
   item,
   group,
   handleSelectionChange,
+  selectedModifiers,
 }: {
   item: Item;
   group: ModifierGroup;
   handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
+  selectedModifiers: SelectedModifiers;
 }) {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -38,6 +41,7 @@ export default function ModifierGroupComponent({
               option={option}
               group={group}
               index={index}
+              selectedModifiers={selectedModifiers}
             />
           ))
         ) : (

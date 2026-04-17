@@ -3,21 +3,26 @@ import React, { useState } from "react";
 import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
 import { ThemedText } from "./defaults/themed-text";
 import { Checkbox } from "expo-checkbox";
+import { SelectedModifiers } from "@/types/cart";
 
 export default function ModifierOptionCheckboxComponent({
   item,
   option,
   group,
   index,
+  selectedModifiers,
 }: {
   item: Item,
   option: ModifierOption;
   group: ModifierGroup;
   index: number;
+  selectedModifiers: SelectedModifiers;
 }) {
+  //check if default here!!!
   const [isChecked, setIsChecked] = useState(false);
 
   
+
   return (
     <Pressable style={styles.optionContainer}  onPress={() => setIsChecked((prev) => !prev)}>
       <View style={styles.optionRow}>
