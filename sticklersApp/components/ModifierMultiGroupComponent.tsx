@@ -45,7 +45,7 @@ export default function ModifierGroupComponent({
             key={group.id}
             item={item}
             group={group}
-            // handleSelectionChange={handleSelectionChange}
+            handleSelectionChange={handleSelectionChange}
           />
         )}
       </View>

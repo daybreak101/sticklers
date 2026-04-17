@@ -1,14 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ThemedText } from "./defaults/themed-text";
 import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
 
 export default function ModifierSingleGroupComponent({
   item,
   group,
+  handleSelectionChange,
 }: {
   item: Item;
   group: ModifierGroup;
+  handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -20,11 +22,10 @@ export default function ModifierSingleGroupComponent({
         return (
           <View key={option.id}>
             <Pressable
-              
               style={[styles.optionContainer, styles.optionRow]}
               onPress={() => {
                 setSelectedId(option.id);
-                //handleSelectionChange(group, option.id);
+                handleSelectionChange(group, option.id);
               }}
             >
               <View
