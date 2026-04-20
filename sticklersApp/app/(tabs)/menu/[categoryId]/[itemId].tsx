@@ -16,7 +16,7 @@ import {
   useLocalSearchParams,
   useNavigation,
 } from "expo-router";
-import { getMenuCategories } from "@/lib/menuStorage";
+import { getMenuCategories, getModifierGroups } from "@/lib/menuStorage";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
 import ModifiersList from "@/components/ModifiersList";
@@ -60,6 +60,9 @@ export default function ItemPage() {
     const updatePrice = () => {
       //TODO: update price
       // (basePrice + modifiers) * quantity
+      const basePrice = selectedModifiers["size"] === ("full" || undefined) ? 
+        //correct this
+        item?.basePrice : getModifierGroups().find((m) => m.id === "size").options.find((o) => o.id === "half").price;
       setTotalPrice(0)
     }
     updatePrice();
