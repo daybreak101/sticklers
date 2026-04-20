@@ -20,10 +20,13 @@ import { getMenuCategories } from "@/lib/menuStorage";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
 import ModifiersList from "@/components/ModifiersList";
-import { SelectedModifiers } from "@/types/cart";
+import { CartItem, SelectedModifiers } from "@/types/cart";
+import { useCart } from "@/context/CartContext";
 
 export default function ItemPage() {
-  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>({});
+  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
+    {},
+  );
 
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -33,6 +36,7 @@ export default function ItemPage() {
   const { categoryId, itemId } = useLocalSearchParams();
 
   const navigation = useNavigation();
+  const { cart, addItem, removeItem, clearCart } = useCart();
 
   useFocusEffect(
     useCallback(() => {
@@ -52,6 +56,15 @@ export default function ItemPage() {
     loadItem();
   }, []);
 
+  useEffect(() => {
+    const updatePrice = () => {
+      //TODO: update price
+      // (basePrice + modifiers) * quantity
+      setTotalPrice(0)
+    }
+    updatePrice();
+  }, [item, quantity, selectedModifiers])
+
   const loadItem = async () => {
     const categories = await getMenuCategories();
     const found = categories.find((c) => c.id === categoryId) || null;
@@ -69,21 +82,20 @@ export default function ItemPage() {
 
   // do this next
   const addToCart = async () => {
-    const cart = await getCart();
-    const newCart = {
-      ...cart,
-      items: [
-        ...cart.items,
-        {
-          itemId: item?.itemId,
-          quantity: quantity,
-          modifiers: selectedModifiers,
-        },
-      ],
-    };
-    await setCart(newCart);
+    if(!item || !category) return;
+    addItem({
+      itemId: item?.itemId,
+      name: item?.name,
+      category: category?.name,
+      basePrice: item.basePrice,
+      modifierGroupIds: item.modifierGroupIds,
+      defaults: item.defaults,
+      selectedModifiers: selectedModifiers,
+      quantity: quantity,
+      finalPrice: totalPrice,
+      specialRequests: ""
+    } as CartItem);
   };
-
 
   if (!item) return null;
 
