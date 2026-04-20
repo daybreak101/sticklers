@@ -2,17 +2,24 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ThemedText } from "./defaults/themed-text";
 import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
+import { SelectedModifiers } from "@/types/cart";
 
 export default function ModifierSingleGroupComponent({
   item,
   group,
   handleSelectionChange,
+  selectedModifiers
 }: {
   item: Item;
   group: ModifierGroup;
   handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
+  selectedModifiers: SelectedModifiers;
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSelectedId(selectedModifiers[group.id]?.[0] || null);
+  }, [selectedModifiers, group.id]);
 
   return (
     <View>

@@ -1,11 +1,10 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
 import { ThemedText } from "./defaults/themed-text";
-import ModifierMultiGroupComponent from "./ModifierMultiGroupComponent";
-import ModifierSingleGroupComponent from "./ModifierSingleGroupComponent";
+import ModifierSelectionComponent from "./ModifierSelectionComponent";
 
 export default function ModifiersList({
   selectedModifiers,
@@ -21,6 +20,10 @@ export default function ModifiersList({
   useEffect(() => {
     loadModifiers();
   }, [item]);
+
+  useEffect(() => {
+    console.log("selected modifiers", selectedModifiers);
+  }, [selectedModifiers]);
 
   const loadModifiers = async () => {
     const modifiers = await getModifierGroups();
@@ -52,6 +55,7 @@ export default function ModifiersList({
           : [...current, optionId],
       };
     });
+    console.log("change detected")
   };
 
   return (
@@ -61,7 +65,7 @@ export default function ModifiersList({
       </View>
 
       {modifiers.map((group) => (
-        <ModifierMultiGroupComponent
+        <ModifierSelectionComponent
           key={group.id}
           item={item}
           group={group}

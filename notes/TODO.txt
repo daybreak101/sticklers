@@ -1,5 +1,13 @@
-Check salad toppings
-Update sandwich modifiers from names to ids
+implement add to cart functionality (and remove)
+implement cart screen, along with cart totals, cart items and qunatity, clear cart, and cart checkout
+implement a numerical indicator for cart tab displaying the number of items in the cart
+implement item price being updated based on the selected modifiers
+implement a "special requests" field for orders
+implement "extra" and "double" modifiers for each modifier and price them accordingly; keep in mind
+   that some modifiers may be mutually exclusive, and depending on the item, the number of modifiers
+   may be discounted, i.e. the Traffic Jam having 4 meats and subbing Salami for Pepperoni would 
+   not add extra price for the modifier.
+
 Add order to modifiers
 Rest of the menu:
   - Breakfast
@@ -11,3 +19,4 @@ Rest of the menu:
   - Ice Cream
   - Platters
   - Combos
+

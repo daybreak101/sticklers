@@ -67,6 +67,23 @@ export default function ItemPage() {
     }
   };
 
+  // do this next
+  const addToCart = async () => {
+    const cart = await getCart();
+    const newCart = {
+      ...cart,
+      items: [
+        ...cart.items,
+        {
+          itemId: item?.itemId,
+          quantity: quantity,
+          modifiers: selectedModifiers,
+        },
+      ],
+    };
+    await setCart(newCart);
+  };
+
 
   if (!item) return null;
 
@@ -129,7 +146,7 @@ export default function ItemPage() {
               </Pressable>
             </View>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add to Order</Text>
+              <Text style={styles.buttonText}>Add to Cart</Text>
             </View>
           </View>
         </View>
