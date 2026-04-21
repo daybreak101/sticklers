@@ -6,11 +6,11 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
-import { Category, Item } from "@/types/menu";
+import { Category, Item, ModifierGroup } from "@/types/menu";
 import {
   useFocusEffect,
   useLocalSearchParams,
@@ -29,11 +29,12 @@ export default function ItemPage() {
   );
 
   const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0);
+  // const [totalPrice, setTotalPrice] = useState<number>(0);
 
   const [item, setItem] = useState<Item | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const { categoryId, itemId } = useLocalSearchParams();
+  const [modifierGroups, setModifierGroups] = useState<ModifierGroup[]>([]);
 
   const navigation = useNavigation();
   const { cart, addItem, removeItem, clearCart } = useCart();
@@ -54,19 +55,52 @@ export default function ItemPage() {
 
   useEffect(() => {
     loadItem();
+
+    const loadGroups = async () => {
+      console.log("loading modifier groups");
+      const groups = await getModifierGroups();
+      console.log("modifierGroups loaded:", groups, Array.isArray(groups));
+
+      setModifierGroups(groups);
+      console.log("modifierGroups set:", groups, Array.isArray(groups));
+    };
+    loadGroups();
   }, []);
 
-  useEffect(() => {
-    const updatePrice = () => {
-      //TODO: update price
-      // (basePrice + modifiers) * quantity
-      const basePrice = selectedModifiers["size"] === ("full" || undefined) ? 
-        //correct this
-        item?.basePrice : getModifierGroups().find((m) => m.id === "size").options.find((o) => o.id === "half").price;
-      setTotalPrice(0)
+  const totalPrice = useMemo(() => {
+    if (!item) return 0;
+    //get the baseprice by first seeing price overrides
+    const sizeData = modifierGroups.find((g) => g.id === "size");
+    let newBase = 0
+    if (selectedModifiers["size"]) {
+      newBase =
+        selectedModifiers["size"][0] === "full"
+          ? item.basePrice
+          : (sizeData?.options.find((o) => o.id === "half")?.price ?? 0);
+    } else newBase = item.basePrice;
+    //for each modifier group in SELECTED MODIFIERS
+    for (const groupId in selectedModifiers) {
+      if (groupId === "size") continue;
+      const groupData = modifierGroups.find((g) => g.id === groupId);
+      //get the current modifier group id
+      const selectedOptionIds = selectedModifiers[groupId];
+
+      //for each modifier option in the modifier group...
+      selectedOptionIds.forEach((optionId) => {
+        //find option data from dataset
+        const option = groupData?.options.find((o) => o.id === optionId);
+        if (!option) return;
+
+        //   if (groupData?.priceType === "add") {
+        newBase += option.price ?? 0;
+        // } else if (groupData?.priceType === "override") {
+        //   total = option.price ?? total;
+        // }
+      });
     }
-    updatePrice();
-  }, [item, quantity, selectedModifiers])
+
+    return newBase * quantity;
+  }, [item, modifierGroups, selectedModifiers, quantity]);
 
   const loadItem = async () => {
     const categories = await getMenuCategories();
@@ -85,19 +119,19 @@ export default function ItemPage() {
 
   // do this next
   const addToCart = async () => {
-    if(!item || !category) return;
-    addItem({
-      itemId: item?.itemId,
-      name: item?.name,
-      category: category?.name,
-      basePrice: item.basePrice,
-      modifierGroupIds: item.modifierGroupIds,
-      defaults: item.defaults,
-      selectedModifiers: selectedModifiers,
-      quantity: quantity,
-      finalPrice: totalPrice,
-      specialRequests: ""
-    } as CartItem);
+    if (!item || !category) return;
+    // addItem({
+    //   itemId: item?.itemId,
+    //   name: item?.name,
+    //   category: category?.name,
+    //   basePrice: item.basePrice,
+    //   modifierGroupIds: item.modifierGroupIds,
+    //   defaults: item.defaults,
+    //   selectedModifiers: selectedModifiers,
+    //   quantity: quantity,
+    //   finalPrice: totalPrice,
+    //   specialRequests: "",
+    // } as CartItem);
   };
 
   if (!item) return null;
