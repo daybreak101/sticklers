@@ -6,6 +6,7 @@ import {
   SetStateAction,
   use,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -20,6 +21,7 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Cart>({
     items: [],
@@ -27,7 +29,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const addItem = (item: CartItem) => {
-    
+    console.log("adding item to cart:", item);
     setCart((prev) => ({
       ...prev,
       items: [...prev.items, item],

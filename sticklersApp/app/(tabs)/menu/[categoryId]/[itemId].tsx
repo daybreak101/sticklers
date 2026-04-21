@@ -90,12 +90,7 @@ export default function ItemPage() {
         //find option data from dataset
         const option = groupData?.options.find((o) => o.id === optionId);
         if (!option) return;
-
-        //   if (groupData?.priceType === "add") {
         newBase += option.price ?? 0;
-        // } else if (groupData?.priceType === "override") {
-        //   total = option.price ?? total;
-        // }
       });
     }
 
@@ -120,18 +115,18 @@ export default function ItemPage() {
   // do this next
   const addToCart = async () => {
     if (!item || !category) return;
-    // addItem({
-    //   itemId: item?.itemId,
-    //   name: item?.name,
-    //   category: category?.name,
-    //   basePrice: item.basePrice,
-    //   modifierGroupIds: item.modifierGroupIds,
-    //   defaults: item.defaults,
-    //   selectedModifiers: selectedModifiers,
-    //   quantity: quantity,
-    //   finalPrice: totalPrice,
-    //   specialRequests: "",
-    // } as CartItem);
+    addItem({
+      itemId: item?.itemId,
+      name: item?.name,
+      category: category?.name,
+      basePrice: item.basePrice,
+      modifierGroupIds: item.modifierGroupIds,
+      defaults: item.defaults,
+      selectedModifiers: selectedModifiers,
+      quantity: quantity,
+      finalPrice: totalPrice,
+      specialRequests: "",
+    } as CartItem);
   };
 
   if (!item) return null;
@@ -194,9 +189,9 @@ export default function ItemPage() {
                 <Text style={styles.buttonText}>+</Text>
               </Pressable>
             </View>
-            <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add to Cart</Text>
-            </View>
+            <Pressable onPress={addToCart} style={styles.buttonContainer}>
+              <Text style={styles.buttonText} >Add to Cart</Text>
+            </Pressable>
           </View>
         </View>
       </ThemedView>
