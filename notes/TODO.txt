@@ -13,6 +13,8 @@ implement "extra" and "double" modifiers for each modifier and price them accord
      a function to calculate price based on category. (one for sandwiches, one for salads, etc)
   !IMPORTANT!
   - Add a way to disregard premium modifier price when they are defaults
+  !IMPORTANT!
+  - Add modifier rules, to each modifier group.
 
 Add order to modifiers
 Rest of the menu:

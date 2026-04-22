@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
@@ -37,21 +37,10 @@ export default function ModifiersList({
     allModsRef.current = groups || [];
   };
 
-  const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
-    if (group.id === "size") {
-      if (optionId === "half") {
-        setModifiers((prev) =>
-          prev.map((g) => {
-            if (g.id !== "bread") return g;
-            return {
-              ...g,
-              options: g.options.filter(
-                (o) => o.id === "french" || o.id === "wheat",
-              ),
-            };
-          }),
-        );
-        setSelectedModifiers((prev) => {
+  const filteredModifiers = useMemo(() => {
+    const size = selectedModifiers["size"]?.[0];
+    if(size !== "half") return modifiers;
+     setSelectedModifiers((prev) => {
           const bread = prev.bread?.[0];
 
           if (bread !== "french" && bread !== "wheat") {
@@ -63,10 +52,45 @@ export default function ModifiersList({
 
           return prev;
         });
-      } else if (optionId === "full") {
-        setModifiers(allModsRef.current);
+    return modifiers.map((g) => {
+      if(g.id !== "bread") return g;
+      return {
+        ...g,
+        options: g.options.filter((o) =>["french", "wheat"].includes(o.id))
       }
-    }
+    })
+  }, [modifiers, selectedModifiers])
+
+  const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
+    // if (group.id === "size") {
+    //   if (optionId === "half") {
+    //     setModifiers((prev) =>
+    //       prev.map((g) => {
+    //         if (g.id !== "bread") return g;
+    //         return {
+    //           ...g,
+    //           options: g.options.filter(
+    //             (o) => o.id === "french" || o.id === "wheat",
+    //           ),
+    //         };
+    //       }),
+    //     );
+    //     setSelectedModifiers((prev) => {
+    //       const bread = prev.bread?.[0];
+
+    //       if (bread !== "french" && bread !== "wheat") {
+    //         return {
+    //           ...prev,
+    //           bread: ["french"],
+    //         };
+    //       }
+
+    //       return prev;
+    //     });
+    //   } else if (optionId === "full") {
+    //     setModifiers(allModsRef.current);
+    //   }
+    // }
 
     setSelectedModifiers((prev) => {
       const current = prev[group.id] || [];
@@ -97,7 +121,7 @@ export default function ModifiersList({
         <ThemedText style={styles.headerText}>Modifiers</ThemedText>
       </View>
 
-      {modifiers.map((group) => (
+      {filteredModifiers.map((group) => (
         <ModifierSelectionComponent
           key={group.id}
           item={item}
