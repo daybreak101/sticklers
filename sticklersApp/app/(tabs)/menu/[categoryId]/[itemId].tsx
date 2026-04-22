@@ -22,6 +22,7 @@ import { ThemedText } from "@/components/defaults/themed-text";
 import ModifiersList from "@/components/ModifiersList";
 import { CartItem, SelectedModifiers } from "@/types/cart";
 import { useCart } from "@/context/CartContext";
+import ItemPrice from "@/components/ItemPrice";
 
 export default function ItemPage() {
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
@@ -29,8 +30,7 @@ export default function ItemPage() {
   );
 
   const [quantity, setQuantity] = useState(1);
-  // const [totalPrice, setTotalPrice] = useState<number>(0);
-
+  let totalPrice = 0;
   const [item, setItem] = useState<Item | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
   const { categoryId, itemId } = useLocalSearchParams();
@@ -39,6 +39,7 @@ export default function ItemPage() {
   const navigation = useNavigation();
   const { cart, addItem, removeItem, clearCart } = useCart();
 
+  //remove tab navigation for this screen
   useFocusEffect(
     useCallback(() => {
       navigation.getParent()?.setOptions({
@@ -53,49 +54,16 @@ export default function ItemPage() {
     }, [navigation]),
   );
 
+  //load item and modifiers
   useEffect(() => {
     loadItem();
 
     const loadGroups = async () => {
-      console.log("loading modifier groups");
       const groups = await getModifierGroups();
-      console.log("modifierGroups loaded:", groups, Array.isArray(groups));
-
       setModifierGroups(groups);
-      console.log("modifierGroups set:", groups, Array.isArray(groups));
     };
     loadGroups();
   }, []);
-
-  const totalPrice = useMemo(() => {
-    if (!item) return 0;
-    //get the baseprice by first seeing price overrides
-    const sizeData = modifierGroups.find((g) => g.id === "size");
-    let newBase = 0
-    if (selectedModifiers["size"]) {
-      newBase =
-        selectedModifiers["size"][0] === "full"
-          ? item.basePrice
-          : (sizeData?.options.find((o) => o.id === "half")?.price ?? 0);
-    } else newBase = item.basePrice;
-    //for each modifier group in SELECTED MODIFIERS
-    for (const groupId in selectedModifiers) {
-      if (groupId === "size") continue;
-      const groupData = modifierGroups.find((g) => g.id === groupId);
-      //get the current modifier group id
-      const selectedOptionIds = selectedModifiers[groupId];
-
-      //for each modifier option in the modifier group...
-      selectedOptionIds.forEach((optionId) => {
-        //find option data from dataset
-        const option = groupData?.options.find((o) => o.id === optionId);
-        if (!option) return;
-        newBase += option.price ?? 0;
-      });
-    }
-
-    return newBase * quantity;
-  }, [item, modifierGroups, selectedModifiers, quantity]);
 
   const loadItem = async () => {
     const categories = await getMenuCategories();
@@ -112,7 +80,7 @@ export default function ItemPage() {
     }
   };
 
-  // do this next
+  // add to cart, called by "Add to Cart" button
   const addToCart = async () => {
     if (!item || !category) return;
     addItem({
@@ -129,6 +97,7 @@ export default function ItemPage() {
     } as CartItem);
   };
 
+  //dont render if item is not loaded
   if (!item) return null;
 
   const imageKey: string | undefined | null = item.image ?? category?.image;
@@ -160,10 +129,7 @@ export default function ItemPage() {
         </ScrollView>
 
         <View style={styles.bottomBar}>
-          <View style={styles.bottomBarTop}>
-            <ThemedText style={styles.totalText}>Total</ThemedText>
-            <Text style={styles.price}>${totalPrice.toFixed(2)}</Text>
-          </View>
+          <ItemPrice item={item} modifierGroups={modifierGroups} selectedModifiers={selectedModifiers} quantity={quantity} totalPrice={totalPrice} />
           <View style={styles.bottomBarBottom}>
             <View
               style={[
@@ -190,7 +156,7 @@ export default function ItemPage() {
               </Pressable>
             </View>
             <Pressable onPress={addToCart} style={styles.buttonContainer}>
-              <Text style={styles.buttonText} >Add to Cart</Text>
+              <Text style={styles.buttonText}>Add to Cart</Text>
             </Pressable>
           </View>
         </View>

@@ -8,9 +8,11 @@ implement "extra" and "double" modifiers for each modifier and price them accord
    may be discounted, i.e. the Traffic Jam having 4 meats and subbing Salami for Pepperoni would 
    not add extra price for the modifier.
 
-   !IMPORTANT!
+   !IMPORTANT! (maybe not)
    - Add function to calculate the total price of item in a lib file, which will have
      a function to calculate price based on category. (one for sandwiches, one for salads, etc)
+  !IMPORTANT!
+  - Add a way to disregard premium modifier price when they are defaults
 
 Add order to modifiers
 Rest of the menu:

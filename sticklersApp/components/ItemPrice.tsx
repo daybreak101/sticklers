@@ -1,0 +1,73 @@
+import { StyleSheet, Text, View } from "react-native";
+import React, { useMemo } from "react";
+import { Item, ModifierGroup } from "@/types/menu";
+import { SelectedModifiers } from "@/types/cart";
+import { ThemedText } from "./defaults/themed-text";
+
+type ItemPriceProps = {
+  item: Item;
+  modifierGroups: ModifierGroup[];
+  selectedModifiers: SelectedModifiers;
+  quantity: number;
+  totalPrice: number;
+};
+
+export default function ItemPrice({
+  item,
+  modifierGroups,
+  selectedModifiers,
+  quantity,
+  totalPrice,
+}: ItemPriceProps) {
+  totalPrice = useMemo(() => {
+    if (!item) return 0;
+    //get the baseprice by first seeing price overrides
+    const sizeData = modifierGroups.find((g) => g.id === "size");
+    let newBase = 0;
+    if (selectedModifiers["size"]) {
+      newBase =
+        selectedModifiers["size"][0] === "full"
+          ? item.basePrice
+          : (sizeData?.options.find((o) => o.id === "half")?.price ?? 0);
+    } else newBase = item.basePrice;
+    //for each modifier group in SELECTED MODIFIERS
+    for (const groupId in selectedModifiers) {
+      if (groupId === "size") continue;
+      const groupData = modifierGroups.find((g) => g.id === groupId);
+      //get the current modifier group id
+      const selectedOptionIds = selectedModifiers[groupId];
+
+      //for each modifier option in the modifier group...
+      selectedOptionIds.forEach((optionId) => {
+        //find option data from dataset
+        const option = groupData?.options.find((o) => o.id === optionId);
+        if (!option) return;
+        newBase += option.price ?? 0;
+      });
+    }
+
+    return newBase * quantity;
+  }, [item, modifierGroups, selectedModifiers, quantity]);
+
+  return (
+    <View style={styles.bottomBarTop}>
+      <ThemedText style={styles.totalText}>Total</ThemedText>
+      <Text style={styles.price}>${totalPrice.toFixed(2)}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  bottomBarTop: {
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  price: {
+    fontSize: 20,
+    textAlign: "center",
+    color: "rgb(232, 70, 70)",
+  },
+  totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
+});

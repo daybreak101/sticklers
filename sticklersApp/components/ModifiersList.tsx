@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
@@ -15,6 +15,7 @@ export default function ModifiersList({
   setSelectedModifiers: React.Dispatch<React.SetStateAction<SelectedModifiers>>;
   item: Item;
 }) {
+  const allModsRef = useRef<ModifierGroup[]>([]);
   const [modifiers, setModifiers] = useState<ModifierGroup[]>([]);
 
   useEffect(() => {
@@ -31,10 +32,42 @@ export default function ModifiersList({
       (item.modifierGroupIds?.map((id) =>
         modifiers.find((m) => m.id === id),
       ) as ModifierGroup[]) || null;
+    console.log("groups", groups);
     setModifiers(groups || []);
+    allModsRef.current = groups || [];
   };
 
   const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
+    if (group.id === "size") {
+      if (optionId === "half") {
+        setModifiers((prev) =>
+          prev.map((g) => {
+            if (g.id !== "bread") return g;
+            return {
+              ...g,
+              options: g.options.filter(
+                (o) => o.id === "french" || o.id === "wheat",
+              ),
+            };
+          }),
+        );
+        setSelectedModifiers((prev) => {
+          const bread = prev.bread?.[0];
+
+          if (bread !== "french" && bread !== "wheat") {
+            return {
+              ...prev,
+              bread: ["french"],
+            };
+          }
+
+          return prev;
+        });
+      } else if (optionId === "full") {
+        setModifiers(allModsRef.current);
+      }
+    }
+
     setSelectedModifiers((prev) => {
       const current = prev[group.id] || [];
 
@@ -55,7 +88,7 @@ export default function ModifiersList({
           : [...current, optionId],
       };
     });
-    console.log("change detected")
+    console.log("change detected");
   };
 
   return (
