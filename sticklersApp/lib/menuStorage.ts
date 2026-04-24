@@ -56,7 +56,7 @@ const MODIFIER_KEY = "menu_modifiers";
 export async function getModifierGroups(): Promise<ModifierGroup[]> {
   try {
    // await AsyncStorage.removeItem(STORAGE_KEY);
-    const CACHE_TTL = 1000 * 60 * 10; // 10 min //TODO: reset this
+    const CACHE_TTL = 1000 * 60 * 100; // 10 min //TODO: reset this
 
     // 1. Check cache
     const cached = await AsyncStorage.getItem(MODIFIER_KEY);

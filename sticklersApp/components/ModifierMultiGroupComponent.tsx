@@ -24,6 +24,15 @@ export default function ModifierOptionCheckboxComponent({
   const [isChecked, setIsChecked] = useState(
     selectedModifiers[group.id]?.includes(option.id) || false,
   );
+  const [displayPrice, setDisplayPrice] = 
+    useState<number>(
+      item.defaults[group.id].includes(option.id) 
+      ? 0 : option.price
+    )
+
+  useEffect(() => {
+    //console.log(item.defaults[group.id])
+  }, [])
   
   return (
     <Pressable
@@ -43,9 +52,9 @@ export default function ModifierOptionCheckboxComponent({
           <ThemedText style={styles.optionText}>{option.name}</ThemedText>
         </View>
 
-        {option.price !== 0 && (
+        {displayPrice !== 0 && (
           <ThemedText style={styles.optionPrice}>
-            {`${group.priceType === "add" ? "+" : ""}$${option.price === null ? item.basePrice.toFixed(2) : option.price?.toFixed(2)}`}
+            {`${group.priceType === "add" ? "+" : ""}$${option.price === null ? item.basePrice.toFixed(2) : displayPrice?.toFixed(2)}`}
           </ThemedText>
         )}
       </View>

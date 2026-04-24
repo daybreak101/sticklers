@@ -49,9 +49,7 @@ export type ModifierOption = {
   name: string;
   price: number;
   status: "available" | "unavailable" | "sold-out";
-
-  // optional conditional logic
-  allowedBread?: BreadOptionId[];
+  effects?: Effect[];
 };
 
 export type ModifierGroup = {
@@ -61,3 +59,9 @@ export type ModifierGroup = {
   priceType?: "add" | "override";
   options: ModifierOption[];
 };
+
+export type Effect = {
+  groupId: ModifierGroupId;
+  allowedOptions?: string[]
+  forceOption?: string;
+}

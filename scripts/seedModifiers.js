@@ -75,7 +75,11 @@ const sizeModifiers = {
       name: "Half",
       price: 7.05,
       status: "available",
-      allowedBread: ["french", "wheat"],
+      effects: [{
+        groupId: "bread",
+        allowedOptions: ["wheat", "french"],
+        forceOption: "french"
+      }]
     },
   ],
 };

@@ -18,13 +18,15 @@ export default function ModifiersList({
   const allModsRef = useRef<ModifierGroup[]>([]);
   const [modifiers, setModifiers] = useState<ModifierGroup[]>([]);
 
+  type LastChange = { group: ModifierGroup | null; optionId: string };
+  const [lastChange, setLastChange] = useState<LastChange>({
+    group: null,
+    optionId: "",
+  });
+
   useEffect(() => {
     loadModifiers();
   }, [item]);
-
-  useEffect(() => {
-    console.log("selected modifiers", selectedModifiers);
-  }, [selectedModifiers]);
 
   const loadModifiers = async () => {
     const modifiers = await getModifierGroups();
@@ -37,74 +39,85 @@ export default function ModifiersList({
     allModsRef.current = groups || [];
   };
 
-  const filteredModifiers = useMemo(() => {
-    const size = selectedModifiers["size"]?.[0];
-    if(size !== "half") return modifiers;
-     setSelectedModifiers((prev) => {
-          const bread = prev.bread?.[0];
+const filteredModifiers = useMemo(() => {
+  let updated = [...modifiers];
 
-          if (bread !== "french" && bread !== "wheat") {
-            return {
-              ...prev,
-              bread: ["french"],
-            };
-          }
+  // loop through ALL selected modifiers
+  for (const groupId in selectedModifiers) {
+    const selectedOptionIds = selectedModifiers[groupId];
+    const group = modifiers.find((g) => g.id === groupId);
+    if (!group) continue;
 
-          return prev;
+    selectedOptionIds.forEach((optionId) => {
+      const option = group.options.find((o) => o.id === optionId);
+      if (!option || !option.effects) return;
+
+      option.effects.forEach((effect) => {
+        const { groupId: targetGroupId, allowedOptions } = effect;
+
+        updated = updated.map((g) => {
+          if (g.id !== targetGroupId) return g;
+
+          return {
+            ...g,
+            options: g.options.filter((o) =>
+              allowedOptions?.includes(o.id)
+            ),
+          };
         });
-    return modifiers.map((g) => {
-      if(g.id !== "bread") return g;
-      return {
-        ...g,
-        options: g.options.filter((o) =>["french", "wheat"].includes(o.id))
+      });
+    });
+  }
+
+  return updated;
+}, [modifiers, selectedModifiers]);
+
+useEffect(() => {
+  if (!lastChange.group) return;
+
+  const option = lastChange.group.options.find(
+    (o) => o.id === lastChange.optionId
+  );
+  if (!option || !option.effects) return;
+
+  setSelectedModifiers((prev) => {
+    let updated = { ...prev };
+    let changed = false;
+    option.effects?.forEach((effect) => {
+      const { groupId, allowedOptions, forceOption } = effect;
+
+      const currentSelected = updated[groupId]?.[0];
+
+      if (!allowedOptions?.includes(currentSelected)) {
+        const next = forceOption ? [forceOption] : [];
+
+        // only update if actually different
+        if (
+          JSON.stringify(updated[groupId]) !== JSON.stringify(next)
+        ) {
+          updated[groupId] = next;
+          changed = true;
+        }
       }
-    })
-  }, [modifiers, selectedModifiers])
+    });
+
+    return changed ? updated : prev; // 👈 prevents infinite loop
+  });
+}, [lastChange]);
 
   const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
-    // if (group.id === "size") {
-    //   if (optionId === "half") {
-    //     setModifiers((prev) =>
-    //       prev.map((g) => {
-    //         if (g.id !== "bread") return g;
-    //         return {
-    //           ...g,
-    //           options: g.options.filter(
-    //             (o) => o.id === "french" || o.id === "wheat",
-    //           ),
-    //         };
-    //       }),
-    //     );
-    //     setSelectedModifiers((prev) => {
-    //       const bread = prev.bread?.[0];
-
-    //       if (bread !== "french" && bread !== "wheat") {
-    //         return {
-    //           ...prev,
-    //           bread: ["french"],
-    //         };
-    //       }
-
-    //       return prev;
-    //     });
-    //   } else if (optionId === "full") {
-    //     setModifiers(allModsRef.current);
-    //   }
-    // }
-
+    console.log("handleSelectionChange", group, optionId);
+    setLastChange({ group, optionId });
     setSelectedModifiers((prev) => {
       const current = prev[group.id] || [];
-
       if (group.type === "single") {
         return {
           ...prev,
           [group.id]: [optionId],
         };
       }
-
       // multi select
       const exists = current.includes(optionId);
-
       return {
         ...prev,
         [group.id]: exists

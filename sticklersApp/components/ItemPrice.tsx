@@ -21,18 +21,12 @@ export default function ItemPrice({
 }: ItemPriceProps) {
   totalPrice = useMemo(() => {
     if (!item) return 0;
-    //get the baseprice by first seeing price overrides
-    const sizeData = modifierGroups.find((g) => g.id === "size");
-    let newBase = 0;
-    if (selectedModifiers["size"]) {
-      newBase =
-        selectedModifiers["size"][0] === "full"
-          ? item.basePrice
-          : (sizeData?.options.find((o) => o.id === "half")?.price ?? 0);
-    } else newBase = item.basePrice;
+
+    let newBase = item.basePrice;
+    let modifierPrice = 0;
+
     //for each modifier group in SELECTED MODIFIERS
     for (const groupId in selectedModifiers) {
-      if (groupId === "size") continue;
       const groupData = modifierGroups.find((g) => g.id === groupId);
       //get the current modifier group id
       const selectedOptionIds = selectedModifiers[groupId];
@@ -42,11 +36,17 @@ export default function ItemPrice({
         //find option data from dataset
         const option = groupData?.options.find((o) => o.id === optionId);
         if (!option) return;
-        newBase += option.price ?? 0;
+
+        if (groupData?.priceType === "override") {
+          newBase = option.price ?? item.basePrice;
+          return;
+        } else if(!item.defaults[groupId].includes(optionId)) {
+          modifierPrice += option.price ?? 0;
+        } 
       });
     }
 
-    return newBase * quantity;
+    return (newBase + modifierPrice) * quantity;
   }, [item, modifierGroups, selectedModifiers, quantity]);
 
   return (

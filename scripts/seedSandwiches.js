@@ -77,7 +77,7 @@ const sandwiches = {
       basePrice: 11.2,
       modifierGroupIds: ["bread", "protein", "cheese", "extras"],
       defaults: {
-        size: ["Full"],
+        size: ["full"],
         protein: ["salami", "turkey", "ham", "roast_beef"],
         cheese: ["Swiss"],
         extras: [],
