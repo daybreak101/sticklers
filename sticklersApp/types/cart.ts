@@ -5,6 +5,7 @@ export type SelectedModifiers = {
 export type CartItem = {
     itemId: string;
     name: string;
+    image: string;
     category: string;
     basePrice: number;
     modifierGroupIds?: string[];

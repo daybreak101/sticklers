@@ -86,6 +86,7 @@ export default function ItemPage() {
     addItem({
       itemId: item?.itemId,
       name: item?.name,
+      image: item.image ?? category?.image,
       category: category?.name,
       basePrice: item.basePrice,
       modifierGroupIds: item.modifierGroupIds,

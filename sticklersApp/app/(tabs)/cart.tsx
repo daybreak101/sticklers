@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, StyleSheet, View, Text } from "react-native";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
+import CartItemComponent from "@/components/CartItemComponent";
 
 export default function CartScreen() {
 
@@ -27,7 +28,7 @@ export default function CartScreen() {
         <FlatList 
           data={cart.items}
           keyExtractor={(item) => item.itemId}
-          renderItem={({ item }) => <ThemedText>{item.name}</ThemedText>}
+          renderItem={({ item }) => <CartItemComponent cartItem={item} />}
           ItemSeparatorComponent={() => <View style={{ padding: 10 }}></View>}
           ListFooterComponent={<View style={{ padding: 10 }}></View>}
         />
