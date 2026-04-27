@@ -60,7 +60,13 @@ const bagelModifiers = {
       status: "available",
       availability: "breakfast_only",
     },
-    { id: "asiago", name: "Asiago", price: 0, status: "available" },
+    {
+      id: "asiago",
+      name: "Asiago",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
     {
       id: "cinna_raisin",
       name: "Cinnamon Raisin",

@@ -28,10 +28,20 @@ const sandwiches = {
       modifierGroupIds: ["size", "bread", "protein", "cheese", "extras"],
       defaults: {
         size: ["full"],
-        protein: ["turkey"],
+        protein: ["turkey", "bacon"],
         cheese: ["swiss"],
         extras: ["avocado"],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 2,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 10,
@@ -50,6 +60,16 @@ const sandwiches = {
         extras: [],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 20,
     },
@@ -65,6 +85,16 @@ const sandwiches = {
         cheese: ["swiss"],
         extras: [],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 30,
@@ -83,9 +113,19 @@ const sandwiches = {
         extras: [],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 4,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 40,
-      image: "trafficJam"
+      image: "trafficJam",
     },
     {
       itemId: "itl_sandwich",
@@ -100,6 +140,16 @@ const sandwiches = {
         cheese: ["provolone"],
         extras: [],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 4,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 50,
@@ -118,6 +168,16 @@ const sandwiches = {
         extras: ["marinara"],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 60,
     },
@@ -133,6 +193,16 @@ const sandwiches = {
         cheese: ["swiss"],
         extras: ["lettuce", "tomato"],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 70,
@@ -150,6 +220,16 @@ const sandwiches = {
         extras: [],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 80,
     },
@@ -165,6 +245,16 @@ const sandwiches = {
         cheese: ["swiss"],
         extras: [],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 90,
@@ -183,6 +273,16 @@ const sandwiches = {
         extras: [],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 100,
     },
@@ -200,6 +300,16 @@ const sandwiches = {
         extras: ["green_peppers", "mushrooms"],
         bread: ["French"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 0,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 3,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 110,
     },
@@ -216,6 +326,16 @@ const sandwiches = {
         extras: [],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 2,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 120,
     },
@@ -231,6 +351,16 @@ const sandwiches = {
         cheese: ["cheddar"],
         extras: ["ranch"],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 2,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 130,
@@ -249,6 +379,16 @@ const sandwiches = {
         extras: ["buffalo"],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 140,
     },
@@ -264,6 +404,16 @@ const sandwiches = {
         cheese: ["swiss"],
         extras: [],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 150,
@@ -281,6 +431,16 @@ const sandwiches = {
         extras: ["avocado"],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 2,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 160,
     },
@@ -296,6 +456,16 @@ const sandwiches = {
         cheese: ["swiss"],
         extras: ["lettuce", "tomato", "avocado"],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 170,
@@ -313,6 +483,12 @@ const sandwiches = {
         extras: [],
         bread: ["french"],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 0,
+          extraItemPrice: 1.94,
+        },
+      },
       status: "available",
       order: 180,
     },
@@ -329,6 +505,16 @@ const sandwiches = {
         cheese: ["provolone"],
         extras: ["marinara"],
         bread: ["french"],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 190,
@@ -356,7 +542,11 @@ const sandwiches = {
       pricingRules: {
         protein: {
           includedCount: 2,
-          extraItemPrice: 1.5,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
         },
       },
       status: "available",

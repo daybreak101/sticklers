@@ -1,24 +1,18 @@
-implement add to cart functionality (and remove)
-implement cart screen, along with cart totals, cart items and qunatity, clear cart, and cart checkout
-implement a numerical indicator for cart tab displaying the number of items in the cart
-implement item price being updated based on the selected modifiers
-implement a "special requests" field for orders
-implement "extra" and "double" modifiers for each modifier and price them accordingly; keep in mind
+-implement a way to display price for additional modifiers that are not included in defaults,
+such as adding an extra protein, and a way for premium proteins to ignore the additional protein
+price (Boiled Eggs)
+-find Jalapeno Cheddar and Asiago prices and add them to firestore
+-implement remove from cart functionality
+-implement cart screen, along with cart totals, cart items and qunatity, clear cart, and cart checkout
+-implement a numerical indicator for cart tab displaying the number of items in the cart
+-implement a "special requests" field for orders
+-implement "extra" and "double" modifiers for each modifier and price them accordingly; keep in mind
    that some modifiers may be mutually exclusive, and depending on the item, the number of modifiers
    may be discounted, i.e. the Traffic Jam having 4 meats and subbing Salami for Pepperoni would 
    not add extra price for the modifier.
 
-   !IMPORTANT! (maybe not)
-   - Add function to calculate the total price of item in a lib file, which will have
-     a function to calculate price based on category. (one for sandwiches, one for salads, etc)
-  !IMPORTANT!
-  - Add a way to disregard premium modifier price when they are defaults
-  !IMPORTANT!
-  - Add modifier rules, to each modifier group.
-
-Add order to modifiers
-Rest of the menu:
-  - Breakfast
+-Add order to modifiers??
+-Rest of the menu:
   - Soups
   - Sides
   - Desserts
@@ -27,4 +21,3 @@ Rest of the menu:
   - Ice Cream
   - Platters
   - Combos
-
