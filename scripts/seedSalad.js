@@ -30,6 +30,12 @@ const salads = {
         "salad_protein",
         "dressing",
       ],
+      defaults: {
+        greens: ["romaine"],
+        salad_toppings: [],
+        salad_protein: [],
+        dressing: ["ranch_dressing"],
+      },
       pricingRules: {
         salad_toppings: {
           includedCount: 5,
@@ -58,9 +64,15 @@ const salads = {
         "salad_protein",
         "dressing",
       ],
+      defaults: {
+        greens: ["romaine"],
+        salad_toppings: [], 
+        salad_protein: [],
+        dressing: ["ranch_dressing"], 
+      },
       pricingRules: {
         salad_toppings: {
-          unlimited: true
+          unlimited: true,
         },
         dressing: {
           includedCount: 2,
@@ -70,9 +82,9 @@ const salads = {
           includedCount: 0,
           extraItemPrice: 3.09,
         },
-        status: "available",
-        order: 20,
       },
+      status: "available",
+      order: 20,
     },
   ],
 };

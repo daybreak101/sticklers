@@ -44,6 +44,13 @@ export default function ItemPrice({
           modifierPrice += option.price ?? 0;
         } 
       });
+
+      if(item.pricingRules && item.pricingRules[groupId]) {
+        const overrage = selectedOptionIds.length - item.pricingRules[groupId].includedCount;
+        if(overrage > 0) {
+          modifierPrice += item.pricingRules[groupId].extraItemPrice * overrage;
+        }
+      }
     }
 
     return (newBase + modifierPrice) * quantity;

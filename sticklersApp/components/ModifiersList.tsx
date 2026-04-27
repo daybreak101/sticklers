@@ -30,80 +30,93 @@ export default function ModifiersList({
 
   const loadModifiers = async () => {
     const modifiers = await getModifierGroups();
+    // const groups =
+    //   (item.modifierGroupIds?.map((id) =>
+    //     modifiers.find((m) => m.id === id),
+    //   ) as ModifierGroup[]) ;
+
+    // temp code
+    // console.log("requested IDs:", item.modifierGroupIds);
+
+    // const tempgroups = item.modifierGroupIds?.map((id) => {
+    //   const found = modifiers.find((m) => m.id === id);
+
+    //   if (!found) {
+    //     console.error("MISSING MODIFIER GROUP:", id);
+    //   }
+
+    //   return found;
+    // });
+
     const groups =
-      (item.modifierGroupIds?.map((id) =>
-        modifiers.find((m) => m.id === id),
-      ) as ModifierGroup[]) || null;
-    console.log("groups", groups);
+      item.modifierGroupIds
+        ?.map((id) => modifiers.find((m) => m.id === id))
+        .filter((g): g is ModifierGroup => g !== undefined) || [];
     setModifiers(groups || []);
     allModsRef.current = groups || [];
   };
 
-const filteredModifiers = useMemo(() => {
-  let updated = [...modifiers];
+  const filteredModifiers = useMemo(() => {
+    let updated = [...modifiers];
 
-  // loop through ALL selected modifiers
-  for (const groupId in selectedModifiers) {
-    const selectedOptionIds = selectedModifiers[groupId];
-    const group = modifiers.find((g) => g.id === groupId);
-    if (!group) continue;
+    // loop through ALL selected modifiers
+    for (const groupId in (selectedModifiers ?? {})) {
+      const selectedOptionIds = selectedModifiers[groupId];
+      const group = modifiers.find((g) => g.id === groupId);
+      if (!group) continue;
 
-    selectedOptionIds.forEach((optionId) => {
-      const option = group.options.find((o) => o.id === optionId);
-      if (!option || !option.effects) return;
+      selectedOptionIds.forEach((optionId) => {
+        const option = group.options.find((o) => o.id === optionId);
+        if (!option || !option.effects) return;
 
-      option.effects.forEach((effect) => {
-        const { groupId: targetGroupId, allowedOptions } = effect;
+        option.effects.forEach((effect) => {
+          const { groupId: targetGroupId, allowedOptions } = effect;
 
-        updated = updated.map((g) => {
-          if (g.id !== targetGroupId) return g;
+          updated = updated.map((g) => {
+            if (g.id !== targetGroupId) return g;
 
-          return {
-            ...g,
-            options: g.options.filter((o) =>
-              allowedOptions?.includes(o.id)
-            ),
-          };
+            return {
+              ...g,
+              options: g.options.filter((o) => allowedOptions?.includes(o.id)),
+            };
+          });
         });
       });
-    });
-  }
+    }
 
-  return updated;
-}, [modifiers, selectedModifiers]);
+    return updated;
+  }, [modifiers, selectedModifiers]);
 
-useEffect(() => {
-  if (!lastChange.group) return;
+  useEffect(() => {
+    if (!lastChange.group) return;
 
-  const option = lastChange.group.options.find(
-    (o) => o.id === lastChange.optionId
-  );
-  if (!option || !option.effects) return;
+    const option = lastChange.group.options.find(
+      (o) => o.id === lastChange.optionId,
+    );
+    if (!option || !option.effects) return;
 
-  setSelectedModifiers((prev) => {
-    let updated = { ...prev };
-    let changed = false;
-    option.effects?.forEach((effect) => {
-      const { groupId, allowedOptions, forceOption } = effect;
+    setSelectedModifiers((prev) => {
+      let updated = { ...prev };
+      let changed = false;
+      option.effects?.forEach((effect) => {
+        const { groupId, allowedOptions, forceOption } = effect;
 
-      const currentSelected = updated[groupId]?.[0];
+        const currentSelected = updated[groupId]?.[0];
 
-      if (!allowedOptions?.includes(currentSelected)) {
-        const next = forceOption ? [forceOption] : [];
+        if (!allowedOptions?.includes(currentSelected)) {
+          const next = forceOption ? [forceOption] : [];
 
-        // only update if actually different
-        if (
-          JSON.stringify(updated[groupId]) !== JSON.stringify(next)
-        ) {
-          updated[groupId] = next;
-          changed = true;
+          // only update if actually different
+          if (JSON.stringify(updated[groupId]) !== JSON.stringify(next)) {
+            updated[groupId] = next;
+            changed = true;
+          }
         }
-      }
-    });
+      });
 
-    return changed ? updated : prev; // 👈 prevents infinite loop
-  });
-}, [lastChange]);
+      return changed ? updated : prev; //prevents infinite loop
+    });
+  }, [lastChange]);
 
   const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
     console.log("handleSelectionChange", group, optionId);
@@ -134,7 +147,7 @@ useEffect(() => {
         <ThemedText style={styles.headerText}>Modifiers</ThemedText>
       </View>
 
-      {filteredModifiers.map((group) => (
+      {(filteredModifiers || []).map((group) => (
         <ModifierSelectionComponent
           key={group.id}
           item={item}

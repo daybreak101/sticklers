@@ -23,6 +23,7 @@ export type Item = {
   order: number;
   status: "available" | "sold-out" | "hidden";
   image?: string;
+  pricingRules?: any;
 };
 
 export type ModifierGroupId =

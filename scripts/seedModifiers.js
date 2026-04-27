@@ -293,7 +293,7 @@ const saladProteinModifiers = {
 const dressingModifiers = {
   id: "dressing",
   name: "Dressing",
-  type: "single",
+  type: "multi",
   priceType: "add",
   options: [
     {
