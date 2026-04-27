@@ -76,7 +76,7 @@ const soups = {
 };
 
 async function seed() {
-  await setDoc(doc(db, "modifierGroups", "soups"), soups);
+  await setDoc(doc(db, "menuCategories", "soups"), soups);
   console.log("Menu seeded");
 }
 seed();

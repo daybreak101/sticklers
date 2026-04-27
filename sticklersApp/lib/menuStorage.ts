@@ -8,7 +8,7 @@ const STORAGE_KEY = "menu_categories";
 export async function getMenuCategories(): Promise<Category[]> {
   try {
    // await AsyncStorage.removeItem(STORAGE_KEY);
-    const CACHE_TTL = 1000 * 60 * 100; // 10 min //TODO: reset this
+    const CACHE_TTL = 1000 * 60 * 1; // 10 min //TODO: reset this
 
     // 1. Check cache
     const cached = await AsyncStorage.getItem(STORAGE_KEY);

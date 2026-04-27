@@ -13,8 +13,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const hot = {
-  id: "hot_matcha",
-  name: "Hot Matcha",
+  id: "hot_coffee",
+  name: "Hot Coffee",
   type: "single",
   items: [
     {
@@ -129,7 +129,7 @@ const hot = {
 };
 
 async function seed() {
-  await setDoc(doc(db, "modifierGroups", "hot_coffee"), hot);
+  await setDoc(doc(db, "menuCategories", "hot_coffee"), hot);
   console.log("Menu seeded");
 }
 

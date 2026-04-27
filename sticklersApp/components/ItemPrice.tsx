@@ -37,16 +37,23 @@ export default function ItemPrice({
         const option = groupData?.options.find((o) => o.id === optionId);
         if (!option) return;
 
+        //if option changes base price
         if (groupData?.priceType === "override") {
           newBase = option.price ?? item.basePrice;
           return;
-        } else if(!item.defaults[groupId].includes(optionId)) {
+        }
+        //else, if option is not included in defaults, add it's price to total. 
+        else if(!item.defaults[groupId].includes(optionId)) {
           modifierPrice += option.price ?? 0;
         } 
       });
 
       if(item.pricingRules && item.pricingRules[groupId]) {
-        const overrage = selectedOptionIds.length - item.pricingRules[groupId].includedCount;
+        let overrage = selectedOptionIds.length - item.pricingRules[groupId].includedCount;
+        //special case, keep for now
+        if(selectedOptionIds.includes("boiled_eggs")) {
+          overrage--;
+        }
         if(overrage > 0) {
           modifierPrice += item.pricingRules[groupId].extraItemPrice * overrage;
         }

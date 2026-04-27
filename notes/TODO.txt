@@ -1,6 +1,7 @@
 -implement a way to display price for additional modifiers that are not included in defaults,
 such as adding an extra protein, and a way for premium proteins to ignore the additional protein
-price (Boiled Eggs)
+price (Boiled Eggs) (There is a temporary fix for this atm, maybe permanent if boiled Eggs
+is the only case of this.)
 -find Jalapeno Cheddar and Asiago prices and add them to firestore
 -implement remove from cart functionality
 -implement cart screen, along with cart totals, cart items and qunatity, clear cart, and cart checkout

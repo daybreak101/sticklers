@@ -69,7 +69,7 @@ const iced = {
 }
 
 async function seed() {
-  await setDoc(doc(db, "modifierGroups", "iced_coffee"), iced);
+  await setDoc(doc(db, "menuCategories", "iced_coffee"), iced);
   console.log("Menu seeded");
 }
 
