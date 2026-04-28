@@ -25,28 +25,19 @@ export default function ModifierSingleGroupComponent({
     setSelectedId(selectedModifiers[group.id]?.[0] || null);
   }, [selectedModifiers, group.id]);
 
-  //FIX THIS:
-  // IDEA: items with no base price will have group priceType as "define"
   const returnPrice = (option: ModifierOption): string => {
-    console.log("GROUP:", group)
-
 
     let displayPrice = group.priceType === "add" ? "+$" : "$";
     if (group.priceType === "define") {
-      console.log("group.priceType === define for option:", option.id);
-      displayPrice += item.pricingRules[group.id][option.id];
+      displayPrice += item.pricingRules[group.id][option.id].toFixed(2);
     } else if (option.price === null) {
-      console.log("option.price === null for option:", option.id);
       displayPrice += item.basePrice?.toFixed(2);
     } else if (option.price !== 0) {
-      console.log("option.price !== 0 for option:", option.id);
       displayPrice += option.price?.toFixed(2);
     } else {
-      console.log("no matches for option:", option.id);
       return "";
     }
 
-    console.log("displayPrice:", displayPrice);
     return displayPrice;
   };
 

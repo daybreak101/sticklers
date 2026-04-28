@@ -54,7 +54,7 @@ export default function ModifierOptionCheckboxComponent({
 
         {displayPrice !== 0 && (
           <ThemedText style={styles.optionPrice}>
-            {`${group.priceType === "add" ? "+" : ""}$${option.price === null ? item.basePrice.toFixed(2) : displayPrice?.toFixed(2)}`}
+            {`${group.priceType === "add" ? "+" : ""}$${option.price === null ? item.basePrice?.toFixed(2) : displayPrice?.toFixed(2)}`}
           </ThemedText>
         )}
       </View>

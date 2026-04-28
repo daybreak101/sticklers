@@ -38,7 +38,11 @@ export default function ItemPrice({
         if (!option) return;
 
         //if option changes base price
-        if (groupData?.priceType === "override") {
+        if(groupData?.priceType === "define") {
+          newBase = item.pricingRules[groupId][optionId] ?? item.basePrice ?? 0;
+          return;
+        }
+        else if (groupData?.priceType === "override") {
           newBase = option.price ?? item.basePrice ?? 0;
           return;
         }

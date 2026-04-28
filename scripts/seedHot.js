@@ -182,7 +182,7 @@ const hot = {
       description: "A single shot of espresso.",
       modifierGroupIds: ["espresso_shots"],
       defaults: {
-        hot_coffee_size: ["single"],
+        espresso_shots: ["single"],
       },
       pricingRules: {
         espresso_shots: {
@@ -255,10 +255,57 @@ const espressoShotsModifiers = {
   ],
 };
 
+const syrupModifiers = {
+  id: "syrup",
+  name: "Syrup",
+  type: "multi",
+  priceType: "add",
+  options: [
+    { id: "vanilla", name: "Vanilla", price: 0 },
+    { id: "caramel", name: "Caramel", price: 0 },
+    { id: "hazelnut", name: "Hazelnut", price: 0 },
+    { id: "lavender", name: "Lavender", price: 0 },
+    { id: "brown_sugar", name: "Brown Sugar", price: 0 },
+    { id: "sugar_free_vanilla", name: "Sugar Free Vanilla", price: 0 },
+    { id: "sugar_free_hazelnut", name: "Sugar Free Hazelnut", price: 0 },
+
+  ],
+}
+
+const milkModifiers = {
+  id: "milk",
+  name: "Milk",
+  type: "single",
+  priceType: "add",
+  options: [
+    { id: "whole", name: "Whole", price: 0 },
+    { id: "almond", name: "Almond", price: 0.75 },
+    { id: "oatmilk", name: "Oat Milk", price: 0.75 },
+    { id: "halfandhalf", name: "Half and Half", price: 0 },
+  ],
+}
+
+const coffeeExtrasModifiers = {
+  id: "coffee_extras",
+  name: "Extras",
+  type: "multi",
+  priceType: "add",
+  options: [
+    { id: "whipped", name: "Whipped Cream", price: 0 },
+    { id: "cinnamon", name: "Cinnamon", price: 0 },
+    { id: "nutmeg", name: "Nutmeg", price: 0 },
+    { id: "coldfoam", name: "Cold Foam", price: 0 },
+    { id: "espresso", name: "Extra Espresso Shot", price: 0 },
+  ]
+}
+
 async function seed() {
   await setDoc(doc(db, "menuCategories", "hot_coffee"), hot);
   await setDoc(doc(db, "modifierGroups", "espresso_shots"), espressoShotsModifiers);
   await setDoc(doc(db, "modifierGroups", "hot_coffee_size"), hotCoffeeModifiers);
+  await setDoc(doc(db, "modifierGroups", "syrup"), syrupModifiers);
+  await setDoc(doc(db, "modifierGroups", "milk"), milkModifiers);
+  await setDoc(doc(db, "modifierGroups", "coffee_extras"), coffeeExtrasModifiers);
   console.log("Menu seeded");
 }
 
