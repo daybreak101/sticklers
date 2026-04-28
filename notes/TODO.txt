@@ -1,3 +1,5 @@
+-implement "define" price type to priceTotal
+
 -implement a way to display price for additional modifiers that are not included in defaults,
 such as adding an extra protein, and a way for premium proteins to ignore the additional protein
 price (Boiled Eggs) (There is a temporary fix for this atm, maybe permanent if boiled Eggs

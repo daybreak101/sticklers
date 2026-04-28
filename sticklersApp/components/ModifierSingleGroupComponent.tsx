@@ -8,7 +8,7 @@ export default function ModifierSingleGroupComponent({
   item,
   group,
   handleSelectionChange,
-  selectedModifiers
+  selectedModifiers,
 }: {
   item: Item;
   group: ModifierGroup;
@@ -17,9 +17,38 @@ export default function ModifierSingleGroupComponent({
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  // OLD CODE:
+  // exists within price
+  /* /* {`${group.priceType === "add" ? "+" : ""}$${option.price === null ? item.basePrice?.toFixed(2) : option.price?.toFixed(2)}`} */
+
   useEffect(() => {
     setSelectedId(selectedModifiers[group.id]?.[0] || null);
   }, [selectedModifiers, group.id]);
+
+  //FIX THIS:
+  // IDEA: items with no base price will have group priceType as "define"
+  const returnPrice = (option: ModifierOption): string => {
+    console.log("GROUP:", group)
+
+
+    let displayPrice = group.priceType === "add" ? "+$" : "$";
+    if (group.priceType === "define") {
+      console.log("group.priceType === define for option:", option.id);
+      displayPrice += item.pricingRules[group.id][option.id];
+    } else if (option.price === null) {
+      console.log("option.price === null for option:", option.id);
+      displayPrice += item.basePrice?.toFixed(2);
+    } else if (option.price !== 0) {
+      console.log("option.price !== 0 for option:", option.id);
+      displayPrice += option.price?.toFixed(2);
+    } else {
+      console.log("no matches for option:", option.id);
+      return "";
+    }
+
+    console.log("displayPrice:", displayPrice);
+    return displayPrice;
+  };
 
   return (
     <View>
@@ -48,11 +77,10 @@ export default function ModifierSingleGroupComponent({
                 </View>
                 <ThemedText style={styles.optionText}>{option.name}</ThemedText>
               </View>
-              {option.price !== 0 && (
-                <ThemedText style={styles.optionPrice}>
-                  {`${group.priceType === "add" ? "+" : ""}$${option.price === null ? item.basePrice.toFixed(2) : option.price?.toFixed(2)}`}
-                </ThemedText>
-              )}
+
+              <ThemedText style={styles.optionPrice}>
+                {returnPrice(option)}
+              </ThemedText>
             </Pressable>
             {index !== group.options.length - 1 && (
               <View style={styles.lineBreak}></View>

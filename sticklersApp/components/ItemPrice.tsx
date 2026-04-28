@@ -22,7 +22,7 @@ export default function ItemPrice({
   totalPrice = useMemo(() => {
     if (!item) return 0;
 
-    let newBase = item.basePrice;
+    let newBase = item.basePrice ?? 0;
     let modifierPrice = 0;
 
     //for each modifier group in SELECTED MODIFIERS
@@ -39,7 +39,7 @@ export default function ItemPrice({
 
         //if option changes base price
         if (groupData?.priceType === "override") {
-          newBase = option.price ?? item.basePrice;
+          newBase = option.price ?? item.basePrice ?? 0;
           return;
         }
         //else, if option is not included in defaults, add it's price to total. 

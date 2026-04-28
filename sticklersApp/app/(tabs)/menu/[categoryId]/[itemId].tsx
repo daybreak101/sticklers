@@ -121,7 +121,7 @@ export default function ItemPage() {
             {item.name}
           </ThemedText>
           <ThemedText style={styles.description}>{item.description}</ThemedText>
-          <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>
+          {item.basePrice && <Text style={styles.price}>${item.basePrice?.toFixed(2)}</Text>}
           <ModifiersList
             selectedModifiers={selectedModifiers ?? {}}
             item={item}

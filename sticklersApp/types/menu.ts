@@ -17,7 +17,7 @@ export type Item = {
   itemId: string;
   name: string;
   description: string;
-  basePrice: number;
+  basePrice?: number;
   modifierGroupIds?: string[];
   defaults?: any;
   order: number;
@@ -25,6 +25,16 @@ export type Item = {
   image?: string;
   pricingRules?: any;
 };
+
+//pricing rules structure
+// holds any amount of modifiers.
+// {
+//   [modifierID]: {
+//     extraItemPrice?: number;
+//     includedCount?: number;
+//     unlimited?: boolean
+//   }
+// }
 
 export type ModifierGroupId =
   | "bread"
@@ -35,7 +45,8 @@ export type ModifierGroupId =
   | "greens"
   | "salad_toppings"
   | "salad_protein"
-  | "dressing";
+  | "dressing"
+  | "hot_coffee_size";
 
 type BreadOptionId =
   | "french"
@@ -57,7 +68,7 @@ export type ModifierGroup = {
   id: ModifierGroupId;
   name: string;
   type: "single" | "multi";
-  priceType?: "add" | "override";
+  priceType?: "add" | "override" | "define";
   options: ModifierOption[];
 };
 

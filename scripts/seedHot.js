@@ -13,123 +13,252 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const hot = {
-  id: "hot_coffee",
-  name: "Hot Coffee",
-  type: "single",
+  name: "Hot Beverages",
+  description:
+    "Curated selection of coffees, teas, and comforting classics, served hot.",
+  order: 50,
+  image: "",
   items: [
     {
-      id: "hot_matcha",
+      itemId: "hot_matcha",
       name: "Hot Matcha",
-      description: "",
-      sizes: [
-        { id: "small", name: "Small", price: 4.5, status: "available" },
-        { id: "medium", name: "Medium", price: 5.1, status: "available" },
-        { id: "large", name: "Large", price: 5.5, status: "available" },
-      ],
+      description: "Earthy Japanese green tea blended with steamed milk.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 4.5,
+          medium: 5.1,
+          large: 5.5,
+        },
+      },
+      order: 50,
       status: "available",
     },
     {
-      id: "hot_chocolate",
+      itemId: "hot_chocolate",
       name: "Hot Chocolate",
-      sizes: [
-        { id: "small", name: "Small", price: 3.69, status: "available" },
-        { id: "medium", name: "Medium", price: 3.74, status: "available" },
-        { id: "large", name: "Large", price: 4.78, status: "available" },
-      ],
+      description: "Velvety, steamed milk with a rich chocolate flavor.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 3.69,
+          medium: 3.74,
+          large: 4.78,
+        },
+      },
       status: "available",
+      order: 10,
     },
     {
-      id: "hot_water",
+      itemId: "hot_water",
       name: "Hot Water",
-      price: 1.5,
-      status: "available",
+      description: "Freshly heated water.",
+      basePrice: 1.5,
+      modifierGroupIds: [],
+      defaults: {},
+      status: "hidden",
+      order: 120,
     },
     {
-      id: "caffe_mocha",
+      itemId: "caffe_mocha",
       name: "Caffe Mocha",
-      sizes: [
-        { id: "small", name: "Small", price: 4.68, status: "available" },
-        { id: "medium", name: "Medium", price: 5.35, status: "available" },
-        { id: "large", name: "Large", price: 6.29, status: "available" },
-      ],
+      description: "Espresso with steamed milk and chocolate flavor.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 4.68,
+          medium: 5.35,
+          large: 6.29,
+        },
+      },
       status: "available",
+      order: 30,
     },
     {
-      id: "hot_chai",
+      itemId: "hot_chai",
       name: "Hot Chai Tea Latte",
-      sizes: [
-        { id: "small", name: "Small", price: 4.99, status: "available" },
-        { id: "medium", name: "Medium", price: 5.24, status: "available" },
-        { id: "large", name: "Large", price: 5.88, status: "available" },
-      ],
+      description:
+        "Black tea infused with warming spices and blended with steamed milk.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 4.99,
+          medium: 5.24,
+          large: 5.88,
+        },
+      },
       status: "available",
+      order: 40,
     },
     {
-      id: "coffee",
+      itemId: "coffee",
       name: "Coffee",
-      sizes: [
-        { id: "small", name: "Small", price: 2.96, status: "available" },
-        { id: "medium", name: "Medium", price: 3.1, status: "available" },
-        { id: "large", name: "Large", price: 3.74, status: "available" },
-      ],
+      description:
+        "Freshly brewed coffee with different roasts to choose from. Roasts include our House Coffee, French Roast, Decaf, and a rotating flavored roast.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 2.96,
+          medium: 3.1,
+          large: 3.74,
+        },
+      },
       status: "available",
+      order: 10,
     },
     {
-      id: "hot_macchiato",
+      itemId: "hot_macchiato",
       name: "Hot Macchiato",
-      sizes: [
-        { id: "small", name: "Small", price: 4.78, status: "available" },
-        { id: "medium", name: "Medium", price: 5.3, status: "available" },
-        { id: "large", name: "Large", price: 5.9, status: "available" },
-      ],
+      description: "Espresso with steamed milk topped with caramel drizzle.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 4.78,
+          medium: 5.3,
+          large: 5.9,
+        },
+      },
       status: "available",
+      order: 80,
     },
     {
-      id: "caffe_latte",
+      itemId: "caffe_latte",
       name: "Caffe Latte",
-      sizes: [
-        { id: "small", name: "Small", price: 3.95, status: "available" },
-        { id: "medium", name: "Medium", price: 4.8, status: "available" },
-        { id: "large", name: "Large", price: 5.6, status: "available" },
-      ],
+      description: "Espresso with steamed milk.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 3.95,
+          medium: 4.8,
+          large: 5.6,
+        },
+      },
       status: "available",
+      order: 20,
     },
     {
-      id: "cappuccino",
+      itemId: "cappuccino",
       name: "Cappuccino",
-      sizes: [
-        { id: "small", name: "Small", price: 3.95, status: "available" },
-        { id: "medium", name: "Medium", price: 5.25, status: "available" },
-        { id: "large", name: "Large", price: 6.08, status: "available" },
-      ],
+      description:
+        "Hot beverage composed of equal parts espresso, steamed milk, and milk foam.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 3.95,
+          medium: 5.25,
+          large: 6.08,
+        },
+      },
       status: "available",
+      order: 60,
     },
     {
-      id: "espresso",
+      itemId: "espresso",
       name: "Espresso",
-      sizes: [
-        { id: "single", name: "Single", price: 2.60, status: "available" },
-        { id: "double", name: "Double", price: 3.54, status: "available" },
-      ],
+      description: "A single shot of espresso.",
+      modifierGroupIds: ["espresso_shots"],
+      defaults: {
+        hot_coffee_size: ["single"],
+      },
+      pricingRules: {
+        espresso_shots: {
+          single: 2.6,
+          double: 3.54,
+        },
+      },
       status: "available",
+      order: 110,
     },
     {
-      id: "americano",
+      itemId: "americano",
       name: "Americano",
-      price: 0,
+      description: "Espresso diluted with hot water.",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
       status: "available",
+      pricingRules: {
+        hot_coffee_size: {
+          small: 3.25,
+          medium: 3.85,
+          large: 4.1,
+        },
+      },
+      order: 70,
     },
     {
-      id: "hot_london_fog",
+      itemId: "hot_london_fog",
       name: "Hot London Fog",
-      price: 0,
+      description: "Earl Grey tea with steamed milk and a hint of vanilla.",
       status: "available",
+      modifierGroupIds: ["hot_coffee_size"],
+      defaults: {
+        hot_coffee_size: ["medium"],
+      },
+      pricingRules: {
+        hot_coffee_size: {
+          small: 3.9,
+          medium: 4.58,
+          large: 5.9,
+        },
+      },
+      order: 90,
     },
+  ],
+};
+
+const hotCoffeeModifiers = {
+  id: "hot_coffee_size",
+  name: "Size",
+  type: "single",
+  priceType: "define",
+  options: [
+    { id: "small", name: "Small", price: 0 },
+    { id: "medium", name: "Medium", price: 0 },
+    { id: "large", name: "Large", price: 0 },
+  ],
+};
+
+const espressoShotsModifiers = {
+  id: "espresso_shots",
+  name: "Espresso Shots",
+  type: "single",
+  priceType: "define",
+  options: [
+    { id: "single", name: "Single", price: 0 },
+    { id: "double", name: "Double", price: 0 },
   ],
 };
 
 async function seed() {
   await setDoc(doc(db, "menuCategories", "hot_coffee"), hot);
+  await setDoc(doc(db, "modifierGroups", "espresso_shots"), espressoShotsModifiers);
+  await setDoc(doc(db, "modifierGroups", "hot_coffee_size"), hotCoffeeModifiers);
   console.log("Menu seeded");
 }
 

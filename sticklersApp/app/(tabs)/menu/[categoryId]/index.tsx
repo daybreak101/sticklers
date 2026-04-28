@@ -16,12 +16,14 @@ export default function CategoryScreen() {
   const [category, setCategory] = useState<Category | null>(null);
 
   useEffect(() => {
+
     loadCategory();
   }, []);
 
   const loadCategory = async () => {
     const categories = await getMenuCategories();
     const found = categories.find((c) => c.id === categoryId) || null;
+    console.log("found category:", found);
     setCategory(found || null);
   };
 

@@ -41,7 +41,7 @@ export default function ItemOption({
         <View style={styles.textBackground}>
           <View style={styles.textContainer}>
             <Text style={styles.text}>{item.name}</Text>
-            <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>
+            {item.basePrice && <Text style={styles.price}>${item.basePrice.toFixed(2)}</Text>}
           </View>
         </View>
       </View>
