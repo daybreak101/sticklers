@@ -121,16 +121,27 @@ export default function ItemPage() {
             {item.name}
           </ThemedText>
           <ThemedText style={styles.description}>{item.description}</ThemedText>
-          {item.basePrice && <Text style={styles.price}>${item.basePrice?.toFixed(2)}</Text>}
+          {item.basePrice && (
+            <Text style={styles.price}>${item.basePrice?.toFixed(2)}</Text>
+          )}
           <ModifiersList
             selectedModifiers={selectedModifiers ?? {}}
             item={item}
             setSelectedModifiers={setSelectedModifiers}
           />
+          <View style={styles.headerBanner}>
+            <ThemedText style={styles.headerText}>Special Requests</ThemedText>
+          </View>
         </ScrollView>
 
         <View style={styles.bottomBar}>
-          <ItemPrice item={item} modifierGroups={modifierGroups} selectedModifiers={selectedModifiers} quantity={quantity} totalPrice={totalPrice} />
+          <ItemPrice
+            item={item}
+            modifierGroups={modifierGroups}
+            selectedModifiers={selectedModifiers}
+            quantity={quantity}
+            totalPrice={totalPrice}
+          />
           <View style={styles.bottomBarBottom}>
             <View
               style={[
@@ -221,4 +232,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
+  headerBanner: {
+    padding: 10,
+    backgroundColor: "rgba(104, 33, 29)",
+  },
+  headerText: {
+    color: "white",
+    fontWeight: 300,
+    fontSize: 20,
+    paddingHorizontal: 10,
+  },
 });

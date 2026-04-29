@@ -17,15 +17,18 @@ const hot = {
   description:
     "Curated selection of coffees, teas, and comforting classics, served hot.",
   order: 50,
-  image: "",
+  image: "hotDrinks",
   items: [
     {
       itemId: "hot_matcha",
       name: "Hot Matcha",
       description: "Earthy Japanese green tea blended with steamed milk.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -41,9 +44,12 @@ const hot = {
       itemId: "hot_chocolate",
       name: "Hot Chocolate",
       description: "Velvety, steamed milk with a rich chocolate flavor.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -53,7 +59,8 @@ const hot = {
         },
       },
       status: "available",
-      order: 10,
+      order: 100,
+      image: "hotChocolate",
     },
     {
       itemId: "hot_water",
@@ -69,9 +76,12 @@ const hot = {
       itemId: "caffe_mocha",
       name: "Caffe Mocha",
       description: "Espresso with steamed milk and chocolate flavor.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -88,9 +98,12 @@ const hot = {
       name: "Hot Chai Tea Latte",
       description:
         "Black tea infused with warming spices and blended with steamed milk.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -106,10 +119,11 @@ const hot = {
       itemId: "coffee",
       name: "Coffee",
       description:
-        "Freshly brewed coffee with different roasts to choose from. Roasts include our House Coffee, French Roast, Decaf, and a rotating flavored roast.",
-      modifierGroupIds: ["hot_coffee_size"],
+        "Freshly brewed coffee with different roasts to choose from. Roasts include our House Blend, French Roast, Decaf, and a rotating flavored roast.",
+      modifierGroupIds: ["hot_coffee_size", "drip_flavor"],
       defaults: {
         hot_coffee_size: ["medium"],
+        drip_flavor: ["house"],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -120,14 +134,18 @@ const hot = {
       },
       status: "available",
       order: 10,
+      image: "coffee",
     },
     {
       itemId: "hot_macchiato",
       name: "Hot Macchiato",
       description: "Espresso with steamed milk topped with caramel drizzle.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -143,9 +161,12 @@ const hot = {
       itemId: "caffe_latte",
       name: "Caffe Latte",
       description: "Espresso with steamed milk.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -162,9 +183,12 @@ const hot = {
       name: "Cappuccino",
       description:
         "Hot beverage composed of equal parts espresso, steamed milk, and milk foam.",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -216,9 +240,12 @@ const hot = {
       name: "Hot London Fog",
       description: "Earl Grey tea with steamed milk and a hint of vanilla.",
       status: "available",
-      modifierGroupIds: ["hot_coffee_size"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
+        milk: ["whole"],
+        syrup: [],
+        coffee_extras: [],
       },
       pricingRules: {
         hot_coffee_size: {
@@ -268,9 +295,8 @@ const syrupModifiers = {
     { id: "brown_sugar", name: "Brown Sugar", price: 0 },
     { id: "sugar_free_vanilla", name: "Sugar Free Vanilla", price: 0 },
     { id: "sugar_free_hazelnut", name: "Sugar Free Hazelnut", price: 0 },
-
   ],
-}
+};
 
 const milkModifiers = {
   id: "milk",
@@ -283,7 +309,7 @@ const milkModifiers = {
     { id: "oatmilk", name: "Oat Milk", price: 0.75 },
     { id: "halfandhalf", name: "Half and Half", price: 0 },
   ],
-}
+};
 
 const coffeeExtrasModifiers = {
   id: "coffee_extras",
@@ -296,16 +322,39 @@ const coffeeExtrasModifiers = {
     { id: "nutmeg", name: "Nutmeg", price: 0 },
     { id: "coldfoam", name: "Cold Foam", price: 0 },
     { id: "espresso", name: "Extra Espresso Shot", price: 0 },
-  ]
+  ],
+};
+
+const dripFlavorModifiers = {
+  id: "drip_flavor",
+  name: "Flavor",
+  type: "single",
+  priceType: "add",
+  options: [
+    { id: "house", name: "House Blend", price: 0 },
+    { id: "french", name: "French Roast", price: 0 },
+    { id: "decaf", name: "Decaf", price: 0 },
+    { id: "flavored", name: "Flavored", price: 0 },
+  ],
 }
 
 async function seed() {
   await setDoc(doc(db, "menuCategories", "hot_coffee"), hot);
-  await setDoc(doc(db, "modifierGroups", "espresso_shots"), espressoShotsModifiers);
-  await setDoc(doc(db, "modifierGroups", "hot_coffee_size"), hotCoffeeModifiers);
+  await setDoc(
+    doc(db, "modifierGroups", "espresso_shots"),
+    espressoShotsModifiers,
+  );
+  await setDoc(
+    doc(db, "modifierGroups", "hot_coffee_size"),
+    hotCoffeeModifiers,
+  );
   await setDoc(doc(db, "modifierGroups", "syrup"), syrupModifiers);
   await setDoc(doc(db, "modifierGroups", "milk"), milkModifiers);
-  await setDoc(doc(db, "modifierGroups", "coffee_extras"), coffeeExtrasModifiers);
+  await setDoc(
+    doc(db, "modifierGroups", "coffee_extras"),
+    coffeeExtrasModifiers,
+  );
+  await setDoc(doc(db, "modifierGroups", "drip_flavor"), dripFlavorModifiers);
   console.log("Menu seeded");
 }
 

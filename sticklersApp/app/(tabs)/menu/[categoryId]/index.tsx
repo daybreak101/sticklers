@@ -35,7 +35,7 @@ export default function CategoryScreen() {
         <ThemedText style={[globalStyles.title, { paddingTop: 10, paddingHorizontal: 20 }]}>{category.name}</ThemedText>
         <ThemedText style={styles.description}>{category.description}</ThemedText>
         <FlatList
-          data={category.items}
+          data={category.items.sort((a, b) => a.order - b.order)}
           numColumns={2}
           keyExtractor={(item) => item.itemId}
           renderItem={({ item }) => <ItemOption item={item} category={category} />}
