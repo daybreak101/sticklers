@@ -44,11 +44,12 @@ const hot = {
       itemId: "hot_chocolate",
       name: "Hot Chocolate",
       description: "Velvety, steamed milk with a rich chocolate flavor.",
-      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "mocha", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
         milk: ["whole"],
         syrup: [],
+        mocha: ["chocolate"],
         coffee_extras: [],
       },
       pricingRules: {
@@ -76,11 +77,12 @@ const hot = {
       itemId: "caffe_mocha",
       name: "Caffe Mocha",
       description: "Espresso with steamed milk and chocolate flavor.",
-      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "coffee_extras"],
+      modifierGroupIds: ["hot_coffee_size", "milk", "syrup", "mocha", "coffee_extras"],
       defaults: {
         hot_coffee_size: ["medium"],
         milk: ["whole"],
         syrup: [],
+        mocha: ["chocolate"],
         coffee_extras: [],
       },
       pricingRules: {
@@ -288,15 +290,28 @@ const syrupModifiers = {
   type: "multi",
   priceType: "add",
   options: [
-    { id: "vanilla", name: "Vanilla", price: 0 },
-    { id: "caramel", name: "Caramel", price: 0 },
-    { id: "hazelnut", name: "Hazelnut", price: 0 },
-    { id: "lavender", name: "Lavender", price: 0 },
-    { id: "brown_sugar", name: "Brown Sugar", price: 0 },
-    { id: "sugar_free_vanilla", name: "Sugar Free Vanilla", price: 0 },
-    { id: "sugar_free_hazelnut", name: "Sugar Free Hazelnut", price: 0 },
+    { id: "vanilla", name: "Vanilla", price: .78 },
+    { id: "caramel", name: "Caramel", price: .78 },
+    { id: "hazelnut", name: "Hazelnut", price: .78 },
+    { id: "lavender", name: "Lavender", price: .78 },
+    { id: "brown_sugar", name: "Brown Sugar", price: .78 },
+    { id: "sugar_free_vanilla", name: "Sugar Free Vanilla", price: .78 },
+    { id: "sugar_free_hazelnut", name: "Sugar Free Hazelnut", price: .78 },
   ],
 };
+
+const mochaModifiers = {
+  id: "mocha",
+  name: "Mocha",
+  type: "single",
+  priceType: "add",
+  options: [
+    { id: "chocolate", name: "Chocolate", price: 0 },
+    { id: "white_chocolate", name: "White Chocolate", price: 0},
+    { id: "sf_mocha", name: "Sugar Free Mocha", price: 0 },
+    { id: "sf_white_chocolate", name: "Sugar Free White Chocolate", price: 0 },
+  ],
+}
 
 const milkModifiers = {
   id: "milk",
