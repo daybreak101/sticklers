@@ -353,7 +353,7 @@ const dressingModifiers = {
   ],
 };
 
-async function seed() {
+export async function seed() {
   //await setDoc(doc(db, "menuCategories", "sandwiches"), sandwiches);
   await setDoc(doc(db, "modifierGroups", "bread"), breadModifiers);
   await setDoc(doc(db, "modifierGroups", "size"), sizeModifiers);
@@ -372,7 +372,7 @@ async function seed() {
     saladProteinModifiers,
   );
   await setDoc(doc(db, "modifierGroups", "dressing"), dressingModifiers);
-  console.log("Menu seeded");
+  console.log("Menu modifiers seeded");
 }
 
-seed();
+//seed();

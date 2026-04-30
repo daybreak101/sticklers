@@ -89,9 +89,9 @@ const salads = {
   ],
 };
 
-async function seed() {
+export async function seed() {
   await setDoc(doc(db, "menuCategories", "salads"), salads);
-  console.log("Menu seeded");
+  console.log("Menu salad seeded");
 }
 
-seed();
+//seed();

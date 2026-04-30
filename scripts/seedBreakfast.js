@@ -345,9 +345,9 @@ const breakfast = {
   ],
 };
 
-async function seed() {
+export async function seed() {
   await setDoc(doc(db, "menuCategories", "breakfast"), breakfast);
-  console.log("Menu seeded");
+  console.log("Menu breakfast seeded");
 }
 
-seed();
+//seed();

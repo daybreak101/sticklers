@@ -191,9 +191,9 @@ const iced = {
   ],
 };
 
-async function seed() {
+export async function seed() {
   await setDoc(doc(db, "menuCategories", "iced_coffee"), iced);
-  console.log("Menu seeded");
+  console.log("Menu iced seeded");
 }
 
-seed();
+//seed();

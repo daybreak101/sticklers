@@ -13,70 +13,106 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const soups = {
-  id: "soups",
   name: "Soups",
-  description: "",
+  description: "Homemade soups from the kettle.",
   order: 30,
+  image: "soups",
   items: [
     {
-      id: "veggie_soup",
+      itemId: "veggie_soup",
       name: "Soup of the Day",
       description:
-        "Todays soup of the day. 100% vegetarian. Served with Oyster Crackers.",
-      price: 0,
+        "Today's soup of the day. 100% vegetarian. Served with Oyster Crackers.",
+      modifierGroupIds: ["soup_size"],
+      defaults: {
+        soup_size: ["small"],
+      },
+      pricingRules: {
+        soup_size: {
+          small: 4.85,
+          large: 5.99,
+        },
+      },
       status: "available",
-      sizes: [
-        { id: "small", name: "Small", price: 4.85, status: "available" },
-        { id: "large", name: "Large", price: 5.99, status: "available" },
-      ],
       availability: "lunch_only",
       order: 10,
     },
     {
-      id: "chicken_noodle_soup",
+      itemId: "chicken_noodle_soup",
       name: "Chicken Noodle Soup",
       description: "Served with Oyster Crackers.",
-      price: 0,
+      modifierGroupIds: ["soup_size"],
+      defaults: {
+        soup_size: ["small"],
+      },
+      pricingRules: {
+        soup_size: {
+          small: 4.99,
+          large: 6.66,
+        },
+      },
       status: "available",
-      sizes: [
-        { id: "small", name: "Small", price: 4.99, status: "available" },
-        { id: "large", name: "Large", price: 6.66, status: "available" },
-      ],
       availability: "lunch_only",
       order: 20,
     },
     {
-      id: "homemade_chili",
+      itemId: "homemade_chili",
       name: "Homemade Chili",
       description: "Served with Oyster Crackers.",
-      price: 0,
-      status: "available",
-      sizes: [
-        { id: "small", name: "Small", price: 5.9, status: "available" },
-        { id: "large", name: "Large", price: 7.12, status: "available" },
-      ],
-      inlineModifierGroups: [
-        {
-          id: "chili_toppings",
-          name: "Toppings",
-          type: "multi",
-          options: [
-            { id: "onions", name: "Onions", price: 0 },
-            { id: "cheddar", name: "Cheddar", price: 0 },
-          ],
-        },
-      ],
+      modifierGroupIds: ["soup_size", "chili_toppings"],
       defaults: {
+        soup_size: ["small"],
         chili_toppings: [],
       },
+      pricingRules: {
+        soup_size: {
+          small: 5.9,
+          large: 7.12,
+        },
+      },
+      status: "available",
       availability: "lunch_only",
       order: 30,
     },
   ],
 };
 
-async function seed() {
+const chiliToppingsModifiers = {
+  id: "chili_toppings",
+  name: "Toppings",
+  type: "multi",
+  priceType: "add",
+  options: [
+    { id: "onions", name: "Onions", price: 0 },
+    { id: "cheddar", name: "Cheddar", price: 0 },
+  ],
+};
+
+const soupSizeModifiers = {
+  id: "soup_size",
+  name: "Size",
+  type: "single",
+  priceType: "define",
+  options: [
+    {
+      id: "small",
+      name: "Small",
+      price: 0,
+      status: "available",
+    },
+    {
+      id: "large",
+      name: "Large",
+      price: 0,
+      status: "available",
+    },
+  ],
+};
+
+export async function seed() {
   await setDoc(doc(db, "menuCategories", "soups"), soups);
-  console.log("Menu seeded");
+  await setDoc(doc(db, "modifierGroups", "soup_size"), soupSizeModifiers);
+  await setDoc(doc(db, "modifierGroups", "chili_toppings"), chiliToppingsModifiers);
+  console.log("Menu soups seeded");
 }
-seed();
+//seed();

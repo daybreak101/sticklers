@@ -353,7 +353,7 @@ const dripFlavorModifiers = {
   ],
 }
 
-async function seed() {
+export async function seed() {
   await setDoc(doc(db, "menuCategories", "hot_coffee"), hot);
   await setDoc(
     doc(db, "modifierGroups", "espresso_shots"),
@@ -370,7 +370,7 @@ async function seed() {
     coffeeExtrasModifiers,
   );
   await setDoc(doc(db, "modifierGroups", "drip_flavor"), dripFlavorModifiers);
-  console.log("Menu seeded");
+  console.log("Menu hot seeded");
 }
 
-seed();
+//seed();

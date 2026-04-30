@@ -187,29 +187,6 @@ const breakfastSidesModifiers = {
   ],
 };
 
-const oatmealSizeModifiers = {
-  id: "oatmeal_size",
-  name: "Oatmeal Size",
-  type: "single",
-  priceType: "override",
-  options: [
-    {
-      id: "small",
-      name: "Small",
-      price: 0,
-      status: "available",
-      availability: "breakfast_only",
-    },
-    {
-      id: "medium",
-      name: "Medium",
-      price: 0,
-      status: "available",
-      availability: "breakfast_only",
-    },
-  ],
-};
-
 const oatmealToppingsModifiers = {
   id: "oatmeal_toppings",
   name: "Oatmeal Toppings",
@@ -240,10 +217,16 @@ const oatmealToppingsModifiers = {
       price: 0,
       status: "available",
     },
+    {
+      id: "honey",
+      name: "Honey",
+      price: 0,
+      status: "available",
+    }
   ],
 };
 
-async function seed() {
+export async function seed() {
   await setDoc(doc(db, "modifierGroups", "bagel"), bagelModifiers);
   await setDoc(doc(db, "modifierGroups", "cream_cheese"), creamCheeseModifiers);
   await setDoc(
@@ -258,12 +241,11 @@ async function seed() {
     doc(db, "modifierGroups", "breakfast_sides"),
     breakfastSidesModifiers,
   );
-  await setDoc(doc(db, "modifierGroups", "oatmeal_size"), oatmealSizeModifiers);
   await setDoc(
     doc(db, "modifierGroups", "oatmeal_toppings"),
     oatmealToppingsModifiers,
   );
-  console.log("Menu seeded");
+  console.log("Menu bf modifiers seeded");
 }
 
-seed();
+//seed();
