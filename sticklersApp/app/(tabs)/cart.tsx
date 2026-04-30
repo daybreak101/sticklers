@@ -27,7 +27,7 @@ export default function CartScreen() {
         </ThemedText>
         <FlatList 
           data={cart.items}
-          keyExtractor={(item) => item.itemId}
+          keyExtractor={(item) => item.cartItemId}
           renderItem={({ item }) => <CartItemComponent cartItem={item} />}
           ItemSeparatorComponent={() => <View style={{ padding: 10 }}></View>}
           ListFooterComponent={<View style={{ padding: 10 }}></View>}

@@ -23,6 +23,7 @@ import ModifiersList from "@/components/ModifiersList";
 import { CartItem, SelectedModifiers } from "@/types/cart";
 import { useCart } from "@/context/CartContext";
 import ItemPrice from "@/components/ItemPrice";
+import { nanoid } from "nanoid";
 
 export default function ItemPage() {
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
@@ -83,12 +84,41 @@ export default function ItemPage() {
   // add to cart, called by "Add to Cart" button
   const addToCart = async () => {
     if (!item || !category) return;
+
+    //base price could be defined by price in pricing rules.
+    //find it.
+    let basePrice = item.basePrice;
+    if (!basePrice && item.pricingRules) {
+      for (const groupId in item.pricingRules) {
+        const group = modifierGroups.find((g) => g.id === groupId);
+        if (group && group.priceType === "define") {
+          const option = group.options.find(
+            (o) => o.id === item.defaults[groupId][0],
+          );
+          if (option) {
+            basePrice = item.pricingRules[groupId][option.id];
+          }
+        }
+      }
+    }
+
+    //TODO:
+    //maybe better id generation?
+    //move this to add to cart function in cart context
+    //check if item exists in cart
+    //if it does, update quantity
+    const signature = JSON.stringify({
+      itemId,
+      modifiers: selectedModifiers,
+    });
+
     addItem({
+      cartItemId: nanoid(),
       itemId: item?.itemId,
       name: item?.name,
       image: item.image ?? category?.image,
       category: category?.name,
-      basePrice: item.basePrice,
+      basePrice: basePrice,
       modifierGroupIds: item.modifierGroupIds,
       defaults: item.defaults,
       selectedModifiers: selectedModifiers,

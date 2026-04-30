@@ -3,6 +3,7 @@ export type SelectedModifiers = {
 }
 
 export type CartItem = {
+    cartItemId: string;
     itemId: string;
     name: string;
     image: string;
