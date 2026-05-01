@@ -3,6 +3,7 @@ import React from "react";
 import { CartItem } from "@/types/cart";
 import { images } from "@/constants/images";
 import { ThemedText } from "./defaults/themed-text";
+import ItemModifiersInCart from "./ItemModifiersInCart";
 
 type CartItemProps = {
   cartItem: CartItem;
@@ -16,20 +17,19 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
       <ImageBackground
         source={images[imageKey ?? "logo"]}
         style={styles.image}
-        resizeMode="cover"
+        resizeMode="contain"
       ></ImageBackground>
       <View>
-        <ThemedText>{cartItem.name}</ThemedText>
-        <ThemedText>${cartItem.basePrice.toFixed(2)}</ThemedText>
+        {/* <ThemedText>{cartItem.cartItemId}</ThemedText> */}
+        <ThemedText style={styles.itemName}>{cartItem.name}</ThemedText>
+        <ThemedText style={styles.price}>${cartItem.basePrice.toFixed(2)}</ThemedText>
       </View>
       <FlatList 
-        data={Object.entries(cartItem.selectedModifiers)}
+        data={Object.entries(cartItem.nonDefaultModifiers)}
         keyExtractor={(item) => item[0]}
+        style={styles.modifierList}
         renderItem={({ item }) => {
-          const [groupId, optionIds] = item;
-          return (
-            <ThemedText>{groupId}: {optionIds.join(", ")}</ThemedText>
-          )
+          return <ItemModifiersInCart item={item} />
         }}
       />
     </View>
@@ -40,5 +40,13 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
+    borderRadius: 100,
   },
+  itemName: {},
+  price: {
+
+  },
+  modifierList: {
+
+  }
 });

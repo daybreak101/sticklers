@@ -267,9 +267,9 @@ const hotCoffeeModifiers = {
   type: "single",
   priceType: "define",
   options: [
-    { id: "small", name: "Small", price: 0 },
-    { id: "medium", name: "Medium", price: 0 },
-    { id: "large", name: "Large", price: 0 },
+    { id: "small", name: "Small", price: 0, status: "available" },
+    { id: "medium", name: "Medium", price: 0, status: "available" },
+    { id: "large", name: "Large", price: 0, status: "available" },
   ],
 };
 
@@ -279,8 +279,8 @@ const espressoShotsModifiers = {
   type: "single",
   priceType: "define",
   options: [
-    { id: "single", name: "Single", price: 0 },
-    { id: "double", name: "Double", price: 0 },
+    { id: "single", name: "Single", price: 0, status: "available" },
+    { id: "double", name: "Double", price: 0, status: "available" },
   ],
 };
 
@@ -290,13 +290,13 @@ const syrupModifiers = {
   type: "multi",
   priceType: "add",
   options: [
-    { id: "vanilla", name: "Vanilla", price: .78 },
-    { id: "caramel", name: "Caramel", price: .78 },
-    { id: "hazelnut", name: "Hazelnut", price: .78 },
-    { id: "lavender", name: "Lavender", price: .78 },
-    { id: "brown_sugar", name: "Brown Sugar", price: .78 },
-    { id: "sugar_free_vanilla", name: "Sugar Free Vanilla", price: .78 },
-    { id: "sugar_free_hazelnut", name: "Sugar Free Hazelnut", price: .78 },
+    { id: "vanilla", name: "Vanilla", price: .78, status: "available" },
+    { id: "caramel", name: "Caramel", price: .78, status: "available" },
+    { id: "hazelnut", name: "Hazelnut", price: .78, status: "available" },
+    { id: "lavender", name: "Lavender", price: .78, status: "available" },
+    { id: "brown_sugar", name: "Brown Sugar", price: .78, status: "available" },
+    { id: "sugar_free_vanilla", name: "Sugar Free Vanilla", price: .78, status: "available" },
+    { id: "sugar_free_hazelnut", name: "Sugar Free Hazelnut", price: .78, status: "available" },
   ],
 };
 
@@ -306,10 +306,10 @@ const mochaModifiers = {
   type: "single",
   priceType: "add",
   options: [
-    { id: "chocolate", name: "Chocolate", price: 0 },
-    { id: "white_chocolate", name: "White Chocolate", price: 0},
-    { id: "sf_mocha", name: "Sugar Free Mocha", price: 0 },
-    { id: "sf_white_chocolate", name: "Sugar Free White Chocolate", price: 0 },
+    { id: "chocolate", name: "Chocolate", price: 0, status: "available" },
+    { id: "white_chocolate", name: "White Chocolate", price: 0, status: "available" },
+    { id: "sf_mocha", name: "Sugar Free Mocha", price: 0, status: "available" },
+    { id: "sf_white_chocolate", name: "Sugar Free White Chocolate", price: 0, status: "available" },
   ],
 }
 
@@ -319,10 +319,10 @@ const milkModifiers = {
   type: "single",
   priceType: "add",
   options: [
-    { id: "whole", name: "Whole", price: 0 },
-    { id: "almond", name: "Almond", price: 0.75 },
-    { id: "oatmilk", name: "Oat Milk", price: 0.75 },
-    { id: "halfandhalf", name: "Half and Half", price: 0 },
+    { id: "whole", name: "Whole", price: 0, status: "available" },
+    { id: "almond", name: "Almond", price: 0.75, status: "available" },
+    { id: "oatmilk", name: "Oat Milk", price: 0.75, status: "available" },
+    { id: "halfandhalf", name: "Half and Half", price: 0, status: "available" },
   ],
 };
 
@@ -332,11 +332,11 @@ const coffeeExtrasModifiers = {
   type: "multi",
   priceType: "add",
   options: [
-    { id: "whipped", name: "Whipped Cream", price: 0 },
-    { id: "cinnamon", name: "Cinnamon", price: 0 },
-    { id: "nutmeg", name: "Nutmeg", price: 0 },
-    { id: "coldfoam", name: "Cold Foam", price: 0 },
-    { id: "espresso", name: "Extra Espresso Shot", price: 0 },
+    { id: "whipped", name: "Whipped Cream", price: 0, status: "available" },
+    { id: "cinnamon", name: "Cinnamon", price: 0, status: "available" },
+    { id: "nutmeg", name: "Nutmeg", price: .73, status: "available" },
+    { id: "coldfoam", name: "Cold Foam", price: .73, status: "available" },
+    { id: "espresso", name: "Extra Espresso Shot", price: 1.03, status: "available" },
   ],
 };
 
@@ -346,10 +346,10 @@ const dripFlavorModifiers = {
   type: "single",
   priceType: "add",
   options: [
-    { id: "house", name: "House Blend", price: 0 },
-    { id: "french", name: "French Roast", price: 0 },
-    { id: "decaf", name: "Decaf", price: 0 },
-    { id: "flavored", name: "Flavored", price: 0 },
+    { id: "house", name: "House Blend", price: 0, status: "available" },
+    { id: "french", name: "French Roast", price: 0, status: "available" },
+    { id: "decaf", name: "Decaf", price: 0, status: "available" },
+    { id: "flavored", name: "Flavored", price: 0, status: "available" },
   ],
 }
 

@@ -1,3 +1,4 @@
+import 'react-native-get-random-values'
 import { ThemedText } from "@/components/defaults/themed-text";
 import { CartProvider } from "@/context/CartContext";
 import { Stack } from "expo-router";

@@ -44,6 +44,16 @@ const breakfast = {
         extras: [],
         breakfast_sides: [],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 10,
     },
@@ -69,6 +79,16 @@ const breakfast = {
         extras: [],
         breakfast_sides: [],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 20,
     },
@@ -82,6 +102,7 @@ const breakfast = {
         "cream_cheese",
         "breakfast_protein",
         "breakfast_extras",
+        "extras",
         "breakfast_sides",
       ],
       defaults: {
@@ -89,7 +110,18 @@ const breakfast = {
         cream_cheese: ["cream_cheese"],
         breakfast_protein: [],
         breakfast_extras: [],
+        extras: [],
         breakfast_sides: [],
+      },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
       },
       status: "available",
       order: 30,
@@ -128,6 +160,16 @@ const breakfast = {
         extras: [],
         breakfast_sides: [],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       status: "available",
       order: 50,
     },
@@ -135,7 +177,7 @@ const breakfast = {
       itemId: "breakfast_bowl",
       name: "Breakfast Bowl",
       description:
-        "Breakfast Bowl with egg, green peppers, mushrooms, tomatoes and onions, along with your choice of meat and cheese.",
+        "Breakfast Bowl with egg and your choice of meat and cheese.",
       basePrice: 8.0,
       modifierGroupIds: [
         "breakfast_protein",
@@ -144,11 +186,21 @@ const breakfast = {
         "extras",
         "breakfast_sides",
       ],
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       defaults: {
         breakfast_protein: [],
         cheese: [],
         breakfast_extras: [],
-        extras: ["tomato", "onion", "green_peppers", "mushrooms"],
+        extras: [],
         breakfast_sides: [],
       },
       status: "available",
@@ -167,6 +219,16 @@ const breakfast = {
         "extras",
         "breakfast_sides",
       ],
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       defaults: {
         breakfast_protein: [],
         cheese: [],
@@ -190,6 +252,16 @@ const breakfast = {
         "extras",
         "breakfast_sides",
       ],
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       defaults: {
         breakfast_protein: [],
         cheese: [],
@@ -223,6 +295,12 @@ const breakfast = {
         extras: ["tomato"],
         breakfast_sides: [],
       },
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+      },
       status: "available",
       order: 90,
     },
@@ -231,9 +309,9 @@ const breakfast = {
       name: "Quaker Oats Oatmeal",
       description: "Quaker Oats Oatmeal with optional brown sugar and raisins.",
       basePrice: 3.9,
-      modifierGroupIds: ["oatmeal_size", "oatmeal_toppings"],
+      modifierGroupIds: ["soup_size", "oatmeal_toppings"],
       defaults: {
-        oatmeal_size: ["small"],
+        soup_size: ["small"],
         oatmeal_toppings: ["brown_sugar", "raisins"],
       },
       status: "available",
@@ -247,7 +325,7 @@ const breakfast = {
       status: "available",
       order: 110,
     },
-        {
+    {
       itemId: "loaded_hashbrown",
       name: "Loaded Hash Brown",
       description: "Side of hash brown topped with cheddar and green peppers.",
@@ -294,6 +372,16 @@ const breakfast = {
         "extras",
         "breakfast_sides",
       ],
+      pricingRules: {
+        protein: {
+          includedCount: 1,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 1,
+          extraItemPrice: 1,
+        },
+      },
       defaults: {
         breakfast_protein: ["turkey"],
         cream_cheese: ["cream_cheese"],
@@ -310,6 +398,16 @@ const breakfast = {
       name: "Avocado Toast",
       description: "Avocado spread on your choice of bagel.",
       basePrice: 4.5,
+      pricingRules: {
+        protein: {
+          includedCount: 0,
+          extraItemPrice: 1.94,
+        },
+        cheese: {
+          includedCount: 0,
+          extraItemPrice: 1,
+        },
+      },
       modifierGroupIds: [
         "bagel",
         "breakfast_protein",
@@ -334,9 +432,8 @@ const breakfast = {
       name: "Arroz con Leche",
       description: "Rice pudding.",
       basePrice: 4.2,
-      modifierGroupIds: ["oatmeal_size", "oatmeal_toppings"],
+      modifierGroupIds: ["oatmeal_toppings"],
       defaults: {
-        oatmeal_size: ["small"],
         oatmeal_toppings: ["cinnamon"],
       },
       status: "available",

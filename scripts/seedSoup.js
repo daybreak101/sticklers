@@ -83,8 +83,8 @@ const chiliToppingsModifiers = {
   type: "multi",
   priceType: "add",
   options: [
-    { id: "onions", name: "Onions", price: 0 },
-    { id: "cheddar", name: "Cheddar", price: 0 },
+    { id: "onions", name: "Onions", price: 0, status: "available" },
+    { id: "cheddar", name: "Cheddar", price: 0, status: "available" },
   ],
 };
 

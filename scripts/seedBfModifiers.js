@@ -194,6 +194,12 @@ const oatmealToppingsModifiers = {
   priceType: "add",
   options: [
     {
+      id: "cinnamon",
+      name: "Cinnamon",
+      price: 0,
+      status: "available",
+    },
+    {
       id: "brown_sugar",
       name: "Brown Sugar",
       price: 0,
@@ -222,7 +228,7 @@ const oatmealToppingsModifiers = {
       name: "Honey",
       price: 0,
       status: "available",
-    }
+    },
   ],
 };
 

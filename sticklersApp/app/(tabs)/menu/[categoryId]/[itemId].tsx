@@ -20,7 +20,7 @@ import { getMenuCategories, getModifierGroups } from "@/lib/menuStorage";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
 import ModifiersList from "@/components/ModifiersList";
-import { CartItem, SelectedModifiers } from "@/types/cart";
+import { CartItem, NonDefaultModifiers, SelectedModifiers } from "@/types/cart";
 import { useCart } from "@/context/CartContext";
 import ItemPrice from "@/components/ItemPrice";
 import { nanoid } from "nanoid";
@@ -102,15 +102,70 @@ export default function ItemPage() {
       }
     }
 
-    //TODO:
-    //maybe better id generation?
-    //move this to add to cart function in cart context
-    //check if item exists in cart
-    //if it does, update quantity
-    const signature = JSON.stringify({
-      itemId,
-      modifiers: selectedModifiers,
-    });
+    const nonDefaultModifiers: NonDefaultModifiers = {};
+
+    for (const groupId in selectedModifiers) {
+      const groupData = modifierGroups.find((g) => g.id === groupId);
+      const selectedOptionIds = selectedModifiers[groupId];
+      selectedOptionIds.forEach((optionId) => {
+        //default selections dont need to be highlighted
+        if (item.defaults[groupId].includes(optionId)) return;
+
+        const option = groupData?.options.find((o) => o.id === optionId);
+        if (!option) return;
+
+        if (groupData?.priceType === "define") {
+          nonDefaultModifiers[groupId].push({
+            optionId,
+            price: item.pricingRules[groupId][optionId] ?? item.basePrice ?? 0,
+          });
+          return;
+        } else if (groupData?.priceType === "override") {
+          nonDefaultModifiers[groupId].push({
+            optionId,
+            price: option.price ?? item.basePrice ?? 0,
+          });
+          return;
+        }
+        //else, if option is not included in defaults, add it's price to total.
+        else if (!item.defaults[groupId].includes(optionId)) {
+          nonDefaultModifiers[groupId].push({
+            optionId,
+            price: option.price ?? 0,
+          });
+        }
+      });
+
+      //IDEAS: before for loop, check if default is included in the list.
+      // Make a copy of the list and remove the default from it if it exists.
+      // Increase the count if it exists.
+      // Use the copy in the for loop so that way default is disregarded.
+
+      // also filter out boiled eggs as well, but don't increase the count.
+
+      // remember to push items that is not an overrage
+      // to nonDefaultModifiers if it isn't a default, with a price of 0.
+      if (item.pricingRules && item.pricingRules[groupId]) {
+        let count = 0;
+        for (
+          let i = 0;
+          i < selectedOptionIds.length;
+          i++
+        ) {
+          const optionId = selectedOptionIds[i];
+          const option = groupData?.options.find((o) => o.id === optionId);
+          if (!option || option.id === "boiled_eggs") continue;
+
+          count++;
+          if (count > item.pricingRules[groupId].includedCount) {
+            nonDefaultModifiers[groupId].push({
+              optionId,
+              price: item.pricingRules[groupId].extraItemPrice ?? 0,
+            });
+          }
+        }
+      }
+    }
 
     addItem({
       cartItemId: nanoid(),
@@ -122,6 +177,7 @@ export default function ItemPage() {
       modifierGroupIds: item.modifierGroupIds,
       defaults: item.defaults,
       selectedModifiers: selectedModifiers,
+      nonDefaultModifiers: nonDefaultModifiers,
       quantity: quantity,
       finalPrice: totalPrice,
       specialRequests: "",

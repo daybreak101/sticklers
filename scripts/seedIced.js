@@ -191,8 +191,21 @@ const iced = {
   ],
 };
 
+const icedCoffeeModifiers = {
+  id: "iced_coffee_size",
+  name: "Size",
+  type: "single",
+  priceType: "define",
+  options: [
+    { id: "small", name: "Small", price: 0, status: "available" },
+    { id: "large", name: "Large", price: 0, status: "available" },
+    { id: "x_large", name: "X-Large", price: 0, status: "available" },
+  ],
+};
+
 export async function seed() {
   await setDoc(doc(db, "menuCategories", "iced_coffee"), iced);
+  await setDoc(doc(db, "modifierGroups", "iced_coffee_size"), icedCoffeeModifiers);
   console.log("Menu iced seeded");
 }
 

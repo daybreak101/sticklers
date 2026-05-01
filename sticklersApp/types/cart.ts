@@ -2,6 +2,15 @@ export type SelectedModifiers = {
     [groupId: string]: string[]
 }
 
+export type NonDefaultModifier = {
+    optionId: string;
+    price: number;
+}
+
+export type NonDefaultModifiers = {
+    [groupId: string]: NonDefaultModifier[]
+}
+
 export type CartItem = {
     cartItemId: string;
     itemId: string;
@@ -12,6 +21,7 @@ export type CartItem = {
     modifierGroupIds?: string[];
     defaults?: any;
     selectedModifiers: SelectedModifiers;
+    nonDefaultModifiers: NonDefaultModifiers;
     quantity: number;
     finalPrice: number;
     specialRequests?: string;
