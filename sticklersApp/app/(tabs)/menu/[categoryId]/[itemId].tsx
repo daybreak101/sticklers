@@ -147,6 +147,22 @@ export default function ItemPage() {
       // to nonDefaultModifiers if it isn't a default, with a price of 0.
       if (item.pricingRules && item.pricingRules[groupId]) {
         let count = 0;
+        let copy = selectedOptionIds;
+        //filter out boiled eggs
+        if(copy.includes("boiled_eggs")) {
+          nonDefaultModifiers[groupId].push({
+            optionId: "boiled_eggs",
+            price: groupData?.options.find((option) => option.id === "boiled_eggs")?.price ?? 0,
+          });
+          copy = copy.filter((optionId) => optionId !== "boiled_eggs");
+        };
+        //filter out defaults
+        for(let i = 0; i < item.defaults[groupId].length; i++) {
+          const optionId = item.defaults[groupId][i];
+
+        }
+
+        // charge for all overrages
         for (
           let i = 0;
           i < selectedOptionIds.length;

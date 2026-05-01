@@ -26,6 +26,9 @@ export type Item = {
   pricingRules?: any;
 };
 
+//defaults structure???
+// TODO: write down the structure
+
 //pricing rules structure
 // holds any amount of modifiers.
 // {
