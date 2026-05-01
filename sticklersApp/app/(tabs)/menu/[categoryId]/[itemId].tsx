@@ -159,7 +159,7 @@ export default function ItemPage() {
         //filter out defaults
         for(let i = 0; i < item.defaults[groupId].length; i++) {
           const optionId = item.defaults[groupId][i];
-
+          
         }
 
         // charge for all overrages
