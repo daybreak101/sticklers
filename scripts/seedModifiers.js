@@ -182,11 +182,12 @@ const extrasModifiers = {
 const greensModifiers = {
   id: "greens",
   name: "Greens",
-  type: "multi",
+  type: "single",
   priceType: "add",
   options: [
     { id: "romaine", name: "Romaine", price: 0, status: "available" },
     { id: "spring_mix", name: "Spring Mix", price: 0, status: "available" },
+    { id: "both_greens", name: "Half Romaine, Half Spring", price: 0, status: "available" },
   ],
 };
 

@@ -15,7 +15,7 @@ type CartContextType = {
   cart: Cart;
   addItem: (item: CartItem) => void;
   removeItem: (itemId: string) => void;
-  //updateQuantity: (itemId: string, quantity: number) => void;
+  updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
 };
 
@@ -23,10 +23,16 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+
+
   const [cart, setCart] = useState<Cart>({
     items: [],
     totalPrice: 0,
   });
+
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [cart.items]);
 
   const addItem = (item: CartItem) => {
     console.log("adding item to cart:", item);
@@ -50,12 +56,44 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  //TODO: implement updateQuantity
+  const updateQuantity = (itemId: string, quantity: number) => {
+    setCart((prev) => {
+      const item = prev.items.find((i) => i.itemId === itemId);
+      if (!item) return prev;
+      const newQuantity = item.quantity + quantity;
+
+      return {
+        ...prev,
+        items: prev.items.map((i) => {
+          if (i.itemId === itemId) {
+            return {
+              ...i,
+              quantity: newQuantity,
+            };
+          }
+          return i;
+        }),
+      }
+    });
+  };
+
+  //TODO: implement calculate total price
+  const calculateTotalPrice = () => {
+    let total = 0;
+    cart.items.forEach((item) => {
+      total += item.finalPrice * item.quantity;
+    });
+    setCart((prev) => ({ ...prev, totalPrice: total }));
+  };
+
   const value = useMemo(
     () => ({
       cart,
       addItem,
       removeItem,
-      clearCart
+      clearCart,
+      updateQuantity
     }),
     [cart],
   );

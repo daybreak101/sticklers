@@ -119,7 +119,7 @@ export default function ModifiersList({
   }, [lastChange]);
 
   const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
-    console.log("handleSelectionChange", group, optionId);
+    //console.log("handleSelectionChange", group, optionId);
     setLastChange({ group, optionId });
     setSelectedModifiers((prev) => {
       const current = prev[group.id] || [];
@@ -162,7 +162,7 @@ export default function ModifiersList({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 30,
+    paddingTop: 30,
   },
   headerBanner: {
     padding: 10,

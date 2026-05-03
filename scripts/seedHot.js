@@ -332,9 +332,9 @@ const coffeeExtrasModifiers = {
   type: "multi",
   priceType: "add",
   options: [
-    { id: "whipped", name: "Whipped Cream", price: 0, status: "available" },
+    { id: "whipped", name: "Whipped Cream", price: .73, status: "available" },
     { id: "cinnamon", name: "Cinnamon", price: 0, status: "available" },
-    { id: "nutmeg", name: "Nutmeg", price: .73, status: "available" },
+    { id: "nutmeg", name: "Nutmeg", price: 0, status: "available" },
     { id: "coldfoam", name: "Cold Foam", price: .73, status: "available" },
     { id: "espresso", name: "Extra Espresso Shot", price: 1.03, status: "available" },
   ],
@@ -370,6 +370,7 @@ export async function seed() {
     coffeeExtrasModifiers,
   );
   await setDoc(doc(db, "modifierGroups", "drip_flavor"), dripFlavorModifiers);
+  await setDoc(doc(db, "modifierGroups", "mocha"), mochaModifiers);
   console.log("Menu hot seeded");
 }
 

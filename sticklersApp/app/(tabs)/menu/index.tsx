@@ -18,7 +18,7 @@ export default function HomeScreen() {
 
   const loadData = async () => {
     const result = await getMenuCategories();
-    console.log(result);
+    //console.log(result);
     setData(result);
   };
 

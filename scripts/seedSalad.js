@@ -34,7 +34,7 @@ const salads = {
         greens: ["romaine"],
         salad_toppings: [],
         salad_protein: [],
-        dressing: ["ranch_dressing"],
+        dressing: [],
       },
       pricingRules: {
         salad_toppings: {
@@ -68,7 +68,7 @@ const salads = {
         greens: ["romaine"],
         salad_toppings: [], 
         salad_protein: [],
-        dressing: ["ranch_dressing"], 
+        dressing: [], 
       },
       pricingRules: {
         salad_toppings: {

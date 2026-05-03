@@ -3,7 +3,7 @@ export type SelectedModifiers = {
 }
 
 export type NonDefaultModifier = {
-    optionId: string;
+    option: string;
     price: number;
 }
 

@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -36,6 +37,7 @@ export default function ItemPage() {
   const [category, setCategory] = useState<Category | null>(null);
   const { categoryId, itemId } = useLocalSearchParams();
   const [modifierGroups, setModifierGroups] = useState<ModifierGroup[]>([]);
+  const [specialRequests, setSpecialRequests] = useState("");
 
   const navigation = useNavigation();
   const { cart, addItem, removeItem, clearCart } = useCart();
@@ -81,6 +83,58 @@ export default function ItemPage() {
     }
   };
 
+  totalPrice = useMemo(() => {
+    if (!item) return 0;
+
+    let newBase = item.basePrice ?? 0;
+    let modifierPrice = 0;
+
+    //for each modifier group in SELECTED MODIFIERS
+    for (const groupId in selectedModifiers) {
+      const groupData = modifierGroups.find((g) => g.id === groupId);
+      //get the current modifier group id
+      const selectedOptionIds = selectedModifiers[groupId];
+
+      //for each modifier option in the modifier group...
+      selectedOptionIds.forEach((optionId) => {
+        //find option data from dataset
+        const option = groupData?.options.find((o) => o.id === optionId);
+        if (!option) return;
+
+        //if option changes base price
+        if (groupData?.priceType === "define") {
+          newBase = item.pricingRules[groupId][optionId] ?? item.basePrice ?? 0;
+          return;
+        } else if (groupData?.priceType === "override") {
+          newBase = option.price ?? item.basePrice ?? 0;
+          return;
+        }
+        //else, if option is not included in defaults, add it's price to total.
+        else if (!item.defaults[groupId].includes(optionId)) {
+          modifierPrice += option.price ?? 0;
+        }
+      });
+
+      if (item.pricingRules && item.pricingRules[groupId]) {
+        let overrage =
+          selectedOptionIds.length - item.pricingRules[groupId].includedCount;
+        //special case, keep for now
+        if (selectedOptionIds.includes("boiled_eggs")) {
+          overrage--;
+        }
+        if (overrage > 0) {
+          modifierPrice += item.pricingRules[groupId].extraItemPrice * overrage;
+        }
+      }
+    }
+
+    return newBase + modifierPrice; //* quantity;
+  }, [item, modifierGroups, selectedModifiers, quantity]);
+
+  const totalPriceWithQuantity = useMemo(() => {
+    return totalPrice * quantity;
+  }, [item, quantity]);
+
   // add to cart, called by "Add to Cart" button
   const addToCart = async () => {
     if (!item || !category) return;
@@ -105,36 +159,35 @@ export default function ItemPage() {
     const nonDefaultModifiers: NonDefaultModifiers = {};
 
     for (const groupId in selectedModifiers) {
+      nonDefaultModifiers[groupId] = [];
       const groupData = modifierGroups.find((g) => g.id === groupId);
       const selectedOptionIds = selectedModifiers[groupId];
+
+      if (!groupData) continue;
+      nonDefaultModifiers[groupData.name] = [];
       selectedOptionIds.forEach((optionId) => {
         //default selections dont need to be highlighted
-        if (item.defaults[groupId].includes(optionId)) return;
+        //if (item.defaults[groupId].includes(optionId)) return;
 
         const option = groupData?.options.find((o) => o.id === optionId);
         if (!option) return;
 
         if (groupData?.priceType === "define") {
-          nonDefaultModifiers[groupId].push({
-            optionId,
+          nonDefaultModifiers[groupData.name].push({
+            option: option.name,
             price: item.pricingRules[groupId][optionId] ?? item.basePrice ?? 0,
           });
           return;
         } else if (groupData?.priceType === "override") {
-          nonDefaultModifiers[groupId].push({
-            optionId,
+          basePrice = option.price;
+          nonDefaultModifiers[groupData.name].push({
+            option: option.name,
             price: option.price ?? item.basePrice ?? 0,
           });
           return;
         }
-        //else, if option is not included in defaults, add it's price to total.
-        else if (!item.defaults[groupId].includes(optionId)) {
-          nonDefaultModifiers[groupId].push({
-            optionId,
-            price: option.price ?? 0,
-          });
-        }
       });
+      if (groupData?.priceType !== "add") continue;
 
       //IDEAS: before for loop, check if default is included in the list.
       // Make a copy of the list and remove the default from it if it exists.
@@ -145,43 +198,73 @@ export default function ItemPage() {
 
       // remember to push items that is not an overrage
       // to nonDefaultModifiers if it isn't a default, with a price of 0.
-      if (item.pricingRules && item.pricingRules[groupId]) {
-        let count = 0;
-        let copy = selectedOptionIds;
-        //filter out boiled eggs
-        if(copy.includes("boiled_eggs")) {
-          nonDefaultModifiers[groupId].push({
-            optionId: "boiled_eggs",
-            price: groupData?.options.find((option) => option.id === "boiled_eggs")?.price ?? 0,
-          });
-          copy = copy.filter((optionId) => optionId !== "boiled_eggs");
-        };
-        //filter out defaults
-        for(let i = 0; i < item.defaults[groupId].length; i++) {
-          const optionId = item.defaults[groupId][i];
-          
-        }
 
-        // charge for all overrages
-        for (
-          let i = 0;
-          i < selectedOptionIds.length;
-          i++
-        ) {
-          const optionId = selectedOptionIds[i];
-          const option = groupData?.options.find((o) => o.id === optionId);
-          if (!option || option.id === "boiled_eggs") continue;
-
+      let count = 0;
+      let copy = [...selectedOptionIds];
+      //filter out boiled eggs
+      if (copy.includes("boiled_eggs")) {
+        nonDefaultModifiers[groupData.name].push({
+          option: "Boiled Eggs",
+          price:
+            groupData?.options.find((option) => option.id === "boiled_eggs")
+              ?.price ?? 0,
+        });
+        copy = copy.filter((optionId) => optionId !== "boiled_eggs");
+      }
+      //filter out defaults
+      for (let i = 0; i < item.defaults[groupId].length; i++) {
+        const defaultId = item.defaults[groupId][i];
+        const current = groupData?.options.find(
+          (o) => o.id === item.defaults[groupId][i],
+        );
+        if (!current) continue;
+        if (copy.includes(defaultId)) {
+          copy = copy.filter((optionId) => optionId !== defaultId);
           count++;
-          if (count > item.pricingRules[groupId].includedCount) {
-            nonDefaultModifiers[groupId].push({
-              optionId,
-              price: item.pricingRules[groupId].extraItemPrice ?? 0,
+          if (groupData.type === "single") {
+            nonDefaultModifiers[groupData.name].push({
+              option: current?.name,
+              price: 0,
             });
           }
+        } else if (groupData.type === "multi") {
+          nonDefaultModifiers[groupData.name].push({
+            option: "No " + current?.name,
+            price: 0,
+          });
+        }
+      }
+
+      // charge for all overrages
+      for (let i = 0; i < copy.length; i++) {
+        //console.log("copy[i]:", copy[i]);
+        const optionId = copy[i];
+        const option = groupData?.options.find((o) => o.id === optionId);
+        if (!option || option.id === "boiled_eggs") continue;
+
+        count++;
+        //console.log("pushing optionId:", optionId);
+
+        if (
+          groupData?.priceType === "add" &&
+          item.pricingRules[groupId] &&
+          count > item.pricingRules[groupId].includedCount
+        ) {
+          nonDefaultModifiers[groupData.name].push({
+            option: option.name,
+            price: item.pricingRules[groupId].extraItemPrice ?? 0,
+          });
+        } else {
+          nonDefaultModifiers[groupData.name].push({
+            option: option.name,
+            price: option.price ?? 0,
+          });
         }
       }
     }
+    console.log("defaults:", item.defaults);
+    console.log("selectedModifiers:", selectedModifiers);
+    console.log("nonDefaultModifiers:", nonDefaultModifiers);
 
     addItem({
       cartItemId: nanoid(),
@@ -196,7 +279,7 @@ export default function ItemPage() {
       nonDefaultModifiers: nonDefaultModifiers,
       quantity: quantity,
       finalPrice: totalPrice,
-      specialRequests: "",
+      specialRequests: specialRequests,
     } as CartItem);
   };
 
@@ -231,19 +314,30 @@ export default function ItemPage() {
             item={item}
             setSelectedModifiers={setSelectedModifiers}
           />
-          <View style={styles.headerBanner}>
-            <ThemedText style={styles.headerText}>Special Requests</ThemedText>
+          <View>
+            <View style={styles.headerBanner}>
+              <ThemedText style={styles.headerText}>
+                Special Requests
+              </ThemedText>
+            </View>
+            <View style={styles.specialRequests}>
+              <TextInput
+                style={[styles.specialRequestsInput, 
+                  specialRequests.length === 0 && { fontStyle: "italic" }
+                ]}
+                placeholder="lightly toasted, cold meat, cold cheese, etc."
+                
+                placeholderTextColor={"gray"}
+                multiline={true}
+                numberOfLines={4}
+                onChangeText={(text) => setSpecialRequests(text)}
+              />
+            </View>
           </View>
         </ScrollView>
 
         <View style={styles.bottomBar}>
-          <ItemPrice
-            item={item}
-            modifierGroups={modifierGroups}
-            selectedModifiers={selectedModifiers}
-            quantity={quantity}
-            totalPrice={totalPrice}
-          />
+          <ItemPrice totalPrice={totalPriceWithQuantity} />
           <View style={styles.bottomBarBottom}>
             <View
               style={[
@@ -343,5 +437,22 @@ const styles = StyleSheet.create({
     fontWeight: 300,
     fontSize: 20,
     paddingHorizontal: 10,
+  },
+  specialRequestsInput: {
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 10,
+    color: "white",
+    textAlignVertical: "top",
+    justifyContent: "flex-start",
+  },
+  specialRequests: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 30,
+    borderRadius: 10,
+    
   },
 });
