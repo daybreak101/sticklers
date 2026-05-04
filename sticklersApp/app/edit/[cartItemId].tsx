@@ -299,11 +299,11 @@ export default function EditItemPage() {
       finalPrice: totalPrice,
       specialRequests: specialRequests,
     } as CartItem);
+    navigation.goBack();
   };
 
   //dont render if item is not loaded
   if (!item) {
-    console.log("item not found");
     return null;
   } else {
     console.log("item found");

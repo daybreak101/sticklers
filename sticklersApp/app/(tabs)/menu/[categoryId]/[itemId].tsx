@@ -30,7 +30,7 @@ import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
-  const { cart, addItem, removeItem, clearCart } = useCart();
+  const { cart, addItem, showToast } = useCart();
 
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
     {},
@@ -296,6 +296,8 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
       finalPrice: totalPrice,
       specialRequests: specialRequests,
     } as CartItem);
+    showToast("Item added to cart");
+    navigation.goBack();
   };
 
   //dont render if item is not loaded

@@ -10,7 +10,7 @@ import {
   useMemo,
   useState,
 } from "react";
-
+import { View, Text } from "react-native";
 type CartContextType = {
   cart: Cart;
   addItem: (item: CartItem) => void;
@@ -18,14 +18,12 @@ type CartContextType = {
   updateItem: (cartItemId: string, item: CartItem) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
+  showToast: (message: string) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-
-
   const [cart, setCart] = useState<Cart>({
     items: [],
     totalPrice: 0,
@@ -90,7 +88,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           }
           return i;
         }),
-      }
+      };
     });
   };
 
@@ -103,6 +101,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCart((prev) => ({ ...prev, totalPrice: total }));
   };
 
+  const [toast, setToast] = useState<string | null>(null);
+  function Toast() {
+    return (
+      <>
+        {toast && (
+          <View style={{ position: "absolute", bottom: 20, right: 20 }}>
+            <Text>{toast}</Text>
+          </View>
+        )}
+      </>
+    );
+  }
+  const showToast = (message: string): void => {
+    setToast(message);
+    setTimeout(() => {
+      setToast(null);
+    }, 3000);
+  };
+
   const value = useMemo(
     () => ({
       cart,
@@ -110,11 +127,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       removeItem,
       updateItem,
       clearCart,
-      updateQuantity
+      updateQuantity,
+      showToast,
     }),
     [cart],
   );
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      <Toast />
+    </CartContext.Provider>
+  );
 };
 
 export const useCart = () => {

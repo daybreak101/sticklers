@@ -1,6 +1,10 @@
+- Toast is not showing up, find out why
 -simplify cartItemId edit page by using the cartItem info to populate the page
--force "go back" when adding to cart or when editing an item
+(or nah, whats the point?)
 -show toast when adding to cart, and when pushing edits to item, and when removing item
+- "Report issues" button, that would have user input the issue,
+and it will copy the cart state and send it to the backend
+
 
 -find Jalapeno Cheddar and Asiago prices and add them to firestore
 -implement a numerical indicator for cart tab displaying the number of items in the cart
