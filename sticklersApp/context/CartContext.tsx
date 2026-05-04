@@ -15,6 +15,7 @@ type CartContextType = {
   cart: Cart;
   addItem: (item: CartItem) => void;
   removeItem: (itemId: string) => void;
+  updateItem: (cartItemId: string, item: CartItem) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
 };
@@ -45,8 +46,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const removeItem = (id: string) => {
     setCart((prev) => ({
       ...prev,
-      items: prev.items.filter((i) => i.itemId !== id),
+      items: prev.items.filter((i) => i.cartItemId !== id),
     }));
+  };
+
+  const updateItem = (cartItemId: string, item: CartItem) => {
+    setCart((prev) => {
+      const index = prev.items.findIndex((i) => i.cartItemId === cartItemId);
+      if (index === -1) return prev;
+      return {
+        ...prev,
+        items: [
+          ...prev.items.slice(0, index),
+          item,
+          ...prev.items.slice(index + 1),
+        ],
+      };
+    });
   };
 
   const clearCart = () => {
@@ -57,16 +73,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   //TODO: implement updateQuantity
-  const updateQuantity = (itemId: string, quantity: number) => {
+  const updateQuantity = (cartItemId: string, quantity: number) => {
     setCart((prev) => {
-      const item = prev.items.find((i) => i.itemId === itemId);
+      const item = prev.items.find((i) => i.cartItemId === cartItemId);
       if (!item) return prev;
       const newQuantity = item.quantity + quantity;
 
       return {
         ...prev,
         items: prev.items.map((i) => {
-          if (i.itemId === itemId) {
+          if (i.cartItemId === cartItemId) {
             return {
               ...i,
               quantity: newQuantity,
@@ -92,6 +108,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cart,
       addItem,
       removeItem,
+      updateItem,
       clearCart,
       updateQuantity
     }),

@@ -1,5 +1,5 @@
 import { FlatList, Text, View, StyleSheet } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { globalStyles } from "@/styles/global";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,35 +16,38 @@ export default function CategoryScreen() {
   const [category, setCategory] = useState<Category | null>(null);
 
   useEffect(() => {
-
     loadCategory();
   }, []);
 
   const loadCategory = async () => {
     const categories = await getMenuCategories();
     const found = categories.find((c) => c.id === categoryId) || null;
-   //nsole.log("found category:", found);
+    //nsole.log("found category:", found);
     setCategory(found || null);
   };
 
   if (!category) return null;
 
   return (
-    <SafeAreaView style={globalStyles.safeArea}>
+    <>
+      <Stack.Screen options={{ title: category.name }} />
       <ThemedView style={globalStyles.page}>
-        <ThemedText style={[globalStyles.title, { paddingTop: 10, paddingHorizontal: 20 }]}>{category.name}</ThemedText>
-        <ThemedText style={styles.description}>{category.description}</ThemedText>
+        <ThemedText style={styles.description}>
+          {category.description}
+        </ThemedText>
         <FlatList
           data={category.items.sort((a, b) => a.order - b.order)}
           numColumns={2}
           keyExtractor={(item) => item.itemId}
-          renderItem={({ item }) => <ItemOption item={item} category={category} />}
+          renderItem={({ item }) => (
+            <ItemOption item={item} category={category} />
+          )}
           ItemSeparatorComponent={() => <View style={{ padding: 10 }}></View>}
           ListFooterComponent={<View style={{ padding: 10 }}></View>}
           columnWrapperStyle={{ justifyContent: "space-between" }}
         />
       </ThemedView>
-    </SafeAreaView>
+    </>
   );
 }
 
@@ -54,5 +57,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     fontWeight: 300,
-  }
-})
+  },
+});

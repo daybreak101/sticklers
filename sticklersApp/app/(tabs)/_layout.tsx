@@ -1,10 +1,20 @@
 import { Tabs } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { globalStyles } from "@/styles/global";
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ 
-      headerShown: false }}>
+    <Tabs
+      initialRouteName="menu"
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: globalStyles.tabBarStyle,
+        tabBarActiveTintColor: globalStyles.themeYellow.color,
+        tabBarInactiveTintColor: globalStyles.themeRedBright.color,
+        tabBarLabelStyle: { fontSize: 12 },
+        tabBarIconStyle: { width: 30, height: 30 },
+      }}
+    >
       <Tabs.Screen
         name="menu"
         options={{

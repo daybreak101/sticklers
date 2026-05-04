@@ -8,10 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RootLayout() {
   return (
     <CartProvider>
-      <SafeAreaProvider>
-        <StatusBar style="auto" />
         <Stack screenOptions={{ headerShown: false }} />
-      </SafeAreaProvider>
     </CartProvider>
   );
 }

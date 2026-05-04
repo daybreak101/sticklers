@@ -1,14 +1,9 @@
--implement "define" price type to priceTotal
+-simplify cartItemId edit page by using the cartItem info to populate the page
+-force "go back" when adding to cart or when editing an item
+-show toast when adding to cart, and when pushing edits to item, and when removing item
 
--implement a way to display price for additional modifiers that are not included in defaults,
-such as adding an extra protein, and a way for premium proteins to ignore the additional protein
-price (Boiled Eggs) (There is a temporary fix for this atm, maybe permanent if boiled Eggs
-is the only case of this.)
 -find Jalapeno Cheddar and Asiago prices and add them to firestore
--implement remove from cart functionality
--implement cart screen, along with cart totals, cart items and qunatity, clear cart, and cart checkout
 -implement a numerical indicator for cart tab displaying the number of items in the cart
--implement a "special requests" field for orders
 -implement "extra" and "double" modifiers for each modifier and price them accordingly; keep in mind
    that some modifiers may be mutually exclusive, and depending on the item, the number of modifiers
    may be discounted, i.e. the Traffic Jam having 4 meats and subbing Salami for Pepperoni would 

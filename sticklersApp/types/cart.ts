@@ -13,6 +13,7 @@ export type NonDefaultModifiers = {
 
 export type CartItem = {
     cartItemId: string;
+    categoryId: string;
     itemId: string;
     name: string;
     image: string;

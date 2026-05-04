@@ -7,7 +7,7 @@ export const globalStyles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    padding: 1,
+    padding: 0,
   },
   title: {
     fontSize: 20,
@@ -15,12 +15,18 @@ export const globalStyles = StyleSheet.create({
     textTransform: "uppercase",
   },
   themeRed: {
-    color: "rgba(104, 33, 29)"
+    color: "rgba(104, 33, 29)",
+  },
+  themeRedBright: {
+    color: "rgb(160, 70, 60)",
   },
   themeYellow: {
-    color: "rgba(255, 244, 5)"
+    color: "rgba(255, 244, 5)",
   },
   themeBlack: {
-    color: "rgba(1, 1, 0)"
-  }
+    color: "rgba(1, 1, 0)",
+  },
+  tabBarStyle: {
+    backgroundColor: "#333",
+  },
 });

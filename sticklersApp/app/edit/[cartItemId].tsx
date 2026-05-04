@@ -29,8 +29,17 @@ import ItemPrice from "@/components/ItemPrice";
 import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
 
-export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
-  const { cart, addItem, removeItem, clearCart } = useCart();
+export default function EditItemPage() {
+  const params = useLocalSearchParams();
+  const normalizedCartItemId =
+    typeof params.cartItemId === "string"
+      ? params.cartItemId
+      : params.cartItemId?.[0];
+
+  const { cart, updateItem } = useCart();
+
+  // 🔒 LOCAL BUFFER (critical fix)
+  const [cartItem, setCartItem] = useState<CartItem | null>(null);
 
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
     {},
@@ -40,7 +49,6 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
   let totalPrice = 0;
   const [item, setItem] = useState<Item | null>(null);
   const [category, setCategory] = useState<Category | null>(null);
-  const { categoryId, itemId } = useLocalSearchParams();
   const [modifierGroups, setModifierGroups] = useState<ModifierGroup[]>([]);
   const [specialRequests, setSpecialRequests] = useState(
     cartItem?.specialRequests ?? "",
@@ -64,36 +72,44 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
     }, [navigation]),
   );
 
-  //load item and modifiers
   useEffect(() => {
-    setLoading(true);
-    loadItem();
+    if (!normalizedCartItemId) return;
 
-    const loadGroups = async () => {
-      const groups = await getModifierGroups();
-      setModifierGroups(groups);
-    };
-    loadGroups();
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 10000);
-    setLoading(false);
-  }, []);
+    const found = cart.items.find((i) => i.cartItemId === normalizedCartItemId);
+
+    if (found) {
+      setCartItem(found);
+    }
+  }, [cart.items, normalizedCartItemId]);
+
+  //load item and modifiers
+  useFocusEffect(
+    useCallback(() => {
+      const init = async () => {
+        setLoading(true);
+
+        await loadItem();
+
+        const groups = await getModifierGroups();
+        setModifierGroups(groups);
+
+        setLoading(false);
+      };
+
+      init();
+    }, [cartItem]), // important
+  );
 
   const loadItem = async () => {
     const categories = await getMenuCategories();
-    const found = categories.find((c) => c.id === categoryId) || null;
+    const found = categories.find((c) => c.id === cartItem?.categoryId) || null;
     setCategory(found || null);
-    const item = found?.items.find((i) => i.itemId === itemId) || null;
+    const item =
+      found?.items.find((i) => i.itemId === cartItem?.itemId) || null;
     setItem(item || null);
 
-    if (item) {
-      const defaults = item.defaults;
-      if (cartItem) {
-        setSelectedModifiers(cartItem.selectedModifiers);
-      } else if (defaults) {
-        setSelectedModifiers(defaults);
-      }
+    if (item && cartItem) {
+      setSelectedModifiers(cartItem.selectedModifiers);
     }
   };
 
@@ -149,8 +165,12 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
     return totalPrice * quantity;
   }, [quantity, totalPrice]);
 
+  if (!cartItem) {
+    return null;
+  }
+
   // add to cart, called by "Add to Cart" button
-  const addToCart = async () => {
+  const pushUpdates = async () => {
     if (!item || !category || loading) return;
 
     //base price could be defined by price in pricing rules.
@@ -202,17 +222,6 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
         }
       });
       if (groupData?.priceType !== "add") continue;
-
-      //IDEAS: before for loop, check if default is included in the list.
-      // Make a copy of the list and remove the default from it if it exists.
-      // Increase the count if it exists.
-      // Use the copy in the for loop so that way default is disregarded.
-
-      // also filter out boiled eggs as well, but don't increase the count.
-
-      // remember to push items that is not an overrage
-      // to nonDefaultModifiers if it isn't a default, with a price of 0.
-
       let count = 0;
       let copy = [...selectedOptionIds];
       //filter out boiled eggs
@@ -280,16 +289,10 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
     console.log("selectedModifiers:", selectedModifiers);
     console.log("nonDefaultModifiers:", nonDefaultModifiers);
 
-    addItem({
-      cartItemId: nanoid(),
-      categoryId: category?.id,
-      itemId: item?.itemId,
-      name: item?.name,
-      image: item.image ?? category?.image,
-      category: category?.name,
+    updateItem(cartItem?.cartItemId, {
+      ...cartItem,
       basePrice: basePrice,
       modifierGroupIds: item.modifierGroupIds,
-      defaults: item.defaults,
       selectedModifiers: selectedModifiers,
       nonDefaultModifiers: nonDefaultModifiers,
       quantity: quantity,
@@ -299,13 +302,17 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
   };
 
   //dont render if item is not loaded
-  if (!item) return null;
+  if (!item) {
+    console.log("item not found");
+    return null;
+  } else {
+    console.log("item found");
+  }
 
   const imageKey: string | undefined | null = item.image ?? category?.image;
 
   return (
     <>
-      <Stack.Screen options={{ title: item.name }} />
       <ThemedView
         style={[
           globalStyles.page,
@@ -396,13 +403,14 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                 style={styles.rightButtonContainer}
               />
             ) : (
-    
-                  <Pressable
-                    onPress={addToCart}
-                    style={styles.rightButtonContainer}
-                  >
-                    <Text style={styles.buttonText}>{cartItem ? "Update Item" : "Add to Cart"}</Text>
-                  </Pressable>
+              <Pressable
+                onPress={pushUpdates}
+                style={styles.rightButtonContainer}
+              >
+                <Text style={styles.buttonText}>
+                  {cartItem ? "Update Item" : "Add to Cart"}
+                </Text>
+              </Pressable>
             )}
           </View>
         </View>

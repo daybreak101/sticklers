@@ -23,16 +23,15 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={globalStyles.safeArea}>
       <ThemedView style={globalStyles.page}>
-        <ThemedText style={[globalStyles.title, { paddingTop: 10, paddingHorizontal: 10 }]}>CATEGORIES</ThemedText>
+        <ThemedText style={[globalStyles.title, { padding: 10 }]}>CATEGORIES</ThemedText>
         <FlatList
           data={data}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <CategoryOption category={item} />}
           ItemSeparatorComponent={() => <View style={{padding: 10}}></View>}
+          ListFooterComponent={() => <View style={{padding: 10}}></View>}
         />
       </ThemedView>
-    </SafeAreaView>
   );
 }

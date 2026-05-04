@@ -13,6 +13,7 @@ export default function CartScreen() {
   return (
     <SafeAreaView style={globalStyles.safeArea}>
       <ThemedView style={globalStyles.page}>
+
         <ThemedText
           style={[
             globalStyles.title,
@@ -34,14 +35,19 @@ export default function CartScreen() {
           ListFooterComponent={<View style={{ padding: 10 }}></View>}
         />
       </ThemedView>
-      <View style={styles.bottomBar}>
-        <View style={styles.bottomBarBottom}>
-          <ThemedText style={styles.total}>Total: <Text style={styles.price}>${cart.totalPrice.toFixed(2)}</Text></ThemedText>
-          <Pressable style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Checkout</Text>
-          </Pressable>
+      {cart.items.length > 0 && (
+        <View style={styles.bottomBar}>
+          <View style={styles.bottomBarBottom}>
+            <ThemedText style={styles.total}>
+              Total:{" "}
+              <Text style={styles.price}>${cart.totalPrice.toFixed(2)}</Text>
+            </ThemedText>
+            <Pressable style={styles.buttonContainer}>
+              <Text style={styles.buttonText}>Checkout</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -75,6 +81,7 @@ const styles = StyleSheet.create({
   bottomBar: {
     borderTopColor: "rgb(249, 249, 249)",
     borderTopWidth: 0.2,
+    paddingBottom: 10,
   },
   bottomBarBottom: {
     flexDirection: "row",
@@ -93,5 +100,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     alignSelf: "center",
-  }
+  },
 });
