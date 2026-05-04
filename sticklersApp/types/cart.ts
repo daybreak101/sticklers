@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type SelectedModifiers = {
     [groupId: string]: string[]
 }
@@ -33,17 +35,16 @@ export type Cart = {
     totalPrice: number;
 }
 
+//NO DELIVERIES!
 export type Order = {
     id: string;
     userId: string;
+    userPhone: string;
+    userName: string;
     cart: Cart;
-    status: "pending" | "processing" | "delivered" | "cancelled";
-    createdAt: Date;
-    updatedAt: Date;
-    totalPrice: number;
-    numOfItems: number;
+    timeReady: Timestamp;
+    status: "pending" | "ready" | "fulfilled" | "cancelled";
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
     specialRequests?: string;
-    deliveryAddress?: string;
-    deliveryInstructions?: string;
-
 }
