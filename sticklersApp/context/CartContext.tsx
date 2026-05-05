@@ -1,3 +1,4 @@
+import { globalStyles } from "@/styles/global";
 import { Cart, CartItem } from "@/types/cart";
 import {
   createContext,
@@ -8,6 +9,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { View, Text } from "react-native";
@@ -39,6 +41,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       ...prev,
       items: [...prev.items, item],
     }));
+    showToast("Item added to cart");
   };
 
   const removeItem = (id: string) => {
@@ -46,6 +49,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       ...prev,
       items: prev.items.filter((i) => i.cartItemId !== id),
     }));
+    showToast("Item removed from cart");
   };
 
   const updateItem = (cartItemId: string, item: CartItem) => {
@@ -61,6 +65,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         ],
       };
     });
+    showToast("Item updated");
   };
 
   const clearCart = () => {
@@ -68,6 +73,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       items: [],
       totalPrice: 0,
     });
+    showToast("Cart cleared");
   };
 
   //TODO: implement updateQuantity
@@ -92,7 +98,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  //TODO: implement calculate total price
   const calculateTotalPrice = () => {
     let total = 0;
     cart.items.forEach((item) => {
@@ -102,22 +107,50 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const [toast, setToast] = useState<string | null>(null);
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   function Toast() {
     return (
       <>
         {toast && (
-          <View style={{ position: "absolute", bottom: 20, right: 20 }}>
-            <Text>{toast}</Text>
+          <View
+            style={{
+              position: "absolute",
+              bottom: 100,
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 100,
+              backgroundColor: globalStyles.themeYellow.color,
+              padding: 10,
+              borderRadius: 5,
+            }}
+          >
+            <Text
+              style={{
+                color: globalStyles.themeBlack.color,
+                fontSize: 16,
+                fontWeight: "bold",
+              }}
+            >{toast}</Text>
           </View>
         )}
       </>
     );
   }
   const showToast = (message: string): void => {
+    //clear existing timer
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+
+    //set new message
     setToast(message);
-    setTimeout(() => {
+
+    //start new timer
+    toastTimeoutRef.current = setTimeout(() => {
       setToast(null);
+      toastTimeoutRef.current = null;
     }, 3000);
+
   };
 
   const value = useMemo(

@@ -38,13 +38,16 @@ export type Cart = {
 //NO DELIVERIES!
 export type Order = {
     id: string;
-    userId: string;
-    userPhone: string;
-    userName: string;
+    customerInfo: CustomerInfo;
     cart: Cart;
     timeReady: Timestamp;
     status: "pending" | "ready" | "fulfilled" | "cancelled";
     createdAt: Timestamp;
     updatedAt: Timestamp;
     specialRequests?: string;
+}
+
+export type CustomerInfo = {
+    name: string;
+    phone: string;
 }
