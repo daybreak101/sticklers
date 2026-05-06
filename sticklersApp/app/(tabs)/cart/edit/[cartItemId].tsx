@@ -38,7 +38,6 @@ export default function EditItemPage() {
 
   const { cart, updateItem } = useCart();
 
-  // 🔒 LOCAL BUFFER (critical fix)
   const [cartItem, setCartItem] = useState<CartItem | null>(null);
 
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
