@@ -4,7 +4,7 @@ import React from 'react'
 export default function DisplayUser() {
   return (
     <View>
-      <Text>DIsplayUser</Text>
+      <Text>DisplayUser</Text>
     </View>
   )
 }

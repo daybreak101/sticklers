@@ -2,17 +2,17 @@ import { ThemedView } from "@/components/defaults/themed-view";
 import DisplayUser from "@/components/profile/DisplayUser";
 import SignIn from "@/components/profile/SignIn";
 import { useAuth } from "@/context/AuthContext";
+import { globalStyles } from "@/styles/global";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 export default function ProfileScreen() {
-
   const { user } = useAuth();
 
-
-  
-
   return (
-    <ThemedView>
-      {user ? <DisplayUser /> : <SignIn />}
-    </ThemedView>
+    <SafeAreaView style={globalStyles.safeArea}>
+      <ThemedView style={globalStyles.page}>
+        {user ? <DisplayUser /> : <SignIn />}
+      </ThemedView>
+    </SafeAreaView>
   );
 }
