@@ -11,10 +11,14 @@ import Animated, {
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const visible = useSharedValue(0); // 0 = off, 1 = on
 
   const onPress = () => {
-    visible.value = visible.value ? 0 : 1;
+    const next = !showPassword;
+    setShowPassword(next);
+    visible.value = next ? 1 : 0;
   };
 
   const eyeStyle = useAnimatedStyle(() => ({
@@ -34,12 +38,9 @@ export default function SignIn() {
         </ThemedText>
       </View>
       <View style={styles.inputSection}>
-        {/* make box around input, input has invisible border,
-            then, that box will have row flex direction:
-              1: icon 2: input (flex: 1) 3: eye for password */}
         <ThemedText style={styles.inputLabel}>Email</ThemedText>
         <View style={styles.inputContainer}>
-          <MaterialIcons name="email" size={24} color="#777" />
+          <MaterialIcons name="email" size={24} color="#aaa" />
           <TextInput
             style={styles.input}
             autoCapitalize="none"
@@ -51,23 +52,23 @@ export default function SignIn() {
         </View>
         <ThemedText style={styles.inputLabel}>Password</ThemedText>
         <View style={styles.inputContainer}>
-          <MaterialIcons name="email" size={24} color="#777" />
+          <MaterialIcons name="lock" size={24} color="#aaa" />
           <TextInput
             style={styles.input}
             autoCapitalize="none"
             autoCorrect={false}
-            keyboardType="email-address"
-            onChangeText={(text) => setEmail(text)}
-            value={email}
+            keyboardType="default"
+            secureTextEntry={!showPassword}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
           />
-          <Pressable onPress={onPress}>
-            <View>
-              <Animated.View style={eyeOffStyle}>
-                <MaterialIcons name="visibility-off" size={24} color="white" />
+          <Pressable onPress={onPress} style={styles.eyeButton}>
+            <View style={styles.eyeWrapper}>
+              <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
+                <MaterialIcons name="visibility-off" size={24} color="#777" />
               </Animated.View>
-
-              <Animated.View style={eyeStyle}>
-                <MaterialIcons name="visibility" size={24} color="white" />
+              <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
+                <MaterialIcons name="visibility" size={24} color="#aaa" />
               </Animated.View>
             </View>
           </Pressable>
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4a4a4a",
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
+    paddingHorizontal: 10,
   },
   inputLabel: {
     paddingHorizontal: 10,
@@ -105,5 +106,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#fff",
     flex: 1,
+  },
+  eyeButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  eyeWrapper: {
+    width: 24,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  eyeAbsolute: {
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
