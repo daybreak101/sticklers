@@ -6,24 +6,18 @@ import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import CartItemComponent from "@/components/CartItemComponent";
+import { useRouter } from "expo-router";
 
 export default function CartScreen() {
   const { cart } = useCart();
+  const router = useRouter();
 
   return (
-    <SafeAreaView style={globalStyles.safeArea}>
+    <>
       <ThemedView style={globalStyles.page}>
-
-        <ThemedText
-          style={[
-            globalStyles.title,
-            { paddingTop: 10, paddingHorizontal: 20 },
-          ]}
-        >
-          Cart
-        </ThemedText>
         <ThemedText style={styles.description}>
-          {cart.items.length} items in your cart
+          {cart.items.length} item{cart.items.length !== 1 ? "s" : ""} in your
+          cart
         </ThemedText>
         <FlatList
           data={cart.items}
@@ -42,13 +36,20 @@ export default function CartScreen() {
               Total:{" "}
               <Text style={styles.price}>${cart.totalPrice.toFixed(2)}</Text>
             </ThemedText>
-            <Pressable style={styles.buttonContainer}>
+            <Pressable
+              style={styles.buttonContainer}
+              onPress={() =>
+                router.push({
+                  pathname: "/cart/checkout",
+                })
+              }
+            >
               <Text style={styles.buttonText}>Checkout</Text>
             </Pressable>
           </View>
         </View>
       )}
-    </SafeAreaView>
+    </>
   );
 }
 
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   bottomBar: {
+    backgroundColor: globalStyles.themeBlack.color,
     borderTopColor: "rgb(249, 249, 249)",
     borderTopWidth: 0.2,
     paddingBottom: 10,

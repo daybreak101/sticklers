@@ -91,7 +91,7 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
           <Pressable
             onPress={() =>
               router.push({
-                pathname: "/edit/[cartItemId]",
+                pathname: "/cart/edit/[cartItemId]",
                 params: {
                   cartItemId: cartItem.cartItemId,
                 },
