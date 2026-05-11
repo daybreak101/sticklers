@@ -10,6 +10,8 @@ import SignedOutCheckout from "@/components/cart/SignedOutCheckout";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { setDoc } from "firebase/firestore";
+import { id } from "zod/v4/locales";
 
 export default function CheckoutScreen() {
   const { user } = useAuth();
@@ -28,6 +30,7 @@ export default function CheckoutScreen() {
         new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/),
         "Invalid Number!",
       ),
+    specialRequests: z.string().min(2, "Special Requests is too short"),
     //phone: z.string().min(10, "Invalid phone number"),
   });
   type FormData = z.infer<typeof schema>;
@@ -41,11 +44,27 @@ export default function CheckoutScreen() {
       name: "",
       email: "",
       phone: "",
+      specialRequests: "",
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    const newOrder = {
+      id: Date.now().toString(),
+      customerInfo: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+      },
+      cart: cart,
+      timeReady: null,
+      status: "pending",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      specialRequests: 
+    }
+    await setDoc(doc(db, "orders", 
+    ))
   };
 
   return (
@@ -77,6 +96,45 @@ export default function CheckoutScreen() {
             )}
           />
           {errors.name && <Text>{errors.name.message}</Text>}
+          <Controller
+            control={control}
+            name="phone"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Phone Number"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          {errors.phone && <Text>{errors.phone.message}</Text>}
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          {errors.specialRequests && <Text>{errors.specialRequests.message}</Text>}
+                    <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Special Requests"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          {errors.specialRequests && <Text>{errors.specialRequests.message}</Text>}
           <Pressable onPress={handleSubmit(onSubmit)}>
             <Text>Submit</Text>
           </Pressable>
