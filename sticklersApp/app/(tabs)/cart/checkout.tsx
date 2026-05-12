@@ -10,8 +10,9 @@ import SignedOutCheckout from "@/components/cart/SignedOutCheckout";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setDoc } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { id } from "zod/v4/locales";
+import { db } from "@/lib/firebaseConfig";
 
 export default function CheckoutScreen() {
   const { user } = useAuth();
@@ -59,20 +60,17 @@ export default function CheckoutScreen() {
       cart: cart,
       timeReady: null,
       status: "pending",
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      specialRequests: 
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+      specialRequests: data.specialRequests,
     }
-    await setDoc(doc(db, "orders", 
-    ))
+    await setDoc(doc(db, "orders", newOrder.id), newOrder);
+    router.push("../(tabs)/cart/orderConfirmation");
   };
 
   return (
     <ThemedView style={globalStyles.page}>
       <Stack.Screen options={{ title: "Checkout" }} />
-      <ThemedText style={[globalStyles.title, { padding: 10 }]}>
-        CHECKOUT
-      </ThemedText>
       {user ? (
         <View>
           <ThemedText>Total Items: {cartQuantity}</ThemedText>
