@@ -109,7 +109,7 @@ const sandwiches = {
       defaults: {
         size: ["full"],
         protein: ["salami", "turkey", "ham", "roast_beef"],
-        cheese: ["Swiss"],
+        cheese: ["swiss"],
         extras: [],
         bread: ["french"],
       },
