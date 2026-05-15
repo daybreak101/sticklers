@@ -8,6 +8,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import { globalStyles } from "@/styles/global";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -74,6 +75,11 @@ export default function SignIn() {
           </Pressable>
         </View>
       </View>
+      <View style={styles.buttonSection}>
+        <Pressable onPress={onPress} style={styles.button}>
+          <ThemedText style={styles.buttonText}>Sign In</ThemedText>
+        </Pressable>
+      </View>
     </ThemedView>
   );
 }
@@ -124,5 +130,22 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonSection: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: globalStyles.themeRed.color,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

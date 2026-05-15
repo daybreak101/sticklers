@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
@@ -8,8 +15,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import BirthdayPicker from "./BirthdayPicker";
 
 export default function SignUp() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -31,75 +42,104 @@ export default function SignUp() {
   }));
 
   return (
-    <ThemedView>
-      <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>Sign In</ThemedText>
-        <ThemedText style={styles.headerSubtitle}>
-          Welcome back, you&apos;ve been missed!
-        </ThemedText>
-      </View>
-      <View style={styles.inputSection}>
-        <ThemedText style={styles.inputLabel}>Email</ThemedText>
-        <View style={styles.inputContainer}>
-          <MaterialIcons name="email" size={24} color="#aaa" />
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="email-address"
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-          />
+    <ScrollView>
+      <ThemedView>
+        <View style={styles.header}>
+          <ThemedText style={styles.headerTitle}>Create An Account</ThemedText>
+          <ThemedText style={styles.headerSubtitle}></ThemedText>
         </View>
-        <ThemedText style={styles.inputLabel}>Password</ThemedText>
-        <View style={styles.inputContainer}>
-          <MaterialIcons name="lock" size={24} color="#aaa" />
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="default"
-            secureTextEntry={!showPassword}
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-          />
-          <Pressable onPress={onPress} style={styles.eyeButton}>
-            <View style={styles.eyeWrapper}>
-              <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
-                <MaterialIcons name="visibility-off" size={24} color="#777" />
-              </Animated.View>
-              <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
-                <MaterialIcons name="visibility" size={24} color="#aaa" />
-              </Animated.View>
-            </View>
-          </Pressable>
-        </View>
+        <View style={styles.inputSection}>
+          <ThemedText style={styles.inputLabel}>First Name</ThemedText>
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="person" size={24} color="#aaa" />
+            <TextInput
+              style={styles.input}
+              autoCapitalize="words"
+              autoCorrect={false}
+              keyboardType="default"
+              onChangeText={(text) => setFirstName(text)}
+              value={firstName}
+            />
+          </View>
 
-        <ThemedText style={styles.inputLabel}>Confirm Password</ThemedText>
-        <View style={styles.inputContainer}>
-          <MaterialIcons name="lock" size={24} color="#aaa" />
-          <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="default"
-            secureTextEntry={!showPassword}
-            onChangeText={(text) => setConfirmPassword(text)}
-            value={confirmPassword}
-          />
-          <Pressable onPress={onPress} style={styles.eyeButton}>
-            <View style={styles.eyeWrapper}>
-              <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
-                <MaterialIcons name="visibility-off" size={24} color="#777" />
-              </Animated.View>
-              <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
-                <MaterialIcons name="visibility" size={24} color="#aaa" />
-              </Animated.View>
-            </View>
-          </Pressable>
+          <ThemedText style={styles.inputLabel}>Last Name</ThemedText>
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="person" size={24} color="#aaa" />
+            <TextInput
+              style={styles.input}
+              autoCapitalize="words"
+              autoCorrect={false}
+              keyboardType="default"
+              onChangeText={(text) => setLastName(text)}
+              value={lastName}
+            />
+          </View>
+
+          <ThemedText style={styles.inputLabel}>Birthday (optional)</ThemedText>
+          <BirthdayPicker />
+
+          <ThemedText style={styles.inputLabel}>Email</ThemedText>
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="email" size={24} color="#aaa" />
+            <TextInput
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              onChangeText={(text) => setEmail(text)}
+              value={email}
+            />
+          </View>
+          <ThemedText style={styles.inputLabel}>Password</ThemedText>
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="lock" size={24} color="#aaa" />
+            <TextInput
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="default"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+            />
+            <Pressable onPress={onPress} style={styles.eyeButton}>
+              <View style={styles.eyeWrapper}>
+                <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
+                  <MaterialIcons name="visibility-off" size={24} color="#777" />
+                </Animated.View>
+                <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
+                  <MaterialIcons name="visibility" size={24} color="#aaa" />
+                </Animated.View>
+              </View>
+            </Pressable>
+          </View>
+
+          <ThemedText style={styles.inputLabel}>Confirm Password</ThemedText>
+          <View style={styles.inputContainer}>
+            <MaterialIcons name="lock" size={24} color="#aaa" />
+            <TextInput
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="default"
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setConfirmPassword(text)}
+              value={confirmPassword}
+            />
+            <Pressable onPress={onPress} style={styles.eyeButton}>
+              <View style={styles.eyeWrapper}>
+                <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
+                  <MaterialIcons name="visibility-off" size={24} color="#777" />
+                </Animated.View>
+                <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
+                  <MaterialIcons name="visibility" size={24} color="#aaa" />
+                </Animated.View>
+              </View>
+            </Pressable>
+          </View>
         </View>
-      </View>
-    </ThemedView>
+      </ThemedView>
+    </ScrollView>
   );
 }
 
