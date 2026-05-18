@@ -29,12 +29,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   register: {
-    position: "absolute",
     backgroundColor: globalStyles.themeRed.color,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 20,
+    padding: 10,
     borderTopWidth: 1,
     borderTopColor: "black",
   },

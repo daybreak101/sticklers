@@ -1,193 +1,175 @@
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
-import { MaterialIcons } from "@expo/vector-icons";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from "react-native-reanimated";
 import BirthdayPicker from "./BirthdayPicker";
+import InputField from "../defaults/InputField";
+import { globalStyles } from "@/styles/global";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { auth, db } from "@/lib/firebaseConfig";
+import { FirebaseError } from "firebase/app";
+import { doc, setDoc } from "firebase/firestore";
+import { useRouter } from "expo-router";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
+  const [birthday, setBirthday] = useState<Date | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const visible = useSharedValue(0); // 0 = off, 1 = on
 
-  const onPress = () => {
-    const next = !showPassword;
-    setShowPassword(next);
-    visible.value = next ? 1 : 0;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const router = useRouter();
+
+  const validateForm = (): boolean => {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      setError("All fields are required");
+      return false;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+    setError("");
+    return true;
   };
 
-  const eyeStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(visible.value, { duration: 200 }),
-  }));
+  const submit = async () => {
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = userCredential.user;
 
-  const eyeOffStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(visible.value ? 0 : 1, { duration: 200 }),
-  }));
+      await setDoc(doc(db, "users", user.uid), {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        birthday: birthday,
+      });
+
+      await sendEmailVerification(userCredential.user);
+      console.log("Email sent");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else if (err instanceof FirebaseError) {
+        setError(err.message);
+      } else {
+        setError("Failed to login. Please check your email and password");
+      }
+    } finally {
+      setIsSubmitting(false);
+      router.push("/profile/verifyEmail");
+    }
+  };
 
   return (
-    <ScrollView>
-      <ThemedView>
-        <View style={styles.header}>
-          <ThemedText style={styles.headerTitle}>Create An Account</ThemedText>
-          <ThemedText style={styles.headerSubtitle}></ThemedText>
-        </View>
+    <ThemedView style={styles.screen}>
+      <View>
+        <ThemedText style={styles.headerTitle}>Create An Account</ThemedText>
+      </View>
+      <ScrollView>
         <View style={styles.inputSection}>
-          <ThemedText style={styles.inputLabel}>First Name</ThemedText>
-          <View style={styles.inputContainer}>
-            <MaterialIcons name="person" size={24} color="#aaa" />
-            <TextInput
-              style={styles.input}
-              autoCapitalize="words"
-              autoCorrect={false}
-              keyboardType="default"
-              onChangeText={(text) => setFirstName(text)}
-              value={firstName}
-            />
-          </View>
-
-          <ThemedText style={styles.inputLabel}>Last Name</ThemedText>
-          <View style={styles.inputContainer}>
-            <MaterialIcons name="person" size={24} color="#aaa" />
-            <TextInput
-              style={styles.input}
-              autoCapitalize="words"
-              autoCorrect={false}
-              keyboardType="default"
-              onChangeText={(text) => setLastName(text)}
-              value={lastName}
-            />
-          </View>
-
-          <ThemedText style={styles.inputLabel}>Birthday (optional)</ThemedText>
-          <BirthdayPicker />
-
-          <ThemedText style={styles.inputLabel}>Email</ThemedText>
-          <View style={styles.inputContainer}>
-            <MaterialIcons name="email" size={24} color="#aaa" />
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="email-address"
-              onChangeText={(text) => setEmail(text)}
-              value={email}
-            />
-          </View>
-          <ThemedText style={styles.inputLabel}>Password</ThemedText>
-          <View style={styles.inputContainer}>
-            <MaterialIcons name="lock" size={24} color="#aaa" />
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="default"
-              secureTextEntry={!showPassword}
-              onChangeText={(text) => setPassword(text)}
-              value={password}
-            />
-            <Pressable onPress={onPress} style={styles.eyeButton}>
-              <View style={styles.eyeWrapper}>
-                <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
-                  <MaterialIcons name="visibility-off" size={24} color="#777" />
-                </Animated.View>
-                <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
-                  <MaterialIcons name="visibility" size={24} color="#aaa" />
-                </Animated.View>
-              </View>
-            </Pressable>
-          </View>
-
-          <ThemedText style={styles.inputLabel}>Confirm Password</ThemedText>
-          <View style={styles.inputContainer}>
-            <MaterialIcons name="lock" size={24} color="#aaa" />
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="default"
-              secureTextEntry={!showPassword}
-              onChangeText={(text) => setConfirmPassword(text)}
-              value={confirmPassword}
-            />
-            <Pressable onPress={onPress} style={styles.eyeButton}>
-              <View style={styles.eyeWrapper}>
-                <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
-                  <MaterialIcons name="visibility-off" size={24} color="#777" />
-                </Animated.View>
-                <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
-                  <MaterialIcons name="visibility" size={24} color="#aaa" />
-                </Animated.View>
-              </View>
+          <InputField
+            text={firstName}
+            setText={setFirstName}
+            label="First Name"
+            icon="person"
+          />
+          <InputField
+            text={lastName}
+            setText={setLastName}
+            label="Last Name"
+            icon="person"
+          />
+          <BirthdayPicker birthday={birthday} setBirthday={setBirthday} />
+          <InputField
+            text={email}
+            setText={setEmail}
+            label="Email"
+            icon="email"
+          />
+          <InputField
+            text={password}
+            setText={setPassword}
+            label="Password"
+            icon="lock"
+            isPassword
+          />
+          <InputField
+            text={confirmPassword}
+            setText={setConfirmPassword}
+            label="Confirm Password"
+            icon="lock"
+            isPassword
+          />
+          <View style={styles.buttonSection}>
+            <View>
+              <ThemedText style={styles.error}>{error}</ThemedText>
+            </View>
+            <Pressable onPress={submit} style={styles.button}>
+              <ThemedText style={styles.buttonText}>Sign Up</ThemedText>
             </Pressable>
           </View>
         </View>
-      </ThemedView>
-    </ScrollView>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {},
+  error: {
+    color: "#ff0000",
+    fontSize: 15,
+    paddingVertical: 5,
+  },
+  screen: {
+    flex: 1,
+  },
+  inputSection: {
+    gap: 20,
+  },
   headerTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    paddingBottom: 10,
+    paddingBottom: 20,
   },
-  headerSubtitle: {
-    fontSize: 16,
-    color: "#777",
-    marginBottom: 20,
-  },
-  inputSection: {},
   inputContainer: {
     backgroundColor: "#4a4a4a",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
   },
-  inputLabel: {
-    paddingHorizontal: 10,
-    paddingTop: 30,
-    paddingBottom: 10,
+  buttonSection: {
+    paddingVertical: 20,
+    alignItems: "center",
   },
-  input: {
-    fontSize: 16,
+  button: {
+    backgroundColor: globalStyles.themeRed.color,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  buttonText: {
     color: "#fff",
-    flex: 1,
-  },
-  eyeButton: {
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  eyeWrapper: {
-    width: 24,
-    height: 24,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  eyeAbsolute: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

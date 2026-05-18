@@ -48,6 +48,7 @@ export default function IndexLayout() {
         />
         <Stack.Screen name="favorites" options={{ title: "Favorites" }} />
         <Stack.Screen name="editProfile" options={{ title: "Edit Profile" }} />
+        <Stack.Screen name="verifyEmail" options={{ headerShown: false }}></Stack.Screen>
       </Stack>
     </SafeAreaProvider>
   );
