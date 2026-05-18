@@ -25,20 +25,22 @@ export default function SignUp() {
   // const [password, setPassword] = useState("");
   // const [confirmPassword, setConfirmPassword] = useState("");
 
-  const schema = z.object({
-    firstName: z.string().min(2, "First Name is too short"),
-    lastName: z.string().min(2, "Last Name is too short"),
-    email: z.email("Invalid email"),
-    password: z.string().min(6, "Password is too short"),
-    confirmPassword: z.string().min(6, "Password is too short"),
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+  const schema = z
+    .object({
+      firstName: z.string().min(2, "First Name is too short"),
+      lastName: z.string().min(2, "Last Name is too short"),
+      email: z.email("Invalid email"),
+      password: z.string().min(6, "Password is too short"),
+      confirmPassword: z.string().min(6, "Password is too short"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
   type FormData = z.infer<typeof schema>;
 
   const {
-    control, 
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -51,7 +53,6 @@ export default function SignUp() {
       confirmPassword: "",
     },
   });
-  
 
   // const validateForm = (): boolean => {
   //   if (!firstName || !lastName || !email || !password || !confirmPassword) {
@@ -96,17 +97,17 @@ export default function SignUp() {
 
       await sendEmailVerification(userCredential.user);
       console.log("Email sent");
+      router.push("/profile/verifyEmail");
     } catch (err: unknown) {
-      if (err instanceof Error) {
+      if (err instanceof FirebaseError) {
         setError(err.message);
-      } else if (err instanceof FirebaseError) {
+      } else if (err instanceof Error) {
         setError(err.message);
       } else {
         setError("Failed to login. Please check your email and password");
       }
     } finally {
       setIsSubmitting(false);
-      router.push("/profile/verifyEmail");
     }
   };
 
@@ -115,33 +116,42 @@ export default function SignUp() {
       <View>
         <ThemedText style={styles.headerTitle}>Create An Account</ThemedText>
       </View>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.inputSection}>
           <InputField
             control={control}
+            controlValue="firstName"
+            errors={errors}
             label="First Name"
             icon="person"
           />
           <InputField
             control={control}
-            controlValue={lastName}
+            controlValue="lastName"
+            errors={errors}
             label="Last Name"
             icon="person"
           />
           <BirthdayPicker birthday={birthday} setBirthday={setBirthday} />
           <InputField
             control={control}
+            controlValue="email"
+            errors={errors}
             label="Email"
             icon="email"
           />
           <InputField
             control={control}
+            controlValue="password"
+            errors={errors}
             label="Password"
             icon="lock"
             isPassword
           />
           <InputField
             control={control}
+            controlValue="confirmPassword"
+            errors={errors}
             label="Confirm Password"
             icon="lock"
             isPassword
@@ -150,7 +160,7 @@ export default function SignUp() {
             <View>
               <ThemedText style={styles.error}>{error}</ThemedText>
             </View>
-            <Pressable onPress={submit} style={styles.button}>
+            <Pressable onPress={handleSubmit(submit)} style={styles.button}>
               <ThemedText style={styles.buttonText}>Sign Up</ThemedText>
             </Pressable>
           </View>

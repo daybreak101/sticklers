@@ -20,7 +20,8 @@ import { Controller } from "react-hook-form";
 
 type InputFieldProps = {
   control: any;
-  controlValue: string,
+  controlValue: string;
+  errors: any;
   label?: string;
   icon?: any;
   keyboardType?: any;
@@ -30,6 +31,7 @@ type InputFieldProps = {
 export default function InputField({
   control,
   controlValue,
+  errors,
   label = "",
   icon = "question-mark",
   keyboardType = "default",
@@ -53,9 +55,7 @@ export default function InputField({
   }));
 
   return (
-    <KeyboardAvoidingView
-      style={{ paddingHorizontal: 1 }}
-    >
+    <KeyboardAvoidingView style={{ paddingHorizontal: 1 }}>
       <ThemedText style={styles.inputLabel}>{label}</ThemedText>
       <View
         style={[
@@ -68,7 +68,7 @@ export default function InputField({
         <MaterialIcons name={icon} size={24} color="#aaa" />
         <Controller
           control={control}
-          name={label}
+          name={controlValue}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
@@ -76,13 +76,10 @@ export default function InputField({
               autoCorrect={false}
               keyboardType={keyboardType}
               onChangeText={onChange}
-              value={controlValue}
+              value={value}
               secureTextEntry={isPassword && !showPassword}
             />
           )}
-          rules={{
-            required: "This field is required",
-          }}
         />
         {/* <TextInput
           style={styles.input}
@@ -106,11 +103,17 @@ export default function InputField({
           </Pressable>
         )}
       </View>
+      {errors[controlValue] && <ThemedText style={styles.error}>{errors[controlValue].message}</ThemedText>}
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  error: {
+    color: "#ff0000",
+    fontSize: 15,
+    padding: 5,
+  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",

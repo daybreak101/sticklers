@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: any) => {
           setProfile({
             id: snap.id,
             ...snap.data(),
-            birthday: snap.data().birthday.toDate() ?? null
+            birthday: snap.data().birthday?.toDate() ?? null
           } as Profile)
         }
         else {
