@@ -13,54 +13,85 @@ import { auth, db } from "@/lib/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "expo-router";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
   const [birthday, setBirthday] = useState<Date | null>(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+
+  const schema = z.object({
+    firstName: z.string().min(2, "First Name is too short"),
+    lastName: z.string().min(2, "Last Name is too short"),
+    email: z.email("Invalid email"),
+    password: z.string().min(6, "Password is too short"),
+    confirmPassword: z.string().min(6, "Password is too short"),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+  type FormData = z.infer<typeof schema>;
+
+  const {
+    control, 
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+  
+
+  // const validateForm = (): boolean => {
+  //   if (!firstName || !lastName || !email || !password || !confirmPassword) {
+  //     setError("All fields are required");
+  //     return false;
+  //   }
+  //   if (password.length < 6) {
+  //     setError("Password must be at least 6 characters");
+  //     return false;
+  //   }
+
+  //   if (password !== confirmPassword) {
+  //     setError("Passwords do not match");
+  //     return false;
+  //   }
+  //   setError("");
+  //   return true;
+  // };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   const router = useRouter();
 
-  const validateForm = (): boolean => {
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
-      setError("All fields are required");
-      return false;
-    }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return false;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return false;
-    }
-    setError("");
-    return true;
-  };
-
-  const submit = async () => {
-    if (!validateForm()) return;
-    setIsSubmitting(true);
+  const submit = async (data: FormData) => {
+    //if (!validateForm()) return;
+    //setIsSubmitting(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password,
+        data.email,
+        data.password,
       );
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        birthday: birthday,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        birthday: birthday ?? null,
       });
 
       await sendEmailVerification(userCredential.user);
@@ -87,34 +118,30 @@ export default function SignUp() {
       <ScrollView>
         <View style={styles.inputSection}>
           <InputField
-            text={firstName}
-            setText={setFirstName}
+            control={control}
             label="First Name"
             icon="person"
           />
           <InputField
-            text={lastName}
-            setText={setLastName}
+            control={control}
+            controlValue={lastName}
             label="Last Name"
             icon="person"
           />
           <BirthdayPicker birthday={birthday} setBirthday={setBirthday} />
           <InputField
-            text={email}
-            setText={setEmail}
+            control={control}
             label="Email"
             icon="email"
           />
           <InputField
-            text={password}
-            setText={setPassword}
+            control={control}
             label="Password"
             icon="lock"
             isPassword
           />
           <InputField
-            text={confirmPassword}
-            setText={setConfirmPassword}
+            control={control}
             label="Confirm Password"
             icon="lock"
             isPassword

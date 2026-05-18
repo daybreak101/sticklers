@@ -16,10 +16,11 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { Controller } from "react-hook-form";
 
 type InputFieldProps = {
-  text: any;
-  setText: React.Dispatch<React.SetStateAction<any>>;
+  control: any;
+  controlValue: string,
   label?: string;
   icon?: any;
   keyboardType?: any;
@@ -27,9 +28,9 @@ type InputFieldProps = {
 };
 
 export default function InputField({
-  text,
-  setText,
-  label,
+  control,
+  controlValue,
+  label = "",
   icon = "question-mark",
   keyboardType = "default",
   isPassword = false,
@@ -65,15 +66,33 @@ export default function InputField({
         ]}
       >
         <MaterialIcons name={icon} size={24} color="#aaa" />
-        <TextInput
+        <Controller
+          control={control}
+          name={label}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType={keyboardType}
+              onChangeText={onChange}
+              value={controlValue}
+              secureTextEntry={isPassword && !showPassword}
+            />
+          )}
+          rules={{
+            required: "This field is required",
+          }}
+        />
+        {/* <TextInput
           style={styles.input}
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={keyboardType}
-          onChangeText={(t) => setText(t)}
-          value={text}
+          onChangeText={onChange}
+          value={value}
           secureTextEntry={isPassword && !showPassword}
-        />
+        /> */}
         {isPassword && (
           <Pressable onPress={onPress} style={styles.eyeButton}>
             <View style={styles.eyeWrapper}>

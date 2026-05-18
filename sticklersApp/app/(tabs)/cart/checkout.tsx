@@ -53,6 +53,7 @@ export default function CheckoutScreen() {
     const newOrder = {
       id: Date.now().toString(),
       customerInfo: {
+        id: user?.uid,
         name: data.name,
         email: data.email,
         phone: data.phone,
