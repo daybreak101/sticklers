@@ -72,7 +72,7 @@ export default function CheckoutScreen() {
   return (
     <ThemedView style={globalStyles.page}>
       <Stack.Screen options={{ title: "Checkout" }} />
-      {user ? (
+      {user && user.emailVerified ? (
         <View>
           <ThemedText>Total Items: {cartQuantity}</ThemedText>
           {/* TODO: find tax rate, find processing fee*/}

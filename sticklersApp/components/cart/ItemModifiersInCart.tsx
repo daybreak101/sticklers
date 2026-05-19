@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { getModifierGroups } from "@/lib/menuStorage";
-import { ThemedText } from "./defaults/themed-text";
+import { ThemedText } from "@/components/defaults/themed-text";
 import { ModifierGroup } from "@/types/menu";
 import { NonDefaultModifier } from "@/types/cart";
 

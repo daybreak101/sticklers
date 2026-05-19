@@ -7,15 +7,16 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { CartItem } from "@/types/cart";
 import { images } from "@/constants/images";
-import { ThemedText } from "./defaults/themed-text";
+import { ThemedText } from "@/components/defaults/themed-text";
 import ItemModifiersInCart from "./ItemModifiersInCart";
 import { useCart } from "@/context/CartContext";
 import { globalStyles } from "@/styles/global";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import AreYouSure from "./AreYouSure";
 
 type CartItemProps = {
   cartItem: CartItem;
@@ -26,8 +27,11 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart();
   const router = useRouter();
 
+  const [show, setShow] = useState(false);
+
   return (
     <View style={styles.container}>
+      <AreYouSure show={show} setShow={setShow} itemToRemove={cartItem} />
       <View style={styles.mainContent}>
         <View style={styles.imageContainer}>
           <Image
@@ -82,7 +86,8 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
         <View style={styles.interactions}>
           <Pressable
             onPress={() => {
-              removeItem(cartItem.cartItemId);
+              setShow(true);
+              // removeItem(cartItem.cartItemId);
             }}
             style={styles.buttonInteraction}
           >

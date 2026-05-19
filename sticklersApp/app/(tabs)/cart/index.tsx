@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
-import CartItemComponent from "@/components/CartItemComponent";
+import CartItemComponent from "@/components/cart/CartItemComponent";
 import { useRouter } from "expo-router";
 
 export default function CartScreen() {
