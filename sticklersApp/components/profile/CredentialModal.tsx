@@ -119,8 +119,8 @@ export default function AreYouSure({ show, setShow }: AreYouSureProps) {
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              paddingTop: 20,
               alignItems: "center",
+              gap: 20,
             }}
           >
             <Pressable onPress={closeModal} style={styles.button}>
@@ -171,9 +171,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: globalStyles.themeRed.color,
     paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 10,
-    width: "30%",
+    width: "45%",
     justifyContent: "center",
     alignItems: "center",
   },

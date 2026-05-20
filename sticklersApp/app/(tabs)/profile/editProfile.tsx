@@ -20,8 +20,8 @@ import BirthdayPicker from "@/components/profile/BirthdayPicker";
 import { useAuth } from "@/context/AuthContext";
 
 export default function EditProfile() {
-  const { user } = useAuth();
-  const [birthday, setBirthday] = useState<Date | null>(null);
+  const { user, profile } = useAuth();
+  const [birthday, setBirthday] = useState<Date | null>(profile?.birthday ?? null);
 
   const schema = z
     .object({
@@ -38,9 +38,9 @@ export default function EditProfile() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: profile?.firstName ?? "",
+      lastName: profile?.lastName ?? "",
+      email: profile?.email ?? "",
     },
   });
 
@@ -74,9 +74,6 @@ export default function EditProfile() {
 
   return (
     <ThemedView style={styles.screen}>
-      <View>
-        <ThemedText style={styles.headerTitle}>Create An Account</ThemedText>
-      </View>
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.inputSection}>
           <InputField
@@ -106,7 +103,7 @@ export default function EditProfile() {
               <ThemedText style={styles.error}>{error}</ThemedText>
             </View>
             <Pressable onPress={handleSubmit(submit)} style={styles.button}>
-              <ThemedText style={styles.buttonText}>Sign Up</ThemedText>
+              <ThemedText style={styles.buttonText}>Save Changes</ThemedText>
             </Pressable>
           </View>
         </View>
@@ -125,6 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputSection: {
+    paddingVertical: 20,
     gap: 20,
   },
   headerTitle: {
