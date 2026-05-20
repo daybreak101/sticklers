@@ -18,6 +18,7 @@ import { ThemedText } from "@/components/defaults/themed-text";
 import { ThemedView } from "@/components/defaults/themed-view";
 import BirthdayPicker from "@/components/profile/BirthdayPicker";
 import { useAuth } from "@/context/AuthContext";
+import ChangeEmail from "@/components/profile/ChangeEmail";
 
 export default function EditProfile() {
   const { user, profile } = useAuth();
@@ -56,7 +57,6 @@ export default function EditProfile() {
       await setDoc(doc(db, "users", user.uid), {
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email,
         birthday: birthday ?? null,
       }, { merge: true });
     } catch (err: unknown) {
@@ -91,13 +91,6 @@ export default function EditProfile() {
             icon="person"
           />
           <BirthdayPicker birthday={birthday} setBirthday={setBirthday} />
-          <InputField
-            control={control}
-            controlValue="email"
-            errors={errors}
-            label="Email"
-            icon="email"
-          />
           <View style={styles.buttonSection}>
             <View>
               <ThemedText style={styles.error}>{error}</ThemedText>
@@ -106,6 +99,7 @@ export default function EditProfile() {
               <ThemedText style={styles.buttonText}>Save Changes</ThemedText>
             </Pressable>
           </View>
+          <ChangeEmail />
         </View>
       </ScrollView>
     </ThemedView>
