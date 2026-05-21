@@ -11,6 +11,7 @@ import { useThemeColor } from "@/hooks/use-theme-color";
 import { globalStyles } from "@/styles/global";
 import { deleteDoc, doc } from "firebase/firestore";
 import CredentialModal from "./CredentialModal";
+import AreYouSure from "../cart/AreYouSure";
 
 export default function DisplayUser() {
   const borderColor = useThemeColor({ light: "#aaa", dark: "#fff" }, "text");
@@ -19,7 +20,8 @@ export default function DisplayUser() {
   const { user, profile, refreshUser } = useAuth();
   const router = useRouter();
 
-  const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -48,7 +50,8 @@ export default function DisplayUser() {
   return (
     // full screen
     <ThemedView style={styles.screen}>
-      <CredentialModal show={show} setShow={setShow} />
+      <AreYouSure show={showLogout} setShow={setShowLogout} onAccept={logout} acceptText="Yes" rejectText="No" message="Are you sure you want to logout?" />
+      <CredentialModal show={showDelete} setShow={setShowDelete} />
       {/* header */}
       <ThemedView
         style={[
@@ -93,10 +96,10 @@ export default function DisplayUser() {
       <Pressable onPress={editProfile} style={styles.button}>
         <ThemedText>Edit Profile</ThemedText>
       </Pressable>
-      <Pressable onPress={logout} style={styles.button}>
+      <Pressable onPress={() => setShowLogout(true)} style={styles.button}>
         <ThemedText>Logout</ThemedText>
       </Pressable>
-      <Pressable onPress={() => setShow(true)} style={styles.button}>
+      <Pressable onPress={() => setShowDelete(true)} style={styles.button}>
         <ThemedText>Delete Account</ThemedText>
       </Pressable>
     </ThemedView>

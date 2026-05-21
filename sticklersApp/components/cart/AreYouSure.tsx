@@ -1,32 +1,27 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { use } from "react";
+import { Modal, Pressable, StyleSheet, View } from "react-native";
+import React from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
-import { useTheme } from "@react-navigation/native";
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { CartItem } from "@/types/cart";
-import { useCart } from "@/context/CartContext";
 import { globalStyles } from "@/styles/global";
 
 type AreYouSureProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  itemToRemove: CartItem;
+  onAccept: () => void;
+  acceptText: string;
+  rejectText: string;
+  message: string;
 };
 
 export default function AreYouSure({
   show,
   setShow,
-  itemToRemove,
+  onAccept,
+  acceptText,
+  rejectText,
+  message,
 }: AreYouSureProps) {
-  const { removeItem } = useCart();
-
-  const removeItemFromCart = async () => {
-    await removeItem(itemToRemove.cartItemId);
-    setShow(false);
-  };
-
-
   return (
     <Modal
       transparent={true}
@@ -37,7 +32,7 @@ export default function AreYouSure({
       <ThemedView style={styles.modalContainer}>
         <ThemedView style={[styles.modal, { backgroundColor: useThemeColor({ light: "#fff", dark: "#343434" }, "background") }]}>
           <ThemedText style={styles.message}>
-            Would you like to remove {itemToRemove.name} from your cart?
+            {message}
           </ThemedText>
           <View
             style={{
@@ -49,10 +44,10 @@ export default function AreYouSure({
             }}
           >
             <Pressable onPress={() => setShow(false)} style={styles.button}>
-              <ThemedText>No</ThemedText>
+              <ThemedText>{rejectText}</ThemedText>
             </Pressable>
-            <Pressable onPress={removeItemFromCart} style={styles.button}>
-              <ThemedText>Yes</ThemedText>
+            <Pressable onPress={onAccept} style={styles.button}>
+              <ThemedText>{acceptText}</ThemedText>
             </Pressable>
           </View>
         </ThemedView>

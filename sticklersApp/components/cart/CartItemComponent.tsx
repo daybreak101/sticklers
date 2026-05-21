@@ -29,9 +29,22 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
 
   const [show, setShow] = useState(false);
 
+  const removeItemFromCart = async () => {
+    await removeItem(cartItem.cartItemId);
+    setShow(false);
+  };
+
   return (
     <View style={styles.container}>
-      <AreYouSure show={show} setShow={setShow} itemToRemove={cartItem} />
+      <AreYouSure
+        show={show}
+        setShow={setShow}
+        // itemToRemove={cartItem}
+        onAccept={removeItemFromCart}
+        acceptText="Yes"
+        rejectText="No"
+        message={`Are you sure you want to remove ${cartItem.name} from your cart?`}
+      />
       <View style={styles.mainContent}>
         <View style={styles.imageContainer}>
           <Image

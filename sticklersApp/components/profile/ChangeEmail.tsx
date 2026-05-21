@@ -175,7 +175,8 @@ const styles = StyleSheet.create({
   },
   modal: {
     borderRadius: 20,
-    padding: 35,
+    paddingHorizontal: 5,
+    paddingVertical: 35,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

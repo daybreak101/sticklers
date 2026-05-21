@@ -9,11 +9,13 @@ import { auth } from "@/lib/firebaseConfig";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { FirebaseError } from "firebase/app";
 
 export default function SignIn() {
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const schema = z.object({
     email: z.string().email("Invalid email"),
@@ -36,16 +38,25 @@ export default function SignIn() {
   const submit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      const userCred = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const userCred = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
       const idToken = await userCred.user.getIdToken();
-    } catch(err: any) {
-      console.log(err);
+    } catch (err: any) {
+      if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+        setError("Incorrect email or password");
+      } else if (err.code === "auth/too-many-requests") {
+        setError("Too many attempts");
+      } 
+      else {
+        setError(err.message);
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
-
-
 
   return (
     <ThemedView style={styles.screen}>
@@ -73,6 +84,9 @@ export default function SignIn() {
         />
       </View>
       <View style={styles.buttonSection}>
+        <View>
+          <ThemedText style={styles.error}>{error}</ThemedText>
+        </View>
         <Pressable onPress={handleSubmit(submit)} style={styles.button}>
           <ThemedText style={styles.buttonText}>Sign In</ThemedText>
         </Pressable>
@@ -82,6 +96,11 @@ export default function SignIn() {
 }
 
 const styles = StyleSheet.create({
+  error: {
+    color: "#ff0000",
+    fontSize: 15,
+    paddingVertical: 5,
+  },
   screen: {
     flex: 1,
   },

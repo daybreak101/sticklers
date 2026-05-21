@@ -21,12 +21,12 @@ import { doc, setDoc } from "firebase/firestore";
 import { isDirty } from "zod/v3";
 import { db } from "@/lib/firebaseConfig";
 
-type AreYouSureProps = {
+type CredentialModalProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function AreYouSure({ show, setShow }: AreYouSureProps) {
+export default function CredentialModal({ show, setShow }: CredentialModalProps) {
   const { user } = useAuth();
   const [error, setError] = useState("");
 
