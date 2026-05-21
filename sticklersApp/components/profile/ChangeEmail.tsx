@@ -3,17 +3,27 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
-import z from "zod";
+import z, { email } from "zod";
 import { globalStyles } from "@/styles/global";
 import { ThemedView } from "../defaults/themed-view";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ThemedText } from "../defaults/themed-text";
 import InputField from "../defaults/InputField";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  verifyBeforeUpdateEmail,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebaseConfig";
+import { useRouter } from "expo-router";
 
 export default function ChangeEmail() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
+  const router = useRouter();
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const schema = z.object({
     email: z.email("Invalid email"),
@@ -42,8 +52,22 @@ export default function ChangeEmail() {
 
   const changeEmail = async (data: FormData) => {
     try {
-      // await updateEmail(user, data.email);
-      setShow(false);
+      if (!user || !user.email) return;
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        data.password,
+      );
+      await reauthenticateWithCredential(user, credential);
+      await verifyBeforeUpdateEmail(user, data.email);
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          pendingEmail: data.email,
+        },
+        { merge: true },
+      );
+      await refreshUser();
+      setShowMessage(true);
     } catch (err: any) {
       if (err.code === "auth/email-already-in-use") {
         setError("Email already in use");
@@ -78,44 +102,52 @@ export default function ChangeEmail() {
               },
             ]}
           >
-            {/* <ThemedText style={styles.message}>
+            {showMessage ? (
+              <View>
+                <ThemedText style={styles.message}>
+                  We sent a verification link to your new email address. Once you confirm it, your email will be updated automatically. You may need to reopen the app to see the change.
+                </ThemedText>
+                <Pressable onPress={closeModal} style={[styles.button, { marginTop: 15, alignSelf: "center" }]}>
+                  <ThemedText>Close</ThemedText>
+                </Pressable>
+              </View>
+            ) : ( <View>
+              <InputField
+                control={control}
+                controlValue="email"
+                errors={errors}
+                label="Enter new email"
+                icon="email"
+              />
+              <InputField
+                control={control}
+                controlValue="password"
+                errors={errors}
+                label="In order to change your email, you will need to enter your current password."
+                icon="lock"
+                isPassword
+              />
+              <ThemedText style={styles.error}>{error}</ThemedText>
 
-            </ThemedText> */}
-            <InputField
-              control={control}
-              controlValue="email"
-              errors={errors}
-              label="Enter new email"
-              icon="email"
-            />
-            <InputField
-              control={control}
-              controlValue="password"
-              errors={errors}
-              label="In order to change your email, you will need to enter your current password."
-              icon="lock"
-              isPassword
-            />
-            <ThemedText style={styles.error}>{error}</ThemedText>
-
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                gap: 20,
-              }}
-            >
-              <Pressable onPress={closeModal} style={styles.button}>
-                <ThemedText>Cancel</ThemedText>
-              </Pressable>
-              <Pressable
-                onPress={handleSubmit(changeEmail)}
-                style={styles.button}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                  gap: 20,
+                }}
               >
-                <ThemedText>Confirm</ThemedText>
-              </Pressable>
-            </View>
+                <Pressable onPress={closeModal} style={styles.button}>
+                  <ThemedText>Cancel</ThemedText>
+                </Pressable>
+                <Pressable
+                  onPress={handleSubmit(changeEmail)}
+                  style={styles.button}
+                >
+                  <ThemedText>Confirm</ThemedText>
+                </Pressable>
+              </View>
+            </View> )}
           </ThemedView>
         </ThemedView>
       </Modal>

@@ -41,7 +41,7 @@ export default function EditProfile() {
     defaultValues: {
       firstName: profile?.firstName ?? "",
       lastName: profile?.lastName ?? "",
-      email: profile?.email ?? "",
+      email: user?.email ?? "",
     },
   });
 

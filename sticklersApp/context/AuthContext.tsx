@@ -1,19 +1,15 @@
 // context/AuthContext.tsx
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
+import { onAuthStateChanged, onIdTokenChanged, User } from "firebase/auth";
 import { auth, db } from "@/lib/firebaseConfig";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { Profile } from "@/types/userCache";
 
 type AuthContextType = {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,27 +20,29 @@ export const AuthProvider = ({ children }: any) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     let unsubscribeProfile: (() => void) | null = null;
-    const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+    //maybe change back to onAuthStateChanged
+    const unsubscribeAuth = onIdTokenChanged(auth, async (firebaseUser) => {
+      console.log("AUTH CHANGED: ", firebaseUser);
+      setLoading(true);
+      setUser(auth.currentUser);
 
-      if(!firebaseUser){
+      if (!firebaseUser) {
+        setUser(null);
         setProfile(null);
-        setLoading(false)
+        setLoading(false);
         return;
       }
-
       const profileRef = doc(db, "users", firebaseUser.uid);
       unsubscribeProfile = onSnapshot(profileRef, (snap) => {
-        if(snap.exists()){
+        if (snap.exists()) {  
           setProfile({
             id: snap.id,
             ...snap.data(),
-            birthday: snap.data().birthday?.toDate() ?? null
-          } as Profile)
-        }
-        else {
+            birthday: snap.data().birthday?.toDate() ?? null,
+          } as Profile);
+    
+        } else {
           setProfile(null);
         }
         setLoading(false);
@@ -53,13 +51,24 @@ export const AuthProvider = ({ children }: any) => {
 
     return () => {
       unsubscribeAuth();
-      if(unsubscribeProfile) unsubscribeProfile();
-    }
-
+      if (unsubscribeProfile) unsubscribeProfile();
+    };
   }, []);
 
+  const refreshUser = async () => {
+    const current = auth.currentUser;
+    if (!current) return;
+
+    await current.reload();
+    await current.getIdToken(true);
+
+    setUser(auth.currentUser);
+
+    console.log("REFRESHED USER:", auth.currentUser);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading }}>
+    <AuthContext.Provider value={{ user, profile, loading, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { auth, db } from "@/lib/firebaseConfig";
 import { deleteUser, signOut } from "firebase/auth";
@@ -16,10 +16,20 @@ export default function DisplayUser() {
   const borderColor = useThemeColor({ light: "#aaa", dark: "#fff" }, "text");
   const iconColor = useThemeColor({ light: "#aaa", dark: "#fff" }, "text");
 
-  const { user, profile } = useAuth();
+  const { user, profile, refreshUser } = useAuth();
   const router = useRouter();
 
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const refresh = async () => {
+      await refreshUser();
+    };
+
+    refresh();
+  },  []);
 
   const editProfile = () => {
     router.push("/profile/editProfile");

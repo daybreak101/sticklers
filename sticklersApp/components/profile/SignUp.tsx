@@ -91,7 +91,6 @@ export default function SignUp() {
       await setDoc(doc(db, "users", user.uid), {
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email,
         birthday: birthday ?? null,
       });
 

@@ -1,24 +1,26 @@
 import { Button, Pressable, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { auth } from "@/lib/firebaseConfig";
+import { auth, db } from "@/lib/firebaseConfig";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/defaults/themed-text";
-import { sendEmailVerification, signOut } from "firebase/auth";
+import { sendEmailVerification, signOut, verifyBeforeUpdateEmail } from "firebase/auth";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function VerifyEmail() {
-  const { user } = useAuth();
+  const { user, profile, refreshUser } = useAuth();
   const router = useRouter();
   const [error, setError] = useState("");
 
   if (!user && !auth.currentUser) return null;
 
   const checkVerification = async () => {
-    await auth.currentUser?.reload();
-
+    await refreshUser();
+    const refreshedUser = auth.currentUser;
+    if (!refreshedUser) return;
     if (auth.currentUser?.emailVerified) {
       console.log("Verified");
       router.replace("/profile");
@@ -30,6 +32,8 @@ export default function VerifyEmail() {
 
   const resendVerification = async () => {
     if (!auth.currentUser) return;
+
+    // NORMAL SIGNUP FLOW
     await sendEmailVerification(auth.currentUser);
     setError("Email sent");
   };
@@ -58,11 +62,12 @@ export default function VerifyEmail() {
             <ThemedText style={styles.buttonText}>{`I've Verified`}</ThemedText>
           </Pressable>
 
-          <Pressable onPress={resendVerification} style={styles.button}>
-            <ThemedText style={styles.buttonText}>
-              Resend Verification
-            </ThemedText>
-          </Pressable>
+        
+            <Pressable onPress={resendVerification} style={styles.button}>
+              <ThemedText style={styles.buttonText}>
+                Resend Verification
+              </ThemedText>
+            </Pressable>
 
           <Pressable onPress={logout} style={styles.button}>
             <ThemedText style={styles.buttonText}>Log Out</ThemedText>
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
   buttonSection: {
     paddingVertical: 20,
     alignItems: "center",
-    gap: 20
+    gap: 20,
   },
   button: {
     backgroundColor: globalStyles.themeRed.color,
