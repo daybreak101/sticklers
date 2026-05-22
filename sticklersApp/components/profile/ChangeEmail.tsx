@@ -28,6 +28,14 @@ export default function ChangeEmail() {
   const schema = z.object({
     email: z.email("Invalid email"),
     password: z.string().min(6, "Password is too short"),
+  }).superRefine((data, ctx) => {
+    if (data.email === user?.email) {
+      return ctx.addIssue({
+        code: 'custom',
+        path: ["email"],
+        message: "Email cannot be the same as your current email",
+      });
+    }
   });
   type FormData = z.infer<typeof schema>;
 
@@ -105,49 +113,60 @@ export default function ChangeEmail() {
             {showMessage ? (
               <View>
                 <ThemedText style={styles.message}>
-                  We sent a verification link to your new email address. Once you confirm it, your email will be updated automatically. You may need to reopen the app to see the change.
+                  We sent a verification link to your new email address. Once
+                  you confirm it, your email will be updated automatically. You
+                  may need to reopen the app to see the change.
                 </ThemedText>
-                <Pressable onPress={closeModal} style={[styles.button, { marginTop: 15, alignSelf: "center" }]}>
+                <Pressable
+                  onPress={closeModal}
+                  style={[
+                    styles.button,
+                    { marginTop: 15, alignSelf: "center" },
+                  ]}
+                >
                   <ThemedText>Close</ThemedText>
                 </Pressable>
               </View>
-            ) : ( <View>
-              <InputField
-                control={control}
-                controlValue="email"
-                errors={errors}
-                label="Enter new email"
-                icon="email"
-              />
-              <InputField
-                control={control}
-                controlValue="password"
-                errors={errors}
-                label="In order to change your email, you will need to enter your current password."
-                icon="lock"
-                isPassword
-              />
-              <ThemedText style={styles.error}>{error}</ThemedText>
+            ) : (
+              <View>
+                <InputField
+                  control={control}
+                  controlValue="email"
+                  errors={errors}
+                  label="Enter new email"
+                  icon="email"
+                />
+ 
+                <InputField
+                  control={control}
+                  controlValue="password"
+                  errors={errors}
+                  label="In order to change your email, you will need to enter your current password."
+                  icon="lock"
+                  isPassword
+                />
+                <ThemedText style={styles.error}>{error}</ThemedText>
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  gap: 20,
-                }}
-              >
-                <Pressable onPress={closeModal} style={styles.button}>
-                  <ThemedText>Cancel</ThemedText>
-                </Pressable>
-                <Pressable
-                  onPress={handleSubmit(changeEmail)}
-                  style={styles.button}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    gap: 20,
+                  }}
                 >
-                  <ThemedText>Confirm</ThemedText>
-                </Pressable>
+                  <Pressable onPress={closeModal} style={styles.button}>
+                    <ThemedText>Cancel</ThemedText>
+                  </Pressable>
+                  <Pressable
+                    onPress={handleSubmit(changeEmail)}
+                    style={styles.button}
+                  >
+                    <ThemedText>Confirm</ThemedText>
+                  </Pressable>
+                </View>
               </View>
-            </View> )}
+            )}
           </ThemedView>
         </ThemedView>
       </Modal>

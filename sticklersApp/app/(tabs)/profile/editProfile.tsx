@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   inputSection: {
     paddingVertical: 20,
-    gap: 20,
+    gap: 5,
   },
   headerTitle: {
     fontSize: 24,

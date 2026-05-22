@@ -81,15 +81,6 @@ export default function InputField({
             />
           )}
         />
-        {/* <TextInput
-          style={styles.input}
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType={keyboardType}
-          onChangeText={onChange}
-          value={value}
-          secureTextEntry={isPassword && !showPassword}
-        /> */}
         {isPassword && (
           <Pressable onPress={onPress} style={styles.eyeButton}>
             <View style={styles.eyeWrapper}>
@@ -103,7 +94,7 @@ export default function InputField({
           </Pressable>
         )}
       </View>
-      {errors[controlValue] && <ThemedText style={styles.error}>{errors[controlValue].message}</ThemedText>}
+      <ThemedText style={styles.error}>{errors[controlValue] ? errors[controlValue].message : ""}</ThemedText>
     </KeyboardAvoidingView>
   );
 }
@@ -117,7 +108,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 5,
     paddingHorizontal: 16,
     paddingVertical: 5,
     borderWidth: 1,
