@@ -78,6 +78,7 @@ export default function InputField({
               onChangeText={onChange}
               value={value}
               secureTextEntry={isPassword && !showPassword}
+              onBlur={onBlur}
             />
           )}
         />
@@ -103,7 +104,9 @@ const styles = StyleSheet.create({
   error: {
     color: "#ff0000",
     fontSize: 15,
-    padding: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    textAlign: "right"
   },
   inputContainer: {
     flexDirection: "row",
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   inputLabel: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     paddingBottom: 10,
   },
   input: {

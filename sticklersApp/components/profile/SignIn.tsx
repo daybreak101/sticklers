@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inputSection: {
-    gap: 20,
+    gap: 10,
   },
   inputContainer: {
     backgroundColor: "#4a4a4a",

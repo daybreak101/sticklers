@@ -171,6 +171,7 @@ export default function SignUp() {
 
 const styles = StyleSheet.create({
   error: {
+    width: "100%",
     color: "#ff0000",
     fontSize: 15,
     paddingVertical: 5,
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputSection: {
-    gap: 20,
+    gap: 0,
   },
   headerTitle: {
     fontSize: 24,
