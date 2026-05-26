@@ -19,6 +19,7 @@ import { ThemedView } from "@/components/defaults/themed-view";
 import BirthdayPicker from "@/components/profile/BirthdayPicker";
 import { useAuth } from "@/context/AuthContext";
 import ChangeEmail from "@/components/profile/ChangeEmail";
+import ChangePassword from "@/components/profile/ChangePassword";
 
 export default function EditProfile() {
   const { user, profile } = useAuth();
@@ -100,6 +101,7 @@ export default function EditProfile() {
             </Pressable>
           </View>
           <ChangeEmail />
+          <ChangePassword />
         </View>
       </ScrollView>
     </ThemedView>
