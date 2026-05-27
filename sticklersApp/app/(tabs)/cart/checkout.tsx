@@ -13,14 +13,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { id } from "zod/v4/locales";
 import { db } from "@/lib/firebaseConfig";
+import InputField from "@/components/defaults/InputField";
 
 export default function CheckoutScreen() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { cart } = useCart();
   const router = useRouter();
 
-  const [cartQuantity, setCartQuantity] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [cartQuantity, setCartQuantity] = useState(cart.items.length);
+  const [totalPrice, setTotalPrice] = useState(
+    `$${cart.totalPrice.toFixed(2)}`,
+  );
 
   const schema = z.object({
     name: z.string().min(2, "Name is too short"),
@@ -42,8 +45,8 @@ export default function CheckoutScreen() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: profile ? `${profile?.firstName} ${profile?.lastName}` : "",
+      email: user ? (user?.email as string) : "",
       phone: "",
       specialRequests: "",
     },
@@ -64,7 +67,7 @@ export default function CheckoutScreen() {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       specialRequests: data.specialRequests,
-    }
+    };
     await setDoc(doc(db, "orders", newOrder.id), newOrder);
     router.push("../(tabs)/cart/orderConfirmation");
   };
@@ -82,60 +85,36 @@ export default function CheckoutScreen() {
             fee.
           </ThemedText>
 
-          <Controller
+          <InputField
             control={control}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Name"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+            controlValue="name"
+            errors={errors}
+            label="Name"
+            icon="person"
           />
-          {errors.name && <Text>{errors.name.message}</Text>}
-          <Controller
+          <InputField
             control={control}
-            name="phone"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Phone Number"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+            controlValue="phone"
+            errors={errors}
+            label="Phone Number"
+            icon="phone"
           />
-          {errors.phone && <Text>{errors.phone.message}</Text>}
-          <Controller
+          <InputField
             control={control}
-            name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Email"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+            controlValue="email"
+            errors={errors}
+            label="Email"
+            icon="email"
           />
-          {errors.specialRequests && <Text>{errors.specialRequests.message}</Text>}
-                    <Controller
+          <InputField
             control={control}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="Special Requests"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
+            controlValue="specialRequests"
+            errors={errors}
+            label="Special Requests"
+            icon="sticky-note-2"
           />
-          {errors.specialRequests && <Text>{errors.specialRequests.message}</Text>}
-          <Pressable onPress={handleSubmit(onSubmit)}>
-            <Text>Submit</Text>
+          <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
+            <ThemedText style={styles.buttonText}>Submit</ThemedText>
           </Pressable>
         </View>
       ) : (
@@ -145,4 +124,18 @@ export default function CheckoutScreen() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: globalStyles.themeRed.color,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  alignSelf: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
