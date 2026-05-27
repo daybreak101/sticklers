@@ -16,7 +16,7 @@ export default function CartScreen() {
     <>
       <ThemedView style={globalStyles.page}>
         <ThemedText style={styles.description}>
-          {cart.items.length} item{cart.items.length !== 1 ? "s" : ""} in your
+          {cart.totalItems} item{cart.totalItems !== 1 ? "s" : ""} in your
           cart
         </ThemedText>
         <FlatList

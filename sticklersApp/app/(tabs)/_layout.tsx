@@ -32,6 +32,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="shopping-cart" size={size} color={color} />
           ),
+          popToTopOnBlur: true,
         }}
       />
 
@@ -42,6 +43,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="person" size={size} color={color} />
           ),
+          popToTopOnBlur: true,
         }}
       />
     </Tabs>

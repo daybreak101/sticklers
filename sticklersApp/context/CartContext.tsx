@@ -29,10 +29,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Cart>({
     items: [],
     totalPrice: 0,
+    totalItems: 0
   });
 
   useEffect(() => {
     calculateTotalPrice();
+    calculateTotalItems();
   }, [cart.items]);
 
   const addItem = (item: CartItem) => {
@@ -72,6 +74,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCart({
       items: [],
       totalPrice: 0,
+      totalItems: 0
     });
     showToast("Cart cleared");
   };
@@ -104,6 +107,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       total += item.finalPrice * item.quantity;
     });
     setCart((prev) => ({ ...prev, totalPrice: total }));
+  };
+
+  const calculateTotalItems = () => {
+    let total = 0;
+    cart.items.forEach((item) => {
+      total += item.quantity;
+    });
+    setCart((prev) => ({ ...prev, totalItems: total }));
   };
 
   const [toast, setToast] = useState<string | null>(null);

@@ -23,14 +23,20 @@ import ChangePassword from "@/components/profile/ChangePassword";
 
 export default function EditProfile() {
   const { user, profile } = useAuth();
-  const [birthday, setBirthday] = useState<Date | null>(profile?.birthday ?? null);
+  const [birthday, setBirthday] = useState<Date | null>(
+    profile?.birthday ?? null,
+  );
 
-  const schema = z
-    .object({
-      firstName: z.string().min(2, "First Name is too short"),
-      lastName: z.string().min(2, "Last Name is too short"),
-      email: z.email("Invalid email"),
-    })
+  const schema = z.object({
+    firstName: z.string().min(2, "First Name is too short"),
+    lastName: z.string().min(2, "Last Name is too short"),
+    phone: z
+      .string()
+      .regex(
+        new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/),
+        "Invalid Number!",
+      ),
+  });
   type FormData = z.infer<typeof schema>;
 
   const {
@@ -42,7 +48,7 @@ export default function EditProfile() {
     defaultValues: {
       firstName: profile?.firstName ?? "",
       lastName: profile?.lastName ?? "",
-      email: user?.email ?? "",
+      phone: profile?.phone ?? "",
     },
   });
 
@@ -51,15 +57,21 @@ export default function EditProfile() {
 
   const router = useRouter();
 
-  if(!user) return <></>;
-  
+  if (!user) return <></>;
+
   const submit = async (data: FormData) => {
     try {
-      await setDoc(doc(db, "users", user.uid), {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        birthday: birthday ?? null,
-      }, { merge: true });
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone ?? "",
+          birthday: birthday ?? null,
+        },
+        { merge: true },
+      );
+      router.back();
     } catch (err: unknown) {
       if (err instanceof FirebaseError) {
         setError(err.message);
@@ -90,6 +102,14 @@ export default function EditProfile() {
             errors={errors}
             label="Last Name"
             icon="person"
+          />
+          <InputField
+            control={control}
+            controlValue="phone"
+            errors={errors}
+            label="Phone Number"
+            icon="phone"
+            keyboardType="phone-pad"
           />
           <BirthdayPicker birthday={birthday} setBirthday={setBirthday} />
           <View style={styles.buttonSection}>

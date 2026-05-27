@@ -33,6 +33,7 @@ export type CartItem = {
 export type Cart = {
     items: CartItem[];
     totalPrice: number;
+    totalItems: number;
 }
 
 //NO DELIVERIES!

@@ -30,6 +30,14 @@ export default function SignUp() {
       firstName: z.string().min(2, "First Name is too short"),
       lastName: z.string().min(2, "Last Name is too short"),
       email: z.email("Invalid email"),
+      phone: z
+        .string()
+        .regex(
+          new RegExp(
+            /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
+          ),
+          "Invalid Number!",
+        ),
       password: z.string().min(6, "Password is too short"),
       confirmPassword: z.string().min(6, "Password is too short"),
     })
@@ -49,6 +57,7 @@ export default function SignUp() {
       firstName: "",
       lastName: "",
       email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -91,6 +100,7 @@ export default function SignUp() {
       await setDoc(doc(db, "users", user.uid), {
         firstName: data.firstName,
         lastName: data.lastName,
+        phone: data.phone,
         birthday: birthday ?? null,
       });
 
@@ -138,6 +148,13 @@ export default function SignUp() {
             errors={errors}
             label="Email"
             icon="email"
+          />
+          <InputField
+            control={control}
+            controlValue="phone"
+            errors={errors}
+            label="Phone Number"
+            icon="phone"
           />
           <InputField
             control={control}

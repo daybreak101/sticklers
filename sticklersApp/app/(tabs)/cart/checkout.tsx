@@ -20,7 +20,7 @@ export default function CheckoutScreen() {
   const { cart } = useCart();
   const router = useRouter();
 
-  const [cartQuantity, setCartQuantity] = useState(cart.items.length);
+  const [cartQuantity, setCartQuantity] = useState(cart.totalItems);
   const [totalPrice, setTotalPrice] = useState(
     `$${cart.totalPrice.toFixed(2)}`,
   );
@@ -47,7 +47,7 @@ export default function CheckoutScreen() {
     defaultValues: {
       name: profile ? `${profile?.firstName} ${profile?.lastName}` : "",
       email: user ? (user?.email as string) : "",
-      phone: "",
+      phone: profile?.phone ?? "",
       specialRequests: "",
     },
   });
@@ -114,7 +114,7 @@ export default function CheckoutScreen() {
             icon="sticky-note-2"
           />
           <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
-            <ThemedText style={styles.buttonText}>Submit</ThemedText>
+            <ThemedText style={styles.buttonText}>Place Order</ThemedText>
           </Pressable>
         </View>
       ) : (
