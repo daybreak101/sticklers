@@ -55,7 +55,7 @@ export default function InputField({
   }));
 
   return (
-    <KeyboardAvoidingView style={{ paddingHorizontal: 1 }}>
+    <View style={{ paddingHorizontal: 1 }}>
       <ThemedText style={styles.inputLabel}>{label}</ThemedText>
       <View
         style={[
@@ -96,7 +96,7 @@ export default function InputField({
         )}
       </View>
       <ThemedText style={styles.error}>{errors[controlValue] ? errors[controlValue].message : ""}</ThemedText>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

@@ -16,30 +16,27 @@ import { useRouter } from "expo-router";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ReusableButton from "../defaults/ReusableButton";
 
 export default function SignUp() {
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
   const [birthday, setBirthday] = useState<Date | null>(null);
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
 
   const schema = z
     .object({
-      firstName: z.string().min(2, "First Name is too short"),
-      lastName: z.string().min(2, "Last Name is too short"),
-      email: z.email("Invalid email"),
+      firstName: z.string().trim().min(2, "First Name is too short"),
+      lastName: z.string().trim().min(2, "Last Name is too short"),
+      email: z.email("Invalid email").transform((v) => v.trim()),
       phone: z
         .string()
-        .regex(
-          new RegExp(
-            /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/,
-          ),
-          "Invalid Number!",
-        ),
-      password: z.string().min(6, "Password is too short"),
-      confirmPassword: z.string().min(6, "Password is too short"),
+        .trim()
+        .regex(/^\+?[\d\s()-]{7,20}$/, "Invalid phone number"),
+      password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Must contain an uppercase letter")
+        .regex(/[a-z]/, "Must contain a lowercase letter")
+        .regex(/[0-9]/, "Must contain a number"),
+      confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Passwords do not match",
@@ -63,32 +60,12 @@ export default function SignUp() {
     },
   });
 
-  // const validateForm = (): boolean => {
-  //   if (!firstName || !lastName || !email || !password || !confirmPassword) {
-  //     setError("All fields are required");
-  //     return false;
-  //   }
-  //   if (password.length < 6) {
-  //     setError("Password must be at least 6 characters");
-  //     return false;
-  //   }
-
-  //   if (password !== confirmPassword) {
-  //     setError("Passwords do not match");
-  //     return false;
-  //   }
-  //   setError("");
-  //   return true;
-  // };
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   const router = useRouter();
 
   const submit = async (data: FormData) => {
-    //if (!validateForm()) return;
-    //setIsSubmitting(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -98,9 +75,9 @@ export default function SignUp() {
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
+        firstName: data.firstName.trim(),
+        lastName: data.lastName.trim(),
+        phone: data.phone.replace(/\D/g, ""),
         birthday: birthday ?? null,
       });
 
@@ -176,9 +153,7 @@ export default function SignUp() {
             <View>
               <ThemedText style={styles.error}>{error}</ThemedText>
             </View>
-            <Pressable onPress={handleSubmit(submit)} style={styles.button}>
-              <ThemedText style={styles.buttonText}>Sign Up</ThemedText>
-            </Pressable>
+            <ReusableButton submit={handleSubmit(submit)} buttonText="Sign Up" buttonStyles={{ alignSelf: "center", width: "50%" }} />
           </View>
         </View>
       </ScrollView>

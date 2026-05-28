@@ -20,6 +20,7 @@ import BirthdayPicker from "@/components/profile/BirthdayPicker";
 import { useAuth } from "@/context/AuthContext";
 import ChangeEmail from "@/components/profile/ChangeEmail";
 import ChangePassword from "@/components/profile/ChangePassword";
+import ReusableButton from "@/components/defaults/ReusableButton";
 
 export default function EditProfile() {
   const { user, profile } = useAuth();
@@ -28,14 +29,12 @@ export default function EditProfile() {
   );
 
   const schema = z.object({
-    firstName: z.string().min(2, "First Name is too short"),
-    lastName: z.string().min(2, "Last Name is too short"),
+    firstName: z.string().trim().min(2, "First Name is too short"),
+    lastName: z.string().trim().min(2, "Last Name is too short"),
     phone: z
       .string()
-      .regex(
-        new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/),
-        "Invalid Number!",
-      ),
+      .trim()
+      .regex(/^\+?[\d\s()-]{7,20}$/, "Invalid phone number"),
   });
   type FormData = z.infer<typeof schema>;
 
@@ -64,9 +63,9 @@ export default function EditProfile() {
       await setDoc(
         doc(db, "users", user.uid),
         {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          phone: data.phone ?? "",
+          firstName: data.firstName.trim(),
+          lastName: data.lastName.trim(),
+          phone: data.phone.replace(/\D/g, "") ?? "",
           birthday: birthday ?? null,
         },
         { merge: true },
@@ -116,9 +115,7 @@ export default function EditProfile() {
             <View>
               <ThemedText style={styles.error}>{error}</ThemedText>
             </View>
-            <Pressable onPress={handleSubmit(submit)} style={styles.button}>
-              <ThemedText style={styles.buttonText}>Save Changes</ThemedText>
-            </Pressable>
+            <ReusableButton submit={handleSubmit(submit)} buttonText="Save Changes" buttonStyles={{ alignSelf: "center", width: "50%" }} />
           </View>
           <ChangeEmail />
           <ChangePassword />
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   buttonSection: {
-    paddingVertical: 20,
+    // paddingTop: 10,
     alignItems: "center",
   },
   button: {

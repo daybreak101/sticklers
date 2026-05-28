@@ -14,6 +14,7 @@ import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { id } from "zod/v4/locales";
 import { db } from "@/lib/firebaseConfig";
 import InputField from "@/components/defaults/InputField";
+import ReusableButton from "@/components/defaults/ReusableButton";
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
@@ -27,15 +28,12 @@ export default function CheckoutScreen() {
 
   const schema = z.object({
     name: z.string().min(2, "Name is too short"),
-    email: z.email("Invalid email"),
+    email: z.email("Invalid email").transform((v) => v.trim()),
     phone: z
       .string()
-      .regex(
-        new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/),
-        "Invalid Number!",
-      ),
-    specialRequests: z.string().min(2, "Special Requests is too short"),
-    //phone: z.string().min(10, "Invalid phone number"),
+      .trim()
+      .regex(/^\+?[\d\s()-]{7,20}$/, "Invalid phone number"),
+    specialRequests: z.string().optional(),
   });
   type FormData = z.infer<typeof schema>;
   const {
@@ -57,9 +55,9 @@ export default function CheckoutScreen() {
       id: Date.now().toString(),
       customerInfo: {
         id: user?.uid,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
+        name: data.name.trim(),
+        email: data.email.trim(),
+        phone: data.phone.replace(/\D/g, ""),
       },
       cart: cart,
       timeReady: null,
@@ -73,18 +71,10 @@ export default function CheckoutScreen() {
   };
 
   return (
-    <ThemedView style={globalStyles.page}>
+    <ThemedView style={[globalStyles.page, { paddingBottom: 0 }]}>
       <Stack.Screen options={{ title: "Checkout" }} />
       {user && user.emailVerified ? (
-        <View>
-          <ThemedText>Total Items: {cartQuantity}</ThemedText>
-          {/* TODO: find tax rate, find processing fee*/}
-          <ThemedText>Total Price: {totalPrice}</ThemedText>
-          <ThemedText>
-            Please note: if paying with a card, you will be charged a processing
-            fee.
-          </ThemedText>
-
+        <View style={{flex: 1}}>
           <InputField
             control={control}
             controlValue="name"
@@ -98,6 +88,7 @@ export default function CheckoutScreen() {
             errors={errors}
             label="Phone Number"
             icon="phone"
+            keyboardType="phone-pad"
           />
           <InputField
             control={control}
@@ -113,9 +104,28 @@ export default function CheckoutScreen() {
             label="Special Requests"
             icon="sticky-note-2"
           />
-          <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
-            <ThemedText style={styles.buttonText}>Place Order</ThemedText>
-          </Pressable>
+
+          <ThemedView>
+            <ThemedText>Total Items: {cartQuantity}</ThemedText>
+            <ThemedText>
+              Please note: if paying with a card, you will be charged a
+              processing fee.
+            </ThemedText>
+          </ThemedView>
+
+          <ReusableButton
+            submit={handleSubmit(onSubmit)}
+            buttonText={`Place Order   •   ${totalPrice}`}
+            buttonStyles={{
+              width: "100%",
+              height: 75,
+              textAlign: "center",
+              justifyContent: "center",
+              position: "absolute",
+              bottom: 0,
+            }}
+            textStyles={{ fontSize: 20 }}
+          />
         </View>
       ) : (
         <SignedOutCheckout />
@@ -123,19 +133,3 @@ export default function CheckoutScreen() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: globalStyles.themeRed.color,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  alignSelf: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});

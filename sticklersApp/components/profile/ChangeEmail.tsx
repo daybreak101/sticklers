@@ -17,6 +17,7 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebaseConfig";
 import { useRouter } from "expo-router";
+import ReusableButton from "../defaults/ReusableButton";
 
 export default function ChangeEmail() {
   const { user, refreshUser } = useAuth();
@@ -25,18 +26,20 @@ export default function ChangeEmail() {
   const [show, setShow] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
 
-  const schema = z.object({
-    email: z.email("Invalid email"),
-    password: z.string().min(6, "Password is too short"),
-  }).superRefine((data, ctx) => {
-    if (data.email === user?.email) {
-      return ctx.addIssue({
-        code: 'custom',
-        path: ["email"],
-        message: "Email cannot be the same as your current email",
-      });
-    }
-  });
+  const schema = z
+    .object({
+      email: z.email("Invalid email"),
+      password: z.string().min(6, "Password is too short"),
+    })
+    .superRefine((data, ctx) => {
+      if (data.email === user?.email) {
+        return ctx.addIssue({
+          code: "custom",
+          path: ["email"],
+          message: "Email cannot be the same as your current email",
+        });
+      }
+    });
   type FormData = z.infer<typeof schema>;
 
   const {
@@ -94,7 +97,7 @@ export default function ChangeEmail() {
     <ThemedView>
       <Modal
         transparent={true}
-        animationType="fade"
+        animationType="slide"
         visible={show}
         onRequestClose={() => setShow(false)}
       >
@@ -110,6 +113,9 @@ export default function ChangeEmail() {
               },
             ]}
           >
+            <ThemedText style={[globalStyles.title, styles.header]}>
+              Change Email
+            </ThemedText>
             {showMessage ? (
               <View>
                 <ThemedText style={styles.message}>
@@ -136,7 +142,7 @@ export default function ChangeEmail() {
                   label="Enter new email"
                   icon="email"
                 />
- 
+
                 <InputField
                   control={control}
                   controlValue="password"
@@ -155,32 +161,29 @@ export default function ChangeEmail() {
                     gap: 20,
                   }}
                 >
-                  <Pressable onPress={closeModal} style={styles.button}>
-                    <ThemedText>Cancel</ThemedText>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleSubmit(changeEmail)}
-                    style={styles.button}
-                  >
-                    <ThemedText>Confirm</ThemedText>
-                  </Pressable>
+                  <ReusableButton submit={closeModal} buttonText="Cancel" buttonStyles={styles.button} />
+                  <ReusableButton submit={handleSubmit(changeEmail)} buttonText="Confirm" buttonStyles={styles.button} />
                 </View>
               </View>
             )}
           </ThemedView>
         </ThemedView>
       </Modal>
-      <Pressable
-        onPress={() => setShow(true)}
-        style={[styles.button, { alignSelf: "center" }]}
-      >
-        <ThemedText style={styles.buttonText}>Change Email</ThemedText>
-      </Pressable>
+      <ReusableButton submit={() => setShow(true)} buttonText="Change Email" buttonStyles={{ alignSelf: "center", width: "50%" }} />
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingBottom: 10,
+    textAlign: "center",
+    borderBottomColor: globalStyles.themeRed.color,
+    borderBottomWidth: 5,
+    marginBottom: 10,
+  },
   error: {
     color: "#ff0000",
     fontSize: 15,
@@ -188,14 +191,14 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-end",
+    // alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   modal: {
     borderRadius: 20,
     paddingHorizontal: 5,
-    paddingVertical: 35,
+    paddingVertical: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

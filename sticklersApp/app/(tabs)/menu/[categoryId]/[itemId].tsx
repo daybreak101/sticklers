@@ -28,6 +28,7 @@ import { useCart } from "@/context/CartContext";
 import ItemPrice from "@/components/ItemPrice";
 import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
+import ReusableButton from "@/components/defaults/ReusableButton";
 
 export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
   const { cart, addItem, showToast } = useCart();
@@ -398,13 +399,12 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                 style={styles.rightButtonContainer}
               />
             ) : (
-    
-                  <Pressable
-                    onPress={addToCart}
-                    style={styles.rightButtonContainer}
-                  >
-                    <Text style={styles.buttonText}>{cartItem ? "Update Item" : "Add to Cart"}</Text>
-                  </Pressable>
+              <ReusableButton
+                submit={addToCart}
+                buttonText={cartItem ? "Update Item" : "Add to Cart"}
+                buttonStyles={styles.rightButtonContainer}
+                textStyles={styles.buttonText}
+              />
             )}
           </View>
         </View>

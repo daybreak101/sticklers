@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "../defaults/InputField";
 import { doc, setDoc } from "firebase/firestore";
-import { isDirty } from "zod/v3";
 import { db } from "@/lib/firebaseConfig";
 
 type CredentialModalProps = {
@@ -26,7 +25,10 @@ type CredentialModalProps = {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function CredentialModal({ show, setShow }: CredentialModalProps) {
+export default function CredentialModal({
+  show,
+  setShow,
+}: CredentialModalProps) {
   const { user } = useAuth();
   const [error, setError] = useState("");
 
@@ -65,12 +67,14 @@ export default function CredentialModal({ show, setShow }: CredentialModalProps)
       );
       setShow(false);
     } catch (err: any) {
-      if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+      if (
+        err.code === "auth/wrong-password" ||
+        err.code === "auth/invalid-credential"
+      ) {
         setError("Incorrect password");
       } else if (err.code === "auth/too-many-requests") {
         setError("Too many attempts");
-      } 
-      else {
+      } else {
         setError(err.message);
       }
     } finally {
@@ -86,7 +90,7 @@ export default function CredentialModal({ show, setShow }: CredentialModalProps)
   return (
     <Modal
       transparent={true}
-      animationType="fade"
+      animationType="slide"
       visible={show}
       onRequestClose={() => setShow(false)}
     >
@@ -102,6 +106,9 @@ export default function CredentialModal({ show, setShow }: CredentialModalProps)
             },
           ]}
         >
+          <ThemedText style={[globalStyles.title, styles.header]}>
+            Delete Account
+          </ThemedText>
           <ThemedText style={styles.message}>
             Are you sure you want to delete your account?
           </ThemedText>
@@ -124,13 +131,13 @@ export default function CredentialModal({ show, setShow }: CredentialModalProps)
             }}
           >
             <Pressable onPress={closeModal} style={styles.button}>
-              <ThemedText>No</ThemedText>
+              <ThemedText style={styles.buttonText}>No</ThemedText>
             </Pressable>
             <Pressable
               onPress={handleSubmit(deleteAccount)}
               style={styles.button}
             >
-              <ThemedText>Yes</ThemedText>
+              <ThemedText style={styles.buttonText}>Yes</ThemedText>
             </Pressable>
           </View>
         </ThemedView>
@@ -140,6 +147,15 @@ export default function CredentialModal({ show, setShow }: CredentialModalProps)
 }
 
 const styles = StyleSheet.create({
+  header: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingBottom: 10,
+    textAlign: "center",
+    borderBottomColor: globalStyles.themeRed.color,
+    borderBottomWidth: 5,
+    marginBottom: 10,
+  },
   error: {
     color: "#ff0000",
     fontSize: 15,
@@ -147,13 +163,13 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-end",
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   modal: {
     borderRadius: 20,
-    padding: 35,
+    paddingHorizontal: 5,
+    paddingVertical: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -175,5 +191,11 @@ const styles = StyleSheet.create({
     width: "45%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

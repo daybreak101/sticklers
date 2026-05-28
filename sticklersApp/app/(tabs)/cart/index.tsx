@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import CartItemComponent from "@/components/cart/CartItemComponent";
 import { useRouter } from "expo-router";
+import ReusableButton from "@/components/defaults/ReusableButton";
 
 export default function CartScreen() {
   const { cart } = useCart();
@@ -15,19 +16,33 @@ export default function CartScreen() {
   return (
     <>
       <ThemedView style={globalStyles.page}>
-        <ThemedText style={styles.description}>
-          {cart.totalItems} item{cart.totalItems !== 1 ? "s" : ""} in your
-          cart
-        </ThemedText>
-        <FlatList
-          data={cart.items}
-          keyExtractor={(item) => item.cartItemId}
-          renderItem={({ item }) => <CartItemComponent cartItem={item} />}
-          ItemSeparatorComponent={() => (
-            <View style={{ paddingTop: 10 }}></View>
-          )}
-          ListFooterComponent={<View style={{ padding: 10 }}></View>}
-        />
+        {cart.items.length > 0 ? (
+          <>
+            <ThemedText style={styles.description}>
+              {cart.totalItems} item{cart.totalItems !== 1 ? "s" : ""} in your
+              cart
+            </ThemedText>
+            <FlatList
+              data={cart.items}
+              keyExtractor={(item) => item.cartItemId}
+              renderItem={({ item }) => <CartItemComponent cartItem={item} />}
+              ItemSeparatorComponent={() => (
+                <View style={{ paddingTop: 10 }}></View>
+              )}
+              ListFooterComponent={<View style={{ padding: 10 }}></View>}
+            />
+          </>
+        ) : (
+          <ThemedView style={styles.noItemsView}>
+            <ThemedText style={styles.noItemsText}>
+              Looks like your cart is empty!
+            </ThemedText>
+            <ReusableButton
+              submit={() => router.push("/(tabs)/menu")}
+              buttonText="Go To Menu"
+            />
+          </ThemedView>
+        )}
       </ThemedView>
       {cart.items.length > 0 && (
         <View style={styles.bottomBar}>
@@ -36,16 +51,7 @@ export default function CartScreen() {
               Total:{" "}
               <Text style={styles.price}>${cart.totalPrice.toFixed(2)}</Text>
             </ThemedText>
-            <Pressable
-              style={styles.buttonContainer}
-              onPress={() =>
-                router.push({
-                  pathname: "/cart/checkout",
-                })
-              }
-            >
-              <Text style={styles.buttonText}>Checkout</Text>
-            </Pressable>
+            <ReusableButton submit={() => router.push("/cart/checkout")} buttonText="Checkout" buttonStyles={styles.buttonContainer} textStyles={styles.buttonText} />
           </View>
         </View>
       )}
@@ -54,6 +60,16 @@ export default function CartScreen() {
 }
 
 const styles = StyleSheet.create({
+  noItemsView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noItemsText: {
+    fontSize: 20,
+    textAlign: "center",
+    padding: 10,
+  },
   description: {
     fontSize: 15,
     paddingVertical: 10,

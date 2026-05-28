@@ -28,6 +28,7 @@ import { useCart } from "@/context/CartContext";
 import ItemPrice from "@/components/ItemPrice";
 import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
+import ReusableButton from "@/components/defaults/ReusableButton";
 
 export default function EditItemPage() {
   const params = useLocalSearchParams();
@@ -402,14 +403,7 @@ export default function EditItemPage() {
                 style={styles.rightButtonContainer}
               />
             ) : (
-              <Pressable
-                onPress={pushUpdates}
-                style={styles.rightButtonContainer}
-              >
-                <Text style={styles.buttonText}>
-                  {cartItem ? "Update Item" : "Add to Cart"}
-                </Text>
-              </Pressable>
+              <ReusableButton submit={pushUpdates} buttonText={cartItem ? "Update Item" : "Add to Cart"} buttonStyles={styles.rightButtonContainer} textStyles={styles.buttonText} />
             )}
           </View>
         </View>

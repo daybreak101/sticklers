@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { FirebaseError } from "firebase/app";
+import ReusableButton from "../defaults/ReusableButton";
 
 export default function SignIn() {
   // const [email, setEmail] = useState("");
@@ -87,9 +88,7 @@ export default function SignIn() {
         <View>
           <ThemedText style={styles.error}>{error}</ThemedText>
         </View>
-        <Pressable onPress={handleSubmit(submit)} style={styles.button}>
-          <ThemedText style={styles.buttonText}>Sign In</ThemedText>
-        </Pressable>
+        <ReusableButton submit={handleSubmit(submit)} buttonText="Sign In" buttonStyles={{ alignSelf: "center", width: "50%" }} />
       </View>
     </ThemedView>
   );

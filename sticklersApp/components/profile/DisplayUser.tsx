@@ -31,7 +31,7 @@ export default function DisplayUser() {
     };
 
     refresh();
-  },  []);
+  }, []);
 
   const editProfile = () => {
     router.push("/profile/editProfile");
@@ -50,7 +50,15 @@ export default function DisplayUser() {
   return (
     // full screen
     <ThemedView style={styles.screen}>
-      <AreYouSure show={showLogout} setShow={setShowLogout} onAccept={logout} acceptText="Yes" rejectText="No" message="Are you sure you want to logout?" />
+      <AreYouSure
+        show={showLogout}
+        setShow={setShowLogout}
+        title="Logout"
+        onAccept={logout}
+        acceptText="Yes"
+        rejectText="No"
+        message="Are you sure you want to logout?"
+      />
       <CredentialModal show={showDelete} setShow={setShowDelete} />
       {/* header */}
       <ThemedView
@@ -93,6 +101,7 @@ export default function DisplayUser() {
         )}
       </ThemedView>
 
+      
       <Pressable onPress={editProfile} style={styles.button}>
         <ThemedText>Edit Profile</ThemedText>
       </Pressable>
