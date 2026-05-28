@@ -11,14 +11,14 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, setDoc, Timestamp } from "firebase/firestore";
-import { id } from "zod/v4/locales";
 import { db } from "@/lib/firebaseConfig";
 import InputField from "@/components/defaults/InputField";
 import ReusableButton from "@/components/defaults/ReusableButton";
+import DateTimePicker from "@react-native-community/datetimepicker"
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const router = useRouter();
 
   const [cartQuantity, setCartQuantity] = useState(cart.totalItems);
@@ -67,7 +67,8 @@ export default function CheckoutScreen() {
       specialRequests: data.specialRequests,
     };
     await setDoc(doc(db, "orders", newOrder.id), newOrder);
-    router.push("../(tabs)/cart/orderConfirmation");
+    clearCart();
+    router.push("/cart/orderConfirmation");
   };
 
   return (
@@ -75,6 +76,12 @@ export default function CheckoutScreen() {
       <Stack.Screen options={{ title: "Checkout" }} />
       {user && user.emailVerified ? (
         <View style={{flex: 1}}>
+          <View>
+            {/* ASAP or scheduled? */}
+            {/* if ASAP, assume order is ready in 1o minutes */}
+            {/* if scheduled, display date/time picker */}
+          </View>
+
           <InputField
             control={control}
             controlValue="name"
