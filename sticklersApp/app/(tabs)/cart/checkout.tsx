@@ -15,6 +15,7 @@ import { db } from "@/lib/firebaseConfig";
 import InputField from "@/components/defaults/InputField";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker"
+import ScheduleOrder from "@/components/cart/ScheduleOrder";
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
@@ -25,6 +26,9 @@ export default function CheckoutScreen() {
   const [totalPrice, setTotalPrice] = useState(
     `$${cart.totalPrice.toFixed(2)}`,
   );
+
+  const [pickupDate, setPickupDate] = useState<Date | null>(null);
+  const [pickupTime, setPickupTime] = useState<Date | null>(null);
 
   const schema = z.object({
     name: z.string().min(2, "Name is too short"),
@@ -80,6 +84,13 @@ export default function CheckoutScreen() {
             {/* ASAP or scheduled? */}
             {/* if ASAP, assume order is ready in 1o minutes */}
             {/* if scheduled, display date/time picker */}
+
+            <ScheduleOrder
+              pickupDate={pickupDate}
+              setPickupDate={setPickupDate}
+              pickupTime={pickupTime}
+              setPickupTime={setPickupTime}
+            />
           </View>
 
           <InputField
