@@ -19,6 +19,7 @@ import { auth, db } from "@/lib/firebaseConfig";
 import { useRouter } from "expo-router";
 import ReusableButton from "../defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { TimeSlot } from "@/types/cart";
 
 type ScheduleOrderProps = {
   pickupDate: Date | null;
@@ -41,6 +42,45 @@ export default function ScheduleOrder({
 
   const maximumDate = new Date();
   maximumDate.setMonth(maximumDate.getMonth() + 1);
+
+  //
+  const selectedDate = new Date(2026, 5, 1); // June 1
+
+  const slots: TimeSlot[] = [];
+
+  const formatTimeRange = (start: Date, end: Date) => {
+    const startTime = start.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      // hour12: false,
+    });
+
+    const endTime = end.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      // hour12: false,
+    });
+
+    return `${startTime} - ${endTime}`;
+  };
+
+  for (let hour = 6; hour < 15; hour++) {
+    for (let minute = 0; minute < 60; minute += 15) {
+      const start = new Date(selectedDate);
+      start.setHours(hour, minute, 0, 0);
+
+      const end = new Date(start);
+      end.setMinutes(end.getMinutes() + 15);
+
+      slots.push({
+        id: start.toISOString(),
+        label: formatTimeRange(start, end),
+        start,
+        end,
+      });
+    }
+  }
+  //
 
   const closeModal = () => {
     setError("");
@@ -86,6 +126,18 @@ export default function ScheduleOrder({
             <ThemedText style={[globalStyles.title, styles.header]}>
               Pickup Time
             </ThemedText>
+            {slots.map((slot) => (
+              <ThemedView
+                key={slot.id}
+                style={[
+                  styles.timeSlot
+                ]}
+              >
+                <ThemedText style={[globalStyles.title, styles.header]}>
+                  {slot.label}
+                </ThemedText>
+              </ThemedView>
+            ))}
           </ThemedView>
         </ThemedView>
       </Modal>
@@ -115,6 +167,13 @@ export default function ScheduleOrder({
 }
 
 const styles = StyleSheet.create({
+  timeSlot: {
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 5,
+  },
   container: {
     padding: 5,
     flexDirection: "row",

@@ -36,12 +36,19 @@ export type Cart = {
     totalItems: number;
 }
 
+export type TimeSlot = {
+    id: string;
+    label: string;
+    start: Date;
+    end: Date;
+}
+
 //NO DELIVERIES!
 export type Order = {
     id: string;
     customerInfo: CustomerInfo;
     cart: Cart;
-    timeReady: Timestamp;
+    timeSlot: TimeSlot;
     status: "pending" | "ready" | "fulfilled" | "cancelled";
     createdAt: Timestamp;
     updatedAt: Timestamp;
