@@ -14,7 +14,7 @@ import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import InputField from "@/components/defaults/InputField";
 import ReusableButton from "@/components/defaults/ReusableButton";
-import DateTimePicker from "@react-native-community/datetimepicker"
+import DateTimePicker from "@react-native-community/datetimepicker";
 import ScheduleOrder from "@/components/cart/ScheduleOrder";
 
 export default function CheckoutScreen() {
@@ -79,19 +79,17 @@ export default function CheckoutScreen() {
     <ThemedView style={[globalStyles.page, { paddingBottom: 0 }]}>
       <Stack.Screen options={{ title: "Checkout" }} />
       {user && user.emailVerified ? (
-        <View style={{flex: 1}}>
-          <View>
-            {/* ASAP or scheduled? */}
-            {/* if ASAP, assume order is ready in 1o minutes */}
-            {/* if scheduled, display date/time picker */}
+        <View style={{ flex: 1 }}>
+          {/* ASAP or scheduled? */}
+          {/* if ASAP, assume order is ready in 1o minutes */}
+          {/* if scheduled, display date/time picker */}
 
-            <ScheduleOrder
-              pickupDate={pickupDate}
-              setPickupDate={setPickupDate}
-              pickupTime={pickupTime}
-              setPickupTime={setPickupTime}
-            />
-          </View>
+          <ScheduleOrder
+            pickupDate={pickupDate}
+            setPickupDate={setPickupDate}
+            pickupTime={pickupTime}
+            setPickupTime={setPickupTime}
+          />
 
           <InputField
             control={control}

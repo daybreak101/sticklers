@@ -40,7 +40,6 @@ export default function ScheduleOrder({
   const minimumDate = new Date();
 
   const maximumDate = new Date();
-  maximumDate.setFullYear(maximumDate.getFullYear());
   maximumDate.setMonth(maximumDate.getMonth() + 1);
 
   const closeModal = () => {
@@ -53,9 +52,10 @@ export default function ScheduleOrder({
         <DateTimePicker
           value={pickupDate || new Date(2000, 0, 1)}
           mode="date"
-          display="spinner"
+          display="calendar"
           minimumDate={minimumDate}
           maximumDate={maximumDate}
+          onDismiss={() => setShowCalender(false)}
           onValueChange={(_, selectedDate) => {
             setShowCalender(false);
 
@@ -84,27 +84,29 @@ export default function ScheduleOrder({
             ]}
           >
             <ThemedText style={[globalStyles.title, styles.header]}>
-              Pickup Date
+              Pickup Time
             </ThemedText>
           </ThemedView>
         </ThemedView>
       </Modal>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 20,
-        }}
-      >
+      <View style={styles.container}>
         <ReusableButton
           submit={() => setShowCalender(true)}
-          buttonText="Date"
+          buttonText={
+            !pickupDate ||
+            pickupDate.toDateString() === new Date().toDateString()
+              ? "Today"
+              : new Intl.DateTimeFormat("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                }).format(pickupDate)
+          }
           buttonStyles={{ alignSelf: "center", width: "50%" }}
         />
         <ReusableButton
           submit={() => setShowDropdown(true)}
-          buttonText="Pickup Time"
+          buttonText={pickupTime ? pickupTime.toLocaleTimeString() : "ASAP"}
           buttonStyles={{ alignSelf: "center", width: "50%" }}
         />
       </View>
@@ -113,6 +115,13 @@ export default function ScheduleOrder({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 5,
+  },
   header: {
     fontSize: 20,
     fontWeight: "bold",
@@ -155,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: globalStyles.themeRed.color,
     paddingVertical: 10,
     borderRadius: 10,
-    width: "45%",
+    width: "35%",
     justifyContent: "center",
     alignItems: "center",
   },

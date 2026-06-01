@@ -60,6 +60,7 @@ export default function BirthdayPicker({ maxAge = 13, birthday, setBirthday }: B
           mode="date"
           display="spinner"
           maximumDate={maximumDate}
+          onDismiss={() => setShow(false)}
           onValueChange={(_, selectedDate) => {
             setShow(false);
 
