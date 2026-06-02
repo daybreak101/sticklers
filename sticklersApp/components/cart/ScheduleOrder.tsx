@@ -1,5 +1,12 @@
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/context/AuthContext";
@@ -20,6 +27,7 @@ import { useRouter } from "expo-router";
 import ReusableButton from "../defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TimeSlot } from "@/types/cart";
+import useCurrentMinute from "@/hooks/useCurrentMinute";
 
 type ScheduleOrderProps = {
   pickupDate: Date | null;
@@ -86,6 +94,19 @@ export default function ScheduleOrder({
     setError("");
   };
 
+  const currentMinute = useCurrentMinute();
+
+
+  // TODO: fix this
+  useEffect(() => {
+    if (pickupTime) {
+      const timeSlot = slots.find(slot => slot.start.getMinutes() === currentMinute);
+      if (timeSlot) {
+        setPickupTime(timeSlot.start);
+      }
+    }
+  }, [currentMinute]);
+
   return (
     <ThemedView>
       {showCalender && (
@@ -126,18 +147,18 @@ export default function ScheduleOrder({
             <ThemedText style={[globalStyles.title, styles.header]}>
               Pickup Time
             </ThemedText>
-            {slots.map((slot) => (
-              <ThemedView
-                key={slot.id}
-                style={[
-                  styles.timeSlot
-                ]}
-              >
-                <ThemedText style={[globalStyles.title, styles.header]}>
-                  {slot.label}
-                </ThemedText>
-              </ThemedView>
-            ))}
+            <FlatList
+              data={slots}
+              keyExtractor={(slot) => slot.id}
+              style={[{ height: "75%", width: "100%" }]}
+              renderItem={({item}) => (
+                <Pressable key={item.id} style={[styles.timeSlot]}>
+                  <ThemedText style={[styles.header]}>
+                    {item.label}
+                  </ThemedText>
+                </Pressable>
+              )}
+            />
           </ThemedView>
         </ThemedView>
       </Modal>
@@ -168,10 +189,10 @@ export default function ScheduleOrder({
 
 const styles = StyleSheet.create({
   timeSlot: {
-    padding: 5,
+    padding: 0,
+    width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: "center",
     gap: 5,
   },
   container: {
