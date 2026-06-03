@@ -72,39 +72,38 @@ export default function ScheduleOrder({
     return `${startTime} - ${endTime}`;
   };
 
-  for (let hour = 6; hour < 15; hour++) {
+const refreshTimeSlots = () => {
+  const now = new Date();
+  const hours = now.getMinutes() > 45 ? now.getHours() + 1 : now.getHours();
+
+  for (let hour = hours; hour < 15; hour++) {
     for (let minute = 0; minute < 60; minute += 15) {
-      const start = new Date(selectedDate);
+      const start = new Date();
       start.setHours(hour, minute, 0, 0);
 
       const end = new Date(start);
       end.setMinutes(end.getMinutes() + 15);
 
-      slots.push({
-        id: start.toISOString(),
-        label: formatTimeRange(start, end),
-        start,
-        end,
-      });
+      if (start.getTime() > now.getTime()) {
+        slots.push({
+          id: start.toISOString(),
+          label: formatTimeRange(start, end),
+          start,
+          end,
+        });
+      }
     }
   }
-  //
-
+};
   const closeModal = () => {
     setError("");
   };
 
   const currentMinute = useCurrentMinute();
 
-
   // TODO: fix this
   useEffect(() => {
-    if (pickupTime) {
-      const timeSlot = slots.find(slot => slot.start.getMinutes() === currentMinute);
-      if (timeSlot) {
-        setPickupTime(timeSlot.start);
-      }
-    }
+    refreshTimeSlots();
   }, [currentMinute]);
 
   return (
@@ -151,11 +150,9 @@ export default function ScheduleOrder({
               data={slots}
               keyExtractor={(slot) => slot.id}
               style={[{ height: "75%", width: "100%" }]}
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <Pressable key={item.id} style={[styles.timeSlot]}>
-                  <ThemedText style={[styles.header]}>
-                    {item.label}
-                  </ThemedText>
+                  <ThemedText style={[styles.header]}>{item.label}</ThemedText>
                 </Pressable>
               )}
             />
