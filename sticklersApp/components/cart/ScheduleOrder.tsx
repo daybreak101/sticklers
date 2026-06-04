@@ -54,7 +54,8 @@ export default function ScheduleOrder({
   //
   const selectedDate = new Date(2026, 5, 1); // June 1
 
-  const slots: TimeSlot[] = [];
+  //const slots: TimeSlot[] = [];
+  const [slots, setSlots] = useState<TimeSlot[]>([]);
 
   const formatTimeRange = (start: Date, end: Date) => {
     const startTime = start.toLocaleTimeString("en-US", {
@@ -72,39 +73,55 @@ export default function ScheduleOrder({
     return `${startTime} - ${endTime}`;
   };
 
-const refreshTimeSlots = () => {
-  const now = new Date();
-  const hours = now.getMinutes() > 45 ? now.getHours() + 1 : now.getHours();
+  const refreshTimeSlots = () => {
+    setSlots([]);
+    const now = new Date();
+    const hours = now.getMinutes() > 45 ? now.getHours() + 1 : now.getHours();
 
-  for (let hour = hours; hour < 15; hour++) {
-    for (let minute = 0; minute < 60; minute += 15) {
-      const start = new Date();
-      start.setHours(hour, minute, 0, 0);
+    for (let hour = hours; hour < 15; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        console.log(hour, minute);
+        const start = new Date();
+        start.setHours(hour, minute, 0, 0);
 
-      const end = new Date(start);
-      end.setMinutes(end.getMinutes() + 15);
+        const end = new Date(start);
+        end.setMinutes(end.getMinutes() + 15);
 
-      if (start.getTime() > now.getTime()) {
-        slots.push({
-          id: start.toISOString(),
-          label: formatTimeRange(start, end),
-          start,
-          end,
-        });
+        if (start.getTime() > now.getTime()) {
+          setSlots((prevSlots) => [
+            ...prevSlots,
+            {
+              id: start.toISOString(),
+              label: formatTimeRange(start, end),
+              start,
+              end,
+            },
+          ]);
+        }
       }
     }
-  }
-};
+    setSlots((prevSlots) =>  [{
+      id: "asap",
+      label: "ASAP",
+      start: new Date(2000, 0, 1),
+      end: new Date(2000, 0, 1),
+    },...prevSlots]);
+  };
   const closeModal = () => {
     setError("");
   };
 
   const currentMinute = useCurrentMinute();
+  let lastMinute = currentMinute;
 
   // TODO: fix this
   useEffect(() => {
     refreshTimeSlots();
   }, [currentMinute]);
+
+  // useEffect(() => {
+  //   refreshTimeSlots();
+  // }, []);
 
   return (
     <ThemedView>
@@ -152,7 +169,15 @@ const refreshTimeSlots = () => {
               style={[{ height: "75%", width: "100%" }]}
               renderItem={({ item }) => (
                 <Pressable key={item.id} style={[styles.timeSlot]}>
-                  <ThemedText style={[styles.header]}>{item.label}</ThemedText>
+                  <ThemedText
+                    style={[styles.header]}
+                    onPress={() => {
+                      setPickupTime(item.start);
+                      setShowDropdown(false);
+                    }}
+                  >
+                    {item.label}
+                  </ThemedText>
                 </Pressable>
               )}
             />
@@ -176,7 +201,10 @@ const refreshTimeSlots = () => {
         />
         <ReusableButton
           submit={() => setShowDropdown(true)}
-          buttonText={pickupTime ? pickupTime.toLocaleTimeString() : "ASAP"}
+          buttonText={pickupTime ? new Intl.DateTimeFormat("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+          }).format(pickupTime) : "ASAP"}
           buttonStyles={{ alignSelf: "center", width: "50%" }}
         />
       </View>
@@ -191,6 +219,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 5,
+    marginBottom: 5,
   },
   container: {
     padding: 5,
