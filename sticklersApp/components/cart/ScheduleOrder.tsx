@@ -51,23 +51,17 @@ export default function ScheduleOrder({
   const maximumDate = new Date();
   maximumDate.setMonth(maximumDate.getMonth() + 1);
 
-  //
-  const selectedDate = new Date(2026, 5, 1); // June 1
-
-  //const slots: TimeSlot[] = [];
   const [slots, setSlots] = useState<TimeSlot[]>([]);
 
   const formatTimeRange = (start: Date, end: Date) => {
     const startTime = start.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "numeric",
-      // hour12: false,
     });
 
     const endTime = end.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "numeric",
-      // hour12: false,
     });
 
     return `${startTime} - ${endTime}`;
@@ -100,12 +94,15 @@ export default function ScheduleOrder({
         }
       }
     }
-    setSlots((prevSlots) =>  [{
-      id: "asap",
-      label: "ASAP",
-      start: new Date(2000, 0, 1),
-      end: new Date(2000, 0, 1),
-    },...prevSlots]);
+    setSlots((prevSlots) => [
+      {
+        id: "asap",
+        label: "ASAP",
+        start: new Date(2000, 0, 1, 0, 0, 21),
+        end: new Date(2000, 0, 1),
+      },
+      ...prevSlots,
+    ]);
   };
   const closeModal = () => {
     setError("");
@@ -118,10 +115,6 @@ export default function ScheduleOrder({
   useEffect(() => {
     refreshTimeSlots();
   }, [currentMinute]);
-
-  // useEffect(() => {
-  //   refreshTimeSlots();
-  // }, []);
 
   return (
     <ThemedView>
@@ -172,7 +165,11 @@ export default function ScheduleOrder({
                   <ThemedText
                     style={[styles.header]}
                     onPress={() => {
-                      setPickupTime(item.start);
+                      if (item.id === "asap") {
+                        setPickupTime(null);
+                      } else {
+                        setPickupTime(item.start);
+                      }
                       setShowDropdown(false);
                     }}
                   >
@@ -201,10 +198,14 @@ export default function ScheduleOrder({
         />
         <ReusableButton
           submit={() => setShowDropdown(true)}
-          buttonText={pickupTime ? new Intl.DateTimeFormat("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-          }).format(pickupTime) : "ASAP"}
+          buttonText={
+            pickupTime
+              ? new Intl.DateTimeFormat("en-US", {
+                  hour: "numeric",
+                  minute: "numeric",
+                }).format(pickupTime)
+              : "ASAP"
+          }
           buttonStyles={{ alignSelf: "center", width: "50%" }}
         />
       </View>

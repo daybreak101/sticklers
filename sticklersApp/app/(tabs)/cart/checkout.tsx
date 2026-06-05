@@ -1,5 +1,12 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { use, useState } from "react";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import React, { use, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { ThemedText } from "@/components/defaults/themed-text";
 import { ThemedView } from "@/components/defaults/themed-view";
@@ -29,6 +36,8 @@ export default function CheckoutScreen() {
 
   const [pickupDate, setPickupDate] = useState<Date | null>(null);
   const [pickupTime, setPickupTime] = useState<Date | null>(null);
+
+  useEffect(() => {}, []);
 
   const schema = z.object({
     name: z.string().min(2, "Name is too short"),
@@ -79,56 +88,54 @@ export default function CheckoutScreen() {
     <ThemedView style={[globalStyles.page, { paddingBottom: 0 }]}>
       <Stack.Screen options={{ title: "Checkout" }} />
       {user && user.emailVerified ? (
-        <View style={{ flex: 1 }}>
-          {/* ASAP or scheduled? */}
-          {/* if ASAP, assume order is ready in 1o minutes */}
-          {/* if scheduled, display date/time picker */}
+        <>
+          <ScrollView style={{ flex: 1}}>
+            <ThemedText style={globalStyles.title}>Pickup Details</ThemedText>
+            <ScheduleOrder
+              pickupDate={pickupDate}
+              setPickupDate={setPickupDate}
+              pickupTime={pickupTime}
+              setPickupTime={setPickupTime}
+            />
 
-          <ScheduleOrder
-            pickupDate={pickupDate}
-            setPickupDate={setPickupDate}
-            pickupTime={pickupTime}
-            setPickupTime={setPickupTime}
-          />
+            <InputField
+              control={control}
+              controlValue="name"
+              errors={errors}
+              label="Name"
+              icon="person"
+            />
+            <InputField
+              control={control}
+              controlValue="phone"
+              errors={errors}
+              label="Phone Number"
+              icon="phone"
+              keyboardType="phone-pad"
+            />
+            <InputField
+              control={control}
+              controlValue="email"
+              errors={errors}
+              label="Email"
+              icon="email"
+            />
+            <InputField
+              control={control}
+              controlValue="specialRequests"
+              errors={errors}
+              label="Special Requests"
+              icon="sticky-note-2"
+            />
 
-          <InputField
-            control={control}
-            controlValue="name"
-            errors={errors}
-            label="Name"
-            icon="person"
-          />
-          <InputField
-            control={control}
-            controlValue="phone"
-            errors={errors}
-            label="Phone Number"
-            icon="phone"
-            keyboardType="phone-pad"
-          />
-          <InputField
-            control={control}
-            controlValue="email"
-            errors={errors}
-            label="Email"
-            icon="email"
-          />
-          <InputField
-            control={control}
-            controlValue="specialRequests"
-            errors={errors}
-            label="Special Requests"
-            icon="sticky-note-2"
-          />
-
-          <ThemedView>
-            <ThemedText>Total Items: {cartQuantity}</ThemedText>
-            <ThemedText>
-              Please note: if paying with a card, you will be charged a
-              processing fee.
-            </ThemedText>
-          </ThemedView>
-
+            <ThemedView style={{ paddingBottom: 100}}>
+              <ThemedText>Total Items: {cartQuantity}</ThemedText>
+              <ThemedText>
+                Please note: if paying with a card, you will be charged a
+                processing fee.
+              </ThemedText>
+            </ThemedView>
+          </ScrollView>
           <ReusableButton
             submit={handleSubmit(onSubmit)}
             buttonText={`Place Order   •   ${totalPrice}`}
@@ -142,7 +149,7 @@ export default function CheckoutScreen() {
             }}
             textStyles={{ fontSize: 20 }}
           />
-        </View>
+        </>
       ) : (
         <SignedOutCheckout />
       )}
