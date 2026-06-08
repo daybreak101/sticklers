@@ -8,3 +8,16 @@ export function formatBusinessTime(time: number | null ) {
 
   return `${hours12}:${minutes.toString().padStart(2, "0")} ${period}`;
 }
+
+export function formatDay(day: number) {
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return days[day];
+}

@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { images } from "@/constants/images";
 import { useHours } from "@/context/HoursContext";
 import { formatBusinessTime } from "@/lib/formatTime";
+import useCurrentMinute from "@/hooks/useCurrentMinute";
 
 export default function CategoryOption({ category }: { category: Category }) {
   const router = useRouter();
@@ -25,6 +26,8 @@ export default function CategoryOption({ category }: { category: Category }) {
     category.availability?.startTime ?? null,
   );
   const endTime = formatBusinessTime(category.availability?.endTime ?? null);
+
+  const currentMinute = useCurrentMinute();
 
   useEffect(() => {
     console.log("checking availability");
@@ -49,7 +52,7 @@ export default function CategoryOption({ category }: { category: Category }) {
     else {
       setIsDisabled(false);
     }
-  }, [category, scheduledTime]);
+  }, [category, scheduledTime, currentMinute]);
 
   return (
     <Pressable

@@ -1,8 +1,8 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
 type HoursContextType = {
-    hours: Hours;
-    setHours: React.Dispatch<React.SetStateAction<Hours>>;
+    hours: Hours[];
+    setHours: React.Dispatch<React.SetStateAction<Hours[]>>;
     scheduledTime: Date | null;
     setScheduledTime: React.Dispatch<React.SetStateAction<Date | null>>
     scheduledDate: Date | null;
@@ -17,12 +17,13 @@ export type Hours = {
 const HoursContext = createContext<HoursContextType | undefined>(undefined);
 
 export const HoursProvider = ({ children }: any) => {
-    const [hours, setHours] = useState<Hours>({
+    const now = new Date();
+    const [hours, setHours] = useState<Hours[]>([{
         open: null,
         close: null
-    });
+    }]);
     const [scheduledTime, setScheduledTime] = useState<Date | null>(null);
-    const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
+    const [scheduledDate, setScheduledDate] = useState<Date | null>(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
 
     const value = useMemo(
         () => ({

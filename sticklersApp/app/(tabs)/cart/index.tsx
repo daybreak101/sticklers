@@ -8,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import CartItemComponent from "@/components/cart/CartItemComponent";
 import { useRouter } from "expo-router";
 import ReusableButton from "@/components/defaults/ReusableButton";
+import ScheduleOrder from "@/components/cart/ScheduleOrder";
 
 export default function CartScreen() {
   const { cart } = useCart();
@@ -18,6 +19,11 @@ export default function CartScreen() {
       <ThemedView style={globalStyles.page}>
         {cart.items.length > 0 ? (
           <>
+            <ThemedText style={[globalStyles.title, { padding: 10 }]}>
+              Pickup Time
+            </ThemedText>
+            <ScheduleOrder />
+
             <ThemedText style={styles.description}>
               {cart.totalItems} item{cart.totalItems !== 1 ? "s" : ""} in your
               cart
@@ -51,7 +57,12 @@ export default function CartScreen() {
               Total:{" "}
               <Text style={styles.price}>${cart.totalPrice.toFixed(2)}</Text>
             </ThemedText>
-            <ReusableButton submit={() => router.push("/cart/checkout")} buttonText="Checkout" buttonStyles={styles.buttonContainer} textStyles={styles.buttonText} />
+            <ReusableButton
+              submit={() => router.push("/cart/checkout")}
+              buttonText="Checkout"
+              buttonStyles={styles.buttonContainer}
+              textStyles={styles.buttonText}
+            />
           </View>
         </View>
       )}

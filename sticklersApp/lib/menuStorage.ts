@@ -8,7 +8,7 @@ const HOURS_KEY = "hours";
 
 export async function getHours(): Promise<Hours[]> {
   try {
-    const CACHE_TTL = 1000 * 60 * 10; // 10 min //TODO: reset this
+    const CACHE_TTL = 1000 * 60 * 1; // 10 min //TODO: reset this
 
     // 1. Check cache
     const cached = await AsyncStorage.getItem(HOURS_KEY);
@@ -31,15 +31,21 @@ export async function getHours(): Promise<Hours[]> {
     // 2. Fetch from Firestore
     const snapshot = await getDoc(doc(db, "schedule", "businessHours"));
 
-    const data = snapshot.data() as Hours[];
+    
+
+    const data = snapshot.data()
+
+    if(!data?.businessHours) return [];
+
+    const hours = data.businessHours as Hours[];
 
     // 3. Save to storage
     await AsyncStorage.setItem(
       HOURS_KEY,
-      JSON.stringify({ timestamp: Date.now(), data }),
+      JSON.stringify({ timestamp: Date.now(), hours }),
     );
 
-    return data;
+    return hours;
   } catch (err) {
     console.error("Error fetching hours:", err);
     return [];

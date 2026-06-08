@@ -9,9 +9,14 @@ import { getHours, getMenuCategories } from "@/lib/menuStorage";
 import { Category } from "@/types/menu";
 import CategoryOption from "@/components/CategoryOption";
 import ScheduleOrder from "@/components/cart/ScheduleOrder";
+import { useHours } from "@/context/HoursContext";
+import ScheduleModal from "@/components/menu/ScheduleModal";
 
 export default function HomeScreen() {
   const [data, setData] = useState<Category[]>([]);
+  const [modalVisible, setModalVisible] = useState(true);
+
+  const { hours, setHours } = useHours();
 
   useEffect(() => {
     loadData();
@@ -22,10 +27,15 @@ export default function HomeScreen() {
     const hours = await getHours();
     console.log(hours);
     setData(result);
+    setHours(hours);
   };
 
   return (
     <ThemedView style={globalStyles.page}>
+      <ScheduleModal
+        show={modalVisible}
+        setShow={setModalVisible}
+      />
       <ScheduleOrder />
       <ThemedText style={[globalStyles.title, { padding: 10 }]}>
         CATEGORIES

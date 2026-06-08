@@ -104,7 +104,7 @@ export default function CheckoutScreen() {
         <>
           <ScrollView style={{ flex: 1 }}>
             <ThemedText style={globalStyles.title}>Pickup Details</ThemedText>
-            <ScheduleOrder />
+            {/* <ScheduleOrder /> */}
 
             <InputField
               control={control}

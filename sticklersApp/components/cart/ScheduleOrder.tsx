@@ -20,8 +20,13 @@ import { useHours } from "@/context/HoursContext";
 
 //TODO: use context to update time
 export default function ScheduleOrder() {
-  const { scheduledTime, scheduledDate, setScheduledTime, setScheduledDate } =
-    useHours();
+  const {
+    scheduledTime,
+    scheduledDate,
+    setScheduledTime,
+    setScheduledDate,
+    hours,
+  } = useHours();
 
   const [error, setError] = useState("");
   const [showCalender, setShowCalender] = useState(false);
@@ -128,8 +133,14 @@ export default function ScheduleOrder() {
 
             const day = selectedDate.getDay();
             const now = new Date();
-            if (day === 0 || day === 6) {
-              Alert.alert("Unavailable", "We are closed on weekends.");
+            if (hours[day].open === null) {
+              Alert.alert("Unavailable", "Store is not open on this day.");
+              return;
+            } else if (
+              now.getDate() === selectedDate.getDate() &&
+              now.getTime() > (hours[now.getDay()].close ?? 0) * 1000
+            ) {
+              Alert.alert("Unavailable", "Pickup time is too late.");
               return;
             }
             setScheduledDate(selectedDate);
