@@ -6,15 +6,38 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Category } from "@/types/menu";
 import { ThemedText } from "./defaults/themed-text";
 import { useRouter } from "expo-router";
 import { images } from "@/constants/images";
+import { useHours } from "@/context/HoursContext";
+import { formatBusinessTime } from "@/lib/formatTime";
 
 export default function CategoryOption({ category }: { category: Category }) {
   const router = useRouter();
   const imageKey: string | undefined = category.image;
+
+  const { scheduledTime, setScheduledTime } = useHours();
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const startTime = formatBusinessTime(category.availability?.startTime ?? null);
+  const endTime = formatBusinessTime(category.availability?.endTime ?? null);
+
+  useEffect(() => {
+    if (!scheduledTime) {
+      const now = new Date();
+      //const now = new Date(2000, 0, 1, 10, 1, 0);
+      let time = now.getHours() * 100 + now.getMinutes();
+      if (
+        category.availability &&
+        (category.availability.startTime > time ||
+          category.availability.endTime <= time)
+      ) {
+        setIsDisabled(true);
+      }
+    }
+  }, [category]);
 
   return (
     <Pressable
@@ -25,6 +48,7 @@ export default function CategoryOption({ category }: { category: Category }) {
           params: { categoryId: category.id },
         })
       }
+      disabled={isDisabled}
     >
       <View style={styles.imageWrapper}>
         <ImageBackground
@@ -36,6 +60,24 @@ export default function CategoryOption({ category }: { category: Category }) {
           </View>
         </ImageBackground>
       </View>
+      {isDisabled && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ThemedText style={{ color: "white", width: "50%", textAlign: "center" }}>
+            Only available between {startTime} and {endTime}
+          </ThemedText>
+        </View>
+      )}
     </Pressable>
   );
 }

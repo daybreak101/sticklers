@@ -1,12 +1,16 @@
-- Toast is not showing up, find out why
--simplify cartItemId edit page by using the cartItem info to populate the page
-(or nah, whats the point?)
+-at launch, app should have welcome screen, blocking the menu
+prompting the user to schedule a order or place the order now.
+this action should be stored in Context, which will be used throughout the app.
+This screen should check if store is open right now, and if not, placing the order 
+now should be disabled and prompt user to place future order. Based on selection, 
+menu will vary, for example, breakfast items
+should not be available after 10:30 AM.
+-
+
+
 -show toast when adding to cart, and when pushing edits to item, and when removing item
 - "Report issues" button, that would have user input the issue,
 and it will copy the cart state and send it to the backend
-
-
--find Jalapeno Cheddar and Asiago prices and add them to firestore
 -implement a numerical indicator for cart tab displaying the number of items in the cart
 -implement "extra" and "double" modifiers for each modifier and price them accordingly; keep in mind
    that some modifiers may be mutually exclusive, and depending on the item, the number of modifiers

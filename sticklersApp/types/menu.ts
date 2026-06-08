@@ -1,6 +1,6 @@
 export type Availability = {
-  startTime: string;
-  endTime: string;
+  startTime: number;
+  endTime: number;
 };
 
 export type Category = {

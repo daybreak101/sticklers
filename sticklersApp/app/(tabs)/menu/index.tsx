@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { globalStyles } from "@/styles/global";
-import { getMenuCategories } from "@/lib/menuStorage";
+import { getHours, getMenuCategories } from "@/lib/menuStorage";
 import { Category } from "@/types/menu";
 import CategoryOption from "@/components/CategoryOption";
 
@@ -18,7 +18,8 @@ export default function HomeScreen() {
 
   const loadData = async () => {
     const result = await getMenuCategories();
-    //console.log(result);
+    const hours = await getHours();
+    console.log(hours);
     setData(result);
   };
 

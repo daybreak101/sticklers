@@ -8,6 +8,7 @@ type ReusableButtonProps = {
   buttonText: string;
   buttonStyles?: any;
   textStyles?: any;
+  isDisabled?: boolean;
 };
 
 export default function ReusableButton({
@@ -15,17 +16,31 @@ export default function ReusableButton({
   buttonText,
   buttonStyles,
   textStyles,
+  isDisabled,
 }: ReusableButtonProps) {
   return (
-    <Pressable onPress={submit} style={[styles.button, buttonStyles]}>
-      <ThemedText style={[styles.buttonText, textStyles]}>{buttonText}</ThemedText>
+    <Pressable
+      onPress={submit}
+      style={[
+        styles.button,
+        buttonStyles,
+        {
+          backgroundColor: isDisabled
+            ? "#363636"
+            : globalStyles.themeRedBright.color,
+        },
+      ]}
+      disabled={isDisabled}
+    >
+      <ThemedText style={[styles.buttonText, textStyles]}>
+        {buttonText}
+      </ThemedText>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: globalStyles.themeRed.color,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,

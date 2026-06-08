@@ -1,5 +1,5 @@
 import { globalStyles } from "@/styles/global";
-import { Cart, CartItem } from "@/types/cart";
+import { Cart, CartItem, Order } from "@/types/cart";
 import {
   createContext,
   Dispatch,
@@ -21,11 +21,16 @@ type CartContextType = {
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
   showToast: (message: string) => void;
+  setPreviousOrder: Dispatch<SetStateAction<Order | null>>;
+  previousOrder: Order | null;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [previousOrder, setPreviousOrder] = useState<Order | null>(null);
+
+
   const [cart, setCart] = useState<Cart>({
     items: [],
     totalPrice: 0,
@@ -79,7 +84,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     showToast("Cart cleared");
   };
 
-  //TODO: implement updateQuantity
   const updateQuantity = (cartItemId: string, quantity: number) => {
     setCart((prev) => {
       const item = prev.items.find((i) => i.cartItemId === cartItemId);
@@ -173,8 +177,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       clearCart,
       updateQuantity,
       showToast,
+      previousOrder,
+      setPreviousOrder
     }),
-    [cart],
+    [cart, previousOrder],
   );
   return (
     <CartContext.Provider value={value}>

@@ -44,7 +44,7 @@ export default function AreYouSure({
           ]}
         >
           <ThemedText style={[globalStyles.title, styles.header]}>
-            Change Password
+            {title}
           </ThemedText>
           <ThemedText style={styles.message}>{message}</ThemedText>
           <View style={styles.buttonSection}>

@@ -7,23 +7,10 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useAuth } from "@/context/AuthContext";
-import z, { email } from "zod";
 import { globalStyles } from "@/styles/global";
 import { ThemedView } from "../defaults/themed-view";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { ThemedText } from "../defaults/themed-text";
-import InputField from "../defaults/InputField";
-import {
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-  verifyBeforeUpdateEmail,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebaseConfig";
-import { useRouter } from "expo-router";
 import ReusableButton from "../defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TimeSlot } from "@/types/cart";
@@ -70,9 +57,9 @@ export default function ScheduleOrder({
   const refreshTimeSlots = () => {
     setSlots([]);
     const now = new Date();
-    const hours = now.getMinutes() > 45 ? now.getHours() + 1 : now.getHours();
+    const endOfDay = new Date(new Date().setHours(14, 45, 0, 0));
 
-    for (let hour = hours; hour < 15; hour++) {
+    for (let hour = 6; hour < 15; hour++) {
       for (let minute = 0; minute < 60; minute += 15) {
         console.log(hour, minute);
         const start = new Date();
@@ -81,7 +68,21 @@ export default function ScheduleOrder({
         const end = new Date(start);
         end.setMinutes(end.getMinutes() + 15);
 
-        if (start.getTime() > now.getTime()) {
+        if (
+          now.getDate() === pickupDate?.getDate() &&
+          start.getTime() > now.getTime() &&
+          start.getTime() < endOfDay.getTime()
+        ) {
+          setSlots((prevSlots) => [
+            ...prevSlots,
+            {
+              id: start.toISOString(),
+              label: formatTimeRange(start, end),
+              start,
+              end,
+            },
+          ]);
+        } else if(pickupDate?.getDate() !== now.getDate()) {
           setSlots((prevSlots) => [
             ...prevSlots,
             {
@@ -94,27 +95,28 @@ export default function ScheduleOrder({
         }
       }
     }
-    setSlots((prevSlots) => [
-      {
-        id: "asap",
-        label: "ASAP",
-        start: new Date(2000, 0, 1, 0, 0, 21),
-        end: new Date(2000, 0, 1),
-      },
-      ...prevSlots,
-    ]);
+
+    if (endOfDay > now) {
+      setSlots((prevSlots) => [
+        {
+          id: "asap",
+          label: "ASAP",
+          start: new Date(2000, 0, 1, 0, 0, 21),
+          end: new Date(2000, 0, 1),
+        },
+        ...prevSlots,
+      ]);
+    }
   };
   const closeModal = () => {
     setError("");
   };
 
   const currentMinute = useCurrentMinute();
-  let lastMinute = currentMinute;
 
-  // TODO: fix this
   useEffect(() => {
     refreshTimeSlots();
-  }, [currentMinute]);
+  }, [currentMinute, pickupDate]);
 
   return (
     <ThemedView>

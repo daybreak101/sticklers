@@ -23,10 +23,11 @@ import InputField from "@/components/defaults/InputField";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import ScheduleOrder from "@/components/cart/ScheduleOrder";
+import { Order } from "@/types/cart";
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
-  const { cart, clearCart } = useCart();
+  const { cart, setPreviousOrder } = useCart();
   const router = useRouter();
 
   const [cartQuantity, setCartQuantity] = useState(cart.totalItems);
@@ -34,7 +35,7 @@ export default function CheckoutScreen() {
     `$${cart.totalPrice.toFixed(2)}`,
   );
 
-  const [pickupDate, setPickupDate] = useState<Date | null>(null);
+  const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
   const [pickupTime, setPickupTime] = useState<Date | null>(null);
 
   useEffect(() => {}, []);
@@ -64,6 +65,18 @@ export default function CheckoutScreen() {
   });
 
   const onSubmit = async (data: FormData) => {
+    //combine pickup date and time
+    let timeSlot = pickupDate ?? new Date();
+    if (pickupTime) {
+      timeSlot?.setHours(pickupTime.getHours());
+      timeSlot?.setMinutes(pickupTime.getMinutes());
+    }
+    else {
+      const now = new Date();
+      timeSlot?.setHours(now.getHours());
+      timeSlot?.setMinutes(now.getMinutes() + 15);
+    }
+  
     const newOrder = {
       id: Date.now().toString(),
       customerInfo: {
@@ -73,15 +86,16 @@ export default function CheckoutScreen() {
         phone: data.phone.replace(/\D/g, ""),
       },
       cart: cart,
-      timeReady: null,
+      timeSlot: timeSlot,
       status: "pending",
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      specialRequests: data.specialRequests,
-    };
+      specialRequests: data.specialRequests
+    } as Order;
     await setDoc(doc(db, "orders", newOrder.id), newOrder);
-    clearCart();
-    router.push("/cart/orderConfirmation");
+    setPreviousOrder(newOrder);
+    //clearCart();
+    router.replace("/orderConfirmation");
   };
 
   return (
@@ -148,6 +162,7 @@ export default function CheckoutScreen() {
               bottom: 0,
             }}
             textStyles={{ fontSize: 20 }}
+            isDisabled={true}
           />
         </>
       ) : (

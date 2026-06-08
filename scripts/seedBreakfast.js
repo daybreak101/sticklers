@@ -17,8 +17,8 @@ const breakfast = {
   description: "Breakfast Menu. Ends at 10:30 AM",
   order: 30,
   availability: {
-    startTime: "06:00",
-    endTime: "10:30",
+    startTime: 600,
+    endTime: 1030,
   },
   items: [
     {

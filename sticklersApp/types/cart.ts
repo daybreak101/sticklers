@@ -48,7 +48,7 @@ export type Order = {
     id: string;
     customerInfo: CustomerInfo;
     cart: Cart;
-    timeSlot: TimeSlot;
+    timeSlot: Date;
     status: "pending" | "ready" | "fulfilled" | "cancelled";
     createdAt: Timestamp;
     updatedAt: Timestamp;
@@ -56,6 +56,7 @@ export type Order = {
 }
 
 export type CustomerInfo = {
+    id: string;
     name: string;
     email: string;
     phone: string;

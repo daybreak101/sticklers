@@ -39,7 +39,7 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
       <AreYouSure
         show={show}
         setShow={setShow}
-        // itemToRemove={cartItem}
+        title={'Remove Item'}
         onAccept={removeItemFromCart}
         acceptText="Yes"
         rejectText="No"

@@ -5,12 +5,15 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "@/context/AuthContext";
+import { HoursProvider } from "@/context/HoursContext";
 
 export default function RootLayout() {
   return (
     <AuthProvider>
       <CartProvider>
-        <Stack screenOptions={{ headerShown: false }} />
+        <HoursProvider>
+          <Stack screenOptions={{ headerShown: false }} />
+        </HoursProvider>
       </CartProvider>
     </AuthProvider>
   );

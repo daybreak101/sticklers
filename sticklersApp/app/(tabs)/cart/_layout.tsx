@@ -43,7 +43,10 @@ export default function IndexLayout() {
       >
         <Stack.Screen name="index" options={{ title: "Cart" }} />
         <Stack.Screen name="checkout" options={{ title: "Checkout" }} />
-        <Stack.Screen name="orderConfirmation" options={{ title: "Order Confirmation" }} />
+        <Stack.Screen
+          name="orderConfirmation"
+          options={{ title: "Order Confirmation", headerShown: false }}
+        />
         <Stack.Screen
           name="edit/[cartItemId]"
           options={{ title: "Edit Item" }}

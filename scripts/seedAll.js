@@ -6,6 +6,7 @@ import { seed as seedSoups } from "./seedSoup.js";
 import { seed as seedBfModifiers } from "./seedBfModifiers.js";
 import { seed as seedModifiers } from "./seedModifiers.js";
 import { seed as seedSalad } from "./seedSalad.js";
+import { seed as seedSchedule } from "./seedSchedule.js";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
@@ -30,6 +31,7 @@ await Promise.all([
   seedBfModifiers(),
   seedModifiers(app, doc, setDoc, doc),
   seedSalad(),
+  seedSchedule(),
 ]);
 
 console.log("Seeding complete");
