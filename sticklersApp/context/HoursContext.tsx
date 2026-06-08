@@ -5,6 +5,8 @@ type HoursContextType = {
     setHours: React.Dispatch<React.SetStateAction<Hours>>;
     scheduledTime: Date | null;
     setScheduledTime: React.Dispatch<React.SetStateAction<Date | null>>
+    scheduledDate: Date | null;
+    setScheduledDate: React.Dispatch<React.SetStateAction<Date | null>>
 }
 
 export type Hours = {
@@ -20,13 +22,16 @@ export const HoursProvider = ({ children }: any) => {
         close: null
     });
     const [scheduledTime, setScheduledTime] = useState<Date | null>(null);
+    const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
 
     const value = useMemo(
         () => ({
             hours,
             setHours,
             scheduledTime,
-            setScheduledTime
+            setScheduledTime, 
+            scheduledDate,
+            setScheduledDate
         }),
         [hours]
     )

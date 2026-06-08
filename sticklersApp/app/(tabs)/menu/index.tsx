@@ -8,6 +8,7 @@ import { globalStyles } from "@/styles/global";
 import { getHours, getMenuCategories } from "@/lib/menuStorage";
 import { Category } from "@/types/menu";
 import CategoryOption from "@/components/CategoryOption";
+import ScheduleOrder from "@/components/cart/ScheduleOrder";
 
 export default function HomeScreen() {
   const [data, setData] = useState<Category[]>([]);
@@ -24,15 +25,18 @@ export default function HomeScreen() {
   };
 
   return (
-      <ThemedView style={globalStyles.page}>
-        <ThemedText style={[globalStyles.title, { padding: 10 }]}>CATEGORIES</ThemedText>
-        <FlatList
-          data={data}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <CategoryOption category={item} />}
-          ItemSeparatorComponent={() => <View style={{padding: 10}}></View>}
-          ListFooterComponent={() => <View style={{padding: 10}}></View>}
-        />
-      </ThemedView>
+    <ThemedView style={globalStyles.page}>
+      <ScheduleOrder />
+      <ThemedText style={[globalStyles.title, { padding: 10 }]}>
+        CATEGORIES
+      </ThemedText>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <CategoryOption category={item} />}
+        ItemSeparatorComponent={() => <View style={{ padding: 10 }}></View>}
+        ListFooterComponent={() => <View style={{ padding: 10 }}></View>}
+      />
+    </ThemedView>
   );
 }

@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Modal,
   Pressable,
@@ -23,6 +24,7 @@ type ScheduleOrderProps = {
   setPickupTime: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
+//TODO: use context to update time
 export default function ScheduleOrder({
   pickupDate,
   setPickupDate,
@@ -82,7 +84,7 @@ export default function ScheduleOrder({
               end,
             },
           ]);
-        } else if(pickupDate?.getDate() !== now.getDate()) {
+        } else if (pickupDate?.getDate() !== now.getDate()) {
           setSlots((prevSlots) => [
             ...prevSlots,
             {
@@ -129,11 +131,16 @@ export default function ScheduleOrder({
           maximumDate={maximumDate}
           onDismiss={() => setShowCalender(false)}
           onValueChange={(_, selectedDate) => {
+            if (!selectedDate) return;
             setShowCalender(false);
 
-            if (selectedDate) {
-              setPickupDate(selectedDate);
+            const day = selectedDate.getDay();
+
+            if (day === 0 || day === 6) {
+              Alert.alert("Unavailable", "We are closed on weekends.");
+              return;
             }
+            setPickupDate(selectedDate);
           }}
         />
       )}

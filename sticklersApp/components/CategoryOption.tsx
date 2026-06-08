@@ -21,23 +21,30 @@ export default function CategoryOption({ category }: { category: Category }) {
   const { scheduledTime, setScheduledTime } = useHours();
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const startTime = formatBusinessTime(category.availability?.startTime ?? null);
+  const startTime = formatBusinessTime(
+    category.availability?.startTime ?? null,
+  );
   const endTime = formatBusinessTime(category.availability?.endTime ?? null);
 
   useEffect(() => {
-    if (!scheduledTime) {
-      const now = new Date();
-      //const now = new Date(2000, 0, 1, 10, 1, 0);
-      let time = now.getHours() * 100 + now.getMinutes();
-      if (
-        category.availability &&
-        (category.availability.startTime > time ||
-          category.availability.endTime <= time)
-      ) {
-        setIsDisabled(true);
-      }
+    if (!category.availability) {
+      return;
     }
-  }, [category]);
+
+    let now = new Date();
+    if (scheduledTime) {
+      now = scheduledTime;
+    }
+
+    //const now = new Date(2000, 0, 1, 10, 1, 0);
+    let time = now.getHours() * 100 + now.getMinutes();
+    if (
+      category.availability.startTime > time ||
+      category.availability.endTime <= time
+    ) {
+      setIsDisabled(true);
+    }
+  }, [category, scheduledTime]);
 
   return (
     <Pressable
@@ -73,7 +80,9 @@ export default function CategoryOption({ category }: { category: Category }) {
             alignItems: "center",
           }}
         >
-          <ThemedText style={{ color: "white", width: "50%", textAlign: "center" }}>
+          <ThemedText
+            style={{ color: "white", width: "50%", textAlign: "center" }}
+          >
             Only available between {startTime} and {endTime}
           </ThemedText>
         </View>
