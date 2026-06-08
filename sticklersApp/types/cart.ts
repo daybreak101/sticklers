@@ -28,6 +28,7 @@ export type CartItem = {
     quantity: number;
     finalPrice: number;
     specialRequests?: string;
+    isAvailable: boolean;
 }
 
 export type Cart = {

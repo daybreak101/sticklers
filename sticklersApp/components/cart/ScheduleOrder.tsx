@@ -16,21 +16,13 @@ import ReusableButton from "../defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TimeSlot } from "@/types/cart";
 import useCurrentMinute from "@/hooks/useCurrentMinute";
-
-type ScheduleOrderProps = {
-  pickupDate: Date | null;
-  setPickupDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  pickupTime: Date | null;
-  setPickupTime: React.Dispatch<React.SetStateAction<Date | null>>;
-};
+import { useHours } from "@/context/HoursContext";
 
 //TODO: use context to update time
-export default function ScheduleOrder({
-  pickupDate,
-  setPickupDate,
-  pickupTime,
-  setPickupTime,
-}: ScheduleOrderProps) {
+export default function ScheduleOrder() {
+  const { scheduledTime, scheduledDate, setScheduledTime, setScheduledDate } =
+    useHours();
+
   const [error, setError] = useState("");
   const [showCalender, setShowCalender] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -71,7 +63,7 @@ export default function ScheduleOrder({
         end.setMinutes(end.getMinutes() + 15);
 
         if (
-          now.getDate() === pickupDate?.getDate() &&
+          now.getDate() === scheduledDate?.getDate() &&
           start.getTime() > now.getTime() &&
           start.getTime() < endOfDay.getTime()
         ) {
@@ -84,7 +76,7 @@ export default function ScheduleOrder({
               end,
             },
           ]);
-        } else if (pickupDate?.getDate() !== now.getDate()) {
+        } else if (scheduledDate?.getDate() !== now.getDate()) {
           setSlots((prevSlots) => [
             ...prevSlots,
             {
@@ -98,7 +90,7 @@ export default function ScheduleOrder({
       }
     }
 
-    if (endOfDay > now) {
+    if (endOfDay > now && scheduledDate?.getDate() === now.getDate()) {
       setSlots((prevSlots) => [
         {
           id: "asap",
@@ -118,13 +110,13 @@ export default function ScheduleOrder({
 
   useEffect(() => {
     refreshTimeSlots();
-  }, [currentMinute, pickupDate]);
+  }, [currentMinute, scheduledDate]);
 
   return (
     <ThemedView>
       {showCalender && (
         <DateTimePicker
-          value={pickupDate || new Date(2000, 0, 1)}
+          value={scheduledDate || new Date(2000, 0, 1)}
           mode="date"
           display="calendar"
           minimumDate={minimumDate}
@@ -135,12 +127,13 @@ export default function ScheduleOrder({
             setShowCalender(false);
 
             const day = selectedDate.getDay();
-
+            const now = new Date();
             if (day === 0 || day === 6) {
               Alert.alert("Unavailable", "We are closed on weekends.");
               return;
             }
-            setPickupDate(selectedDate);
+            setScheduledDate(selectedDate);
+            setShowDropdown(true);
           }}
         />
       )}
@@ -175,9 +168,9 @@ export default function ScheduleOrder({
                     style={[styles.header]}
                     onPress={() => {
                       if (item.id === "asap") {
-                        setPickupTime(null);
+                        setScheduledTime(null);
                       } else {
-                        setPickupTime(item.start);
+                        setScheduledTime(item.start);
                       }
                       setShowDropdown(false);
                     }}
@@ -194,25 +187,25 @@ export default function ScheduleOrder({
         <ReusableButton
           submit={() => setShowCalender(true)}
           buttonText={
-            !pickupDate ||
-            pickupDate.toDateString() === new Date().toDateString()
+            !scheduledDate ||
+            scheduledDate.toDateString() === new Date().toDateString()
               ? "Today"
               : new Intl.DateTimeFormat("en-US", {
                   weekday: "short",
                   month: "short",
                   day: "numeric",
-                }).format(pickupDate)
+                }).format(scheduledDate)
           }
           buttonStyles={{ alignSelf: "center", width: "50%" }}
         />
         <ReusableButton
           submit={() => setShowDropdown(true)}
           buttonText={
-            pickupTime
+            scheduledTime
               ? new Intl.DateTimeFormat("en-US", {
                   hour: "numeric",
                   minute: "numeric",
-                }).format(pickupTime)
+                }).format(scheduledTime)
               : "ASAP"
           }
           buttonStyles={{ alignSelf: "center", width: "50%" }}

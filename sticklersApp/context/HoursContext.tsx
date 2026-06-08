@@ -33,7 +33,7 @@ export const HoursProvider = ({ children }: any) => {
             scheduledDate,
             setScheduledDate
         }),
-        [hours]
+        [hours, scheduledTime, scheduledDate]
     )
 
     return (

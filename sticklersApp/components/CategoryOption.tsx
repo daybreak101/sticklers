@@ -27,6 +27,7 @@ export default function CategoryOption({ category }: { category: Category }) {
   const endTime = formatBusinessTime(category.availability?.endTime ?? null);
 
   useEffect(() => {
+    console.log("checking availability");
     if (!category.availability) {
       return;
     }
@@ -38,11 +39,15 @@ export default function CategoryOption({ category }: { category: Category }) {
 
     //const now = new Date(2000, 0, 1, 10, 1, 0);
     let time = now.getHours() * 100 + now.getMinutes();
+    console.log(time, category.availability.startTime, category.availability.endTime);
     if (
       category.availability.startTime > time ||
       category.availability.endTime <= time
     ) {
       setIsDisabled(true);
+    }
+    else {
+      setIsDisabled(false);
     }
   }, [category, scheduledTime]);
 

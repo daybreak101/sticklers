@@ -24,19 +24,19 @@ import ReusableButton from "@/components/defaults/ReusableButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import ScheduleOrder from "@/components/cart/ScheduleOrder";
 import { Order } from "@/types/cart";
+import { useHours } from "@/context/HoursContext";
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
   const { cart, setPreviousOrder } = useCart();
   const router = useRouter();
+  const { scheduledTime, setScheduledTime, scheduledDate, setScheduledDate } =
+    useHours();
 
   const [cartQuantity, setCartQuantity] = useState(cart.totalItems);
   const [totalPrice, setTotalPrice] = useState(
     `$${cart.totalPrice.toFixed(2)}`,
   );
-
-  const [pickupDate, setPickupDate] = useState<Date | null>(new Date());
-  const [pickupTime, setPickupTime] = useState<Date | null>(null);
 
   useEffect(() => {}, []);
 
@@ -66,17 +66,16 @@ export default function CheckoutScreen() {
 
   const onSubmit = async (data: FormData) => {
     //combine pickup date and time
-    let timeSlot = pickupDate ?? new Date();
-    if (pickupTime) {
-      timeSlot?.setHours(pickupTime.getHours());
-      timeSlot?.setMinutes(pickupTime.getMinutes());
-    }
-    else {
+    let timeSlot = scheduledDate ?? new Date();
+    if (scheduledTime) {
+      timeSlot?.setHours(scheduledTime.getHours());
+      timeSlot?.setMinutes(scheduledTime.getMinutes());
+    } else {
       const now = new Date();
       timeSlot?.setHours(now.getHours());
       timeSlot?.setMinutes(now.getMinutes() + 15);
     }
-  
+
     const newOrder = {
       id: Date.now().toString(),
       customerInfo: {
@@ -90,7 +89,7 @@ export default function CheckoutScreen() {
       status: "pending",
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      specialRequests: data.specialRequests
+      specialRequests: data.specialRequests,
     } as Order;
     await setDoc(doc(db, "orders", newOrder.id), newOrder);
     setPreviousOrder(newOrder);
@@ -103,14 +102,9 @@ export default function CheckoutScreen() {
       <Stack.Screen options={{ title: "Checkout" }} />
       {user && user.emailVerified ? (
         <>
-          <ScrollView style={{ flex: 1}}>
+          <ScrollView style={{ flex: 1 }}>
             <ThemedText style={globalStyles.title}>Pickup Details</ThemedText>
-            <ScheduleOrder
-              pickupDate={pickupDate}
-              setPickupDate={setPickupDate}
-              pickupTime={pickupTime}
-              setPickupTime={setPickupTime}
-            />
+            <ScheduleOrder />
 
             <InputField
               control={control}
@@ -142,7 +136,7 @@ export default function CheckoutScreen() {
               icon="sticky-note-2"
             />
 
-            <ThemedView style={{ paddingBottom: 100}}>
+            <ThemedView style={{ paddingBottom: 100 }}>
               <ThemedText>Total Items: {cartQuantity}</ThemedText>
               <ThemedText>
                 Please note: if paying with a card, you will be charged a
