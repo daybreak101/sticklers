@@ -12,7 +12,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const businessHours = {
+const businessInfo = {
   businessHours: [
     { open: null, close: null },
     { open: 600, close: 1500 },
@@ -22,8 +22,12 @@ const businessHours = {
     { open: 600, close: 1500 },
     { open: null, close: null },
   ],
+  tax: 0.091
 };
+
+
+
 export async function seed() {
-  await setDoc(doc(db, "schedule", "businessHours"), businessHours);
+  await setDoc(doc(db, "business", "businessInfo"), businessInfo);
   console.log("Schedule seeded");
 }

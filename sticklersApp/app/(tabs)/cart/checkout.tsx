@@ -17,7 +17,7 @@ import SignedOutCheckout from "@/components/cart/SignedOutCheckout";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { doc, setDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import InputField from "@/components/defaults/InputField";
 import ReusableButton from "@/components/defaults/ReusableButton";
@@ -25,10 +25,11 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import ScheduleOrder from "@/components/cart/ScheduleOrder";
 import { Order } from "@/types/cart";
 import { useHours } from "@/context/HoursContext";
+import useCurrentMinute from "@/hooks/useCurrentMinute";
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
-  const { cart, setPreviousOrder } = useCart();
+  const { cart, setPreviousOrder, checkAvailability } = useCart();
   const router = useRouter();
   const { scheduledTime, setScheduledTime, scheduledDate, setScheduledDate } =
     useHours();
@@ -37,8 +38,33 @@ export default function CheckoutScreen() {
   const [totalPrice, setTotalPrice] = useState(
     `$${cart.totalPrice.toFixed(2)}`,
   );
+  const [tax, setTax] = useState(0);
+  const [totalWithTax, setTotalWithTax] = useState(0);
+  const [totalTax, setTotalTax] = useState(0);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchTax = async () => {
+      const snapshot = await getDoc(doc(db, "business", "businessInfo"));
+      const data = snapshot.data();
+      const tax = data?.tax ?? 0;
+      const totalTax = Math.ceil(cart.totalPrice * tax * 100) / 100;
+      setTax(tax);
+      setTotalTax(totalTax);
+      setTotalWithTax(cart.totalPrice + totalTax);
+    };
+    fetchTax();
+  }, []);
+
+  const currentMinute = useCurrentMinute();
+  useEffect(() => {
+    const now = new Date();
+    if (scheduledTime) {
+      now.setHours(scheduledTime.getHours());
+      now.setMinutes(scheduledTime.getMinutes());
+    }
+    const time = now.getHours() * 100 + now.getMinutes();
+    checkAvailability(time);
+  }, [currentMinute, scheduledTime]);
 
   const schema = z.object({
     name: z.string().min(2, "Name is too short"),
@@ -90,6 +116,10 @@ export default function CheckoutScreen() {
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       specialRequests: data.specialRequests,
+      cartPrice: cart.totalPrice,
+      tax: tax,
+      taxPrice: totalTax,
+      totalWithTax: totalWithTax,
     } as Order;
     await setDoc(doc(db, "orders", newOrder.id), newOrder);
     setPreviousOrder(newOrder);
@@ -103,7 +133,9 @@ export default function CheckoutScreen() {
       {user && user.emailVerified ? (
         <>
           <ScrollView style={{ flex: 1 }}>
-            <ThemedText style={globalStyles.title}>Pickup Details</ThemedText>
+            <ThemedText style={[globalStyles.title, { padding: 10 }]}>
+              Pickup Details
+            </ThemedText>
             {/* <ScheduleOrder /> */}
 
             <InputField
@@ -142,11 +174,50 @@ export default function CheckoutScreen() {
                 Please note: if paying with a card, you will be charged a
                 processing fee.
               </ThemedText>
+              <View style={{ paddingLeft: 100 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 10,
+                  }}
+                >
+                  <ThemedText>Subtotal: </ThemedText>
+                  <ThemedText style={{ paddingRight: 10 }}>
+                    ${cart.totalPrice.toFixed(2)}
+                  </ThemedText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 10,
+                  }}
+                >
+                  <ThemedText>Tax ({tax * 100}%):</ThemedText>
+                  <ThemedText style={{ paddingRight: 10 }}>
+                    {" "}
+                    ${totalTax.toFixed(2)}
+                  </ThemedText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 10,
+                  }}
+                >
+                  <ThemedText>Total: </ThemedText>
+                  <ThemedText style={{ paddingRight: 10 }}>
+                    ${totalWithTax.toFixed(2)}
+                  </ThemedText>
+                </View>
+              </View>
             </ThemedView>
           </ScrollView>
           <ReusableButton
             submit={handleSubmit(onSubmit)}
-            buttonText={`Place Order   •   ${totalPrice}`}
+            buttonText={`Place Order   •   $${totalWithTax}`}
             buttonStyles={{
               width: "100%",
               height: 75,
@@ -156,7 +227,7 @@ export default function CheckoutScreen() {
               bottom: 0,
             }}
             textStyles={{ fontSize: 20 }}
-            isDisabled={true}
+            isDisabled={cart.items.some((item) => !item.isAvailable)}
           />
         </>
       ) : (

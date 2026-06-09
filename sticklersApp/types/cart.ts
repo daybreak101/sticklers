@@ -54,6 +54,11 @@ export type Order = {
     createdAt: Timestamp;
     updatedAt: Timestamp;
     specialRequests?: string;
+    
+    cartPrice: number;
+    tax: number;
+    taxPrice: number;
+    totalWithTax: number;
 }
 
 export type CustomerInfo = {

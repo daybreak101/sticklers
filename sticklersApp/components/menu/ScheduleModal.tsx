@@ -41,7 +41,7 @@ export default function ScheduleModal({ show, setShow }: ScheduleModalProps) {
       transparent={true}
       animationType="slide"
       visible={show}
-      onRequestClose={() => setShow(false)}
+      onRequestClose={() => {}}
     >
       <ThemedView style={styles.modalContainer}>
         <ThemedView

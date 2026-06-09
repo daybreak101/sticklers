@@ -7,7 +7,7 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CartItem } from "@/types/cart";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
@@ -28,18 +28,23 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
   const router = useRouter();
 
   const [show, setShow] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(cartItem.isAvailable);
 
   const removeItemFromCart = async () => {
     await removeItem(cartItem.cartItemId);
     setShow(false);
   };
 
+  useEffect(() => {
+    setIsDisabled(!cartItem.isAvailable);
+  }, [cartItem.isAvailable]);
+
   return (
     <View style={styles.container}>
       <AreYouSure
         show={show}
         setShow={setShow}
-        title={'Remove Item'}
+        title={"Remove Item"}
         onAccept={removeItemFromCart}
         acceptText="Yes"
         rejectText="No"
@@ -124,6 +129,26 @@ export default function CartItemComponent({ cartItem }: CartItemProps) {
           ${(cartItem.finalPrice * cartItem.quantity).toFixed(2)}
         </ThemedText>
       </View>
+      {isDisabled && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ThemedText
+            style={{ color: "white", width: "50%", textAlign: "center" }}
+          >
+            Not Available
+          </ThemedText>
+        </View>
+      )}
     </View>
   );
 }

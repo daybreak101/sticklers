@@ -296,6 +296,7 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
       quantity: quantity,
       finalPrice: totalPrice,
       specialRequests: specialRequests,
+      isAvailable: true,
     } as CartItem);
     showToast("Item added to cart");
     navigation.goBack();

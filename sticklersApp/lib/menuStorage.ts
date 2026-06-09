@@ -29,7 +29,7 @@ export async function getHours(): Promise<Hours[]> {
     }
 
     // 2. Fetch from Firestore
-    const snapshot = await getDoc(doc(db, "schedule", "businessHours"));
+    const snapshot = await getDoc(doc(db, "business", "businessInfo"));
 
     
 

@@ -9,10 +9,25 @@ import CartItemComponent from "@/components/cart/CartItemComponent";
 import { useRouter } from "expo-router";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import ScheduleOrder from "@/components/cart/ScheduleOrder";
+import useCurrentMinute from "@/hooks/useCurrentMinute";
+import { useHours } from "@/context/HoursContext";
 
 export default function CartScreen() {
-  const { cart } = useCart();
+  const { cart, checkAvailability } = useCart();
+  const { scheduledTime, setScheduledTime, scheduledDate, setScheduledDate } =
+    useHours();
   const router = useRouter();
+  const currentMinute = useCurrentMinute();
+
+  useEffect(() => {
+    const now = new Date();
+    if (scheduledTime) {
+      now.setHours(scheduledTime.getHours());
+      now.setMinutes(scheduledTime.getMinutes());
+    }
+    const time = now.getHours() * 100 + now.getMinutes();
+    checkAvailability(time);
+  }, [currentMinute, scheduledTime]) 
 
   return (
     <>
@@ -62,6 +77,7 @@ export default function CartScreen() {
               buttonText="Checkout"
               buttonStyles={styles.buttonContainer}
               textStyles={styles.buttonText}
+              isDisabled={cart.items.some((item) => !item.isAvailable)}
             />
           </View>
         </View>

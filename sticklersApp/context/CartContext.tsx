@@ -1,3 +1,4 @@
+import { getMenuCategories } from "@/lib/menuStorage";
 import { globalStyles } from "@/styles/global";
 import { Cart, CartItem, Order } from "@/types/cart";
 import {
@@ -13,6 +14,7 @@ import {
   useState,
 } from "react";
 import { View, Text } from "react-native";
+import { useHours } from "./HoursContext";
 type CartContextType = {
   cart: Cart;
   addItem: (item: CartItem) => void;
@@ -23,6 +25,7 @@ type CartContextType = {
   showToast: (message: string) => void;
   setPreviousOrder: Dispatch<SetStateAction<Order | null>>;
   previousOrder: Order | null;
+  checkAvailability: (time: number) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -30,11 +33,10 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [previousOrder, setPreviousOrder] = useState<Order | null>(null);
 
-
   const [cart, setCart] = useState<Cart>({
     items: [],
     totalPrice: 0,
-    totalItems: 0
+    totalItems: 0,
   });
 
   useEffect(() => {
@@ -79,7 +81,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCart({
       items: [],
       totalPrice: 0,
-      totalItems: 0
+      totalItems: 0,
     });
     showToast("Cart cleared");
   };
@@ -145,7 +147,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 fontSize: 16,
                 fontWeight: "bold",
               }}
-            >{toast}</Text>
+            >
+              {toast}
+            </Text>
           </View>
         )}
       </>
@@ -165,7 +169,40 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setToast(null);
       toastTimeoutRef.current = null;
     }, 3000);
+  };
 
+  const checkAvailability = async (time: number) => {
+    const categories = await getMenuCategories();
+    const refresh = cart.items.map((item) => {
+      const category = categories.find((c) => c.id === item.categoryId);
+      if (category?.availability) {
+        // let now = new Date();
+        // const time = now.getHours() * 100 + now.getMinutes();
+        if (
+          category.availability.startTime > time ||
+          category.availability.endTime < time
+        ) {
+          return {
+            ...item,
+            isAvailable: false,
+          };
+        } else {
+          return {
+            ...item,
+            isAvailable: true,
+          };
+        }
+      }
+      return {
+        ...item,
+        isAvailable: true,
+      };
+    });
+
+    setCart((prev) => ({
+      ...prev,
+      items: refresh,
+    }));
   };
 
   const value = useMemo(
@@ -178,7 +215,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       updateQuantity,
       showToast,
       previousOrder,
-      setPreviousOrder
+      setPreviousOrder,
+      checkAvailability,
     }),
     [cart, previousOrder],
   );
