@@ -7,6 +7,7 @@ import { ThemedText } from "@/components/defaults/themed-text";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import { useCart } from "@/context/CartContext";
+import { useHours } from "@/context/HoursContext";
 
 export default function OrderConfirmationScreen() {
   // TODO: send order information from checkout to this screen
@@ -15,10 +16,12 @@ export default function OrderConfirmationScreen() {
 
   const router = useRouter();
   const { cart, clearCart, setPreviousOrder } = useCart();
+  const { reset } = useHours();
 
   const returnToMenu = () => {
     clearCart();
     setPreviousOrder(null);
+    reset();
     router.replace("/menu");
   }
 

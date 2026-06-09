@@ -59,7 +59,7 @@ export default function CartScreen() {
               Looks like your cart is empty!
             </ThemedText>
             <ReusableButton
-              submit={() => router.push("/(tabs)/menu")}
+              submit={() => router.replace("/(tabs)/menu")}
               buttonText="Go To Menu"
             />
           </ThemedView>

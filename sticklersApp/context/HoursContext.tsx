@@ -7,6 +7,7 @@ type HoursContextType = {
     setScheduledTime: React.Dispatch<React.SetStateAction<Date | null>>
     scheduledDate: Date | null;
     setScheduledDate: React.Dispatch<React.SetStateAction<Date | null>>
+    reset: () => void;
 }
 
 export type Hours = {
@@ -24,6 +25,15 @@ export const HoursProvider = ({ children }: any) => {
     }]);
     const [scheduledTime, setScheduledTime] = useState<Date | null>(null);
     const [scheduledDate, setScheduledDate] = useState<Date | null>(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+    
+    const reset = () => {
+        setHours([{
+            open: null,
+            close: null
+        }]);
+        setScheduledTime(null);
+        setScheduledDate(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+    }
 
     const value = useMemo(
         () => ({
@@ -32,7 +42,8 @@ export const HoursProvider = ({ children }: any) => {
             scheduledTime,
             setScheduledTime, 
             scheduledDate,
-            setScheduledDate
+            setScheduledDate,
+            reset
         }),
         [hours, scheduledTime, scheduledDate]
     )
