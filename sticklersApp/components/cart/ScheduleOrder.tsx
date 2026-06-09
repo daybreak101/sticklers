@@ -133,12 +133,13 @@ export default function ScheduleOrder() {
 
             const day = selectedDate.getDay();
             const now = new Date();
+            const time = now.getHours() * 100 + now.getMinutes();
             if (hours[day].open === null) {
               Alert.alert("Unavailable", "Store is not open on this day.");
               return;
             } else if (
               now.getDate() === selectedDate.getDate() &&
-              now.getTime() > (hours[now.getDay()].close ?? 0) * 1000
+              time > (hours[now.getDay()].close ?? 0)
             ) {
               Alert.alert("Unavailable", "Pickup time is too late.");
               return;

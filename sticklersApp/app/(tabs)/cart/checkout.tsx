@@ -48,9 +48,10 @@ export default function CheckoutScreen() {
       const data = snapshot.data();
       const tax = data?.tax ?? 0;
       const totalTax = Math.ceil(cart.totalPrice * tax * 100) / 100;
+      const totalWithTaxes = Math.ceil((cart.totalPrice + totalTax) * 100) / 100;
       setTax(tax);
       setTotalTax(totalTax);
-      setTotalWithTax(cart.totalPrice + totalTax);
+      setTotalWithTax(totalWithTaxes);
     };
     fetchTax();
   }, []);
