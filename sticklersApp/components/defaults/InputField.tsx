@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     paddingHorizontal: 5,
-    paddingBottom: 10,
+    paddingBottom: 2,
   },
   input: {
     fontSize: 16,

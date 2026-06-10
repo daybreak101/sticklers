@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     fontWeight: 300,
+    fontStyle: "italic",
   },
 });

@@ -84,13 +84,33 @@ const bagelModifiers = {
   ],
 };
 
-const creamCheeseModifiers = {
-  id: "cream_cheese",
-  name: "Cream Cheese",
+const spreadsModifiers = {
+  id: "spreads",
+  name: "Spread",
   type: "single",
   priceType: "add",
   options: [
-    { id: "cream_cheese", name: "Cream Cheese", price: 0, status: "available" },
+    {
+      id: "no_spread",
+      name: "Plain, No Spread",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "butter",
+      name: "Butter",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "cream_cheese",
+      name: "Cream Cheese",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
     {
       id: "onion_cream_cheese",
       name: "Onions & Chives Cream Cheese",
@@ -108,6 +128,48 @@ const creamCheeseModifiers = {
     {
       id: "strawberry_cream_cheese",
       name: "Strawberry Cream Cheese",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "jalapeno_cream_cheese",
+      name: "Jalapeno Cream Cheese",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "strawberry_jelly",
+      name: "Strawberry Jelly",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "peanut_butter",
+      name: "Peanut Butter",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "grape_jelly",
+      name: "Grape Jelly",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "peanut_butter_w_grape",
+      name: "Peanut Butter & Grape Jelly",
+      price: 0,
+      status: "available",
+      availability: "breakfast_only",
+    },
+    {
+      id: "peanut_butter_w_strawberry",
+      name: "Peanut Butter & Strawberry Jelly",
       price: 0,
       status: "available",
       availability: "breakfast_only",
@@ -141,39 +203,9 @@ const breakfastProteinModifiers = {
   ],
 };
 
-const breakfastExtrasModifiers = {
-  id: "breakfast_extras",
-  name: "Extras",
-  type: "multi",
-  priceType: "add",
-  options: [
-    {
-      id: "strawberry_jelly",
-      name: "Strawberry Jelly",
-      price: 0,
-      status: "available",
-      availability: "breakfast_only",
-    },
-    {
-      id: "peanut_butter",
-      name: "Peanut Butter",
-      price: 0,
-      status: "available",
-      availability: "breakfast_only",
-    },
-    {
-      id: "grape_jelly",
-      name: "Grape Jelly",
-      price: 0,
-      status: "available",
-      availability: "breakfast_only",
-    },
-  ],
-};
-
-const breakfastSidesModifiers = {
-  id: "breakfast_sides",
-  name: "Breakfast Sides",
+const hashbrownModifiers = {
+  id: "hashbrown",
+  name: "Hash Brown",
   type: "multi",
   priceType: "add",
   options: [
@@ -234,19 +266,12 @@ const oatmealToppingsModifiers = {
 
 export async function seed() {
   await setDoc(doc(db, "modifierGroups", "bagel"), bagelModifiers);
-  await setDoc(doc(db, "modifierGroups", "cream_cheese"), creamCheeseModifiers);
   await setDoc(
     doc(db, "modifierGroups", "breakfast_protein"),
     breakfastProteinModifiers,
   );
-  await setDoc(
-    doc(db, "modifierGroups", "breakfast_extras"),
-    breakfastExtrasModifiers,
-  );
-  await setDoc(
-    doc(db, "modifierGroups", "breakfast_sides"),
-    breakfastSidesModifiers,
-  );
+  await setDoc(doc(db, "modifierGroups", "spreads"), spreadsModifiers);
+  await setDoc(doc(db, "modifierGroups", "hashbrown"), hashbrownModifiers);
   await setDoc(
     doc(db, "modifierGroups", "oatmeal_toppings"),
     oatmealToppingsModifiers,

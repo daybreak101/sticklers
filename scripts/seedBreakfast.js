@@ -26,23 +26,12 @@ const breakfast = {
       name: "Egg & Bagel Sandwich",
       description: "Egg & Bagel Sandwich, with your choice of meat and cheese.",
       basePrice: 7.25,
-      modifierGroupIds: [
-        "bagel",
-        "breakfast_protein",
-        "cheese",
-        "cream_cheese",
-        "breakfast_extras",
-        "extras",
-        "breakfast_sides",
-      ],
+      modifierGroupIds: ["bagel", "breakfast_protein", "cheese", "extras"],
       defaults: {
-        bagel: [],
+        bagel: ["plain"],
         breakfast_protein: [],
         cheese: [],
-        cream_cheese: [],
-        breakfast_extras: [],
         extras: [],
-        breakfast_sides: [],
       },
       pricingRules: {
         protein: {
@@ -63,21 +52,11 @@ const breakfast = {
       description:
         "Mini Breakfast Sandwich, with egg and your choice of meat and cheese.",
       basePrice: 5.55,
-      modifierGroupIds: [
-        "breakfast_protein",
-        "cheese",
-        "cream_cheese",
-        "breakfast_extras",
-        "extras",
-        "breakfast_sides",
-      ],
+      modifierGroupIds: ["breakfast_protein", "cheese", "extras"],
       defaults: {
         breakfast_protein: [],
         cheese: [],
-        cream_cheese: [],
-        breakfast_extras: [],
         extras: [],
-        breakfast_sides: [],
       },
       pricingRules: {
         protein: {
@@ -93,25 +72,15 @@ const breakfast = {
       order: 20,
     },
     {
-      itemId: "cc_bagel",
-      name: "Bagel with Cream Cheese",
-      description: "Bagel with your choice of cream cheese.",
+      itemId: "spread_bagel",
+      name: "Bagel with Spread",
+      description:
+        "Bagel with your choice of spread. Choose from cream cheeses, peanut butter, jelly, etc.",
       basePrice: 4.5,
-      modifierGroupIds: [
-        "bagel",
-        "cream_cheese",
-        "breakfast_protein",
-        "breakfast_extras",
-        "extras",
-        "breakfast_sides",
-      ],
+      modifierGroupIds: ["bagel", "spreads"],
       defaults: {
-        bagel: [],
-        cream_cheese: ["cream_cheese"],
-        breakfast_protein: [],
-        breakfast_extras: [],
-        extras: [],
-        breakfast_sides: [],
+        bagel: ["plain"],
+        spreads: ["cream_cheese"],
       },
       pricingRules: {
         protein: {
@@ -127,20 +96,6 @@ const breakfast = {
       order: 30,
     },
     {
-      itemId: "pb_bagel",
-      name: "Bagel with Peanut Butter",
-      description: "Bagel with peanut butter.",
-      basePrice: 4.5,
-      modifierGroupIds: ["bagel", "breakfast_extras", "breakfast_sides"],
-      defaults: {
-        bagel: [],
-        breakfast_extras: ["peanut_butter"],
-        breakfast_sides: [],
-      },
-      status: "available",
-      order: 40,
-    },
-    {
       itemId: "breakfast_burrito",
       name: "Breakfast Burrito",
       description:
@@ -149,16 +104,14 @@ const breakfast = {
       modifierGroupIds: [
         "breakfast_protein",
         "cheese",
-        "breakfast_extras",
         "extras",
-        "breakfast_sides",
+        "hashbrown",
       ],
       defaults: {
         breakfast_protein: [],
         cheese: [],
-        breakfast_extras: [],
         extras: [],
-        breakfast_sides: [],
+        hashbrown: [],
       },
       pricingRules: {
         protein: {
@@ -182,9 +135,8 @@ const breakfast = {
       modifierGroupIds: [
         "breakfast_protein",
         "cheese",
-        "breakfast_extras",
         "extras",
-        "breakfast_sides",
+        "hashbrown",
       ],
       pricingRules: {
         protein: {
@@ -199,9 +151,8 @@ const breakfast = {
       defaults: {
         breakfast_protein: [],
         cheese: [],
-        breakfast_extras: [],
         extras: [],
-        breakfast_sides: [],
+        hashbrown: [],
       },
       status: "available",
       order: 60,
@@ -215,9 +166,7 @@ const breakfast = {
       modifierGroupIds: [
         "breakfast_protein",
         "cheese",
-        "breakfast_extras",
         "extras",
-        "breakfast_sides",
       ],
       pricingRules: {
         protein: {
@@ -232,9 +181,7 @@ const breakfast = {
       defaults: {
         breakfast_protein: [],
         cheese: [],
-        breakfast_extras: [],
         extras: [],
-        breakfast_sides: [],
       },
       status: "available",
       order: 70,
@@ -248,9 +195,7 @@ const breakfast = {
       modifierGroupIds: [
         "breakfast_protein",
         "cheese",
-        "breakfast_extras",
         "extras",
-        "breakfast_sides",
       ],
       pricingRules: {
         protein: {
@@ -265,9 +210,7 @@ const breakfast = {
       defaults: {
         breakfast_protein: [],
         cheese: [],
-        breakfast_extras: [],
         extras: [],
-        breakfast_sides: [],
       },
       status: "available",
       order: 80,
@@ -280,20 +223,16 @@ const breakfast = {
       modifierGroupIds: [
         "bagel",
         "breakfast_protein",
-        "cream_cheese",
+        "spreads",
         "cheese",
-        "breakfast_extras",
         "extras",
-        "breakfast_sides",
       ],
       defaults: {
         bagel: [],
         breakfast_protein: ["bacon"],
-        cream_cheese: ["cream_cheese"],
+        spreads: ["cream_cheese"],
         cheese: [],
-        breakfast_extras: [],
         extras: ["tomato"],
-        breakfast_sides: [],
       },
       pricingRules: {
         protein: {
@@ -334,27 +273,13 @@ const breakfast = {
       order: 111,
     },
     {
-      itemId: "plain_bagel",
-      name: "Bagel (Plain / Butter / Jelly)",
-      description: "Bagel served plain, with butter or with jelly.",
-      basePrice: 0,
-      modifierGroupIds: ["breakfast_extras", "breakfast_sides"],
-      defaults: {
-        breakfast_extras: [],
-        breakfast_sides: [],
-      },
-      status: "available",
-      order: 120,
-    },
-    {
       itemId: "english_muffin",
-      name: "English Muffin (Plain / Butter / Jelly)",
-      description: "English Muffin served plain, with butter or with jelly.",
+      name: "English Muffin with Spread",
+      description: "English Muffin served with your choice of spread. Choose from cream cheeses, peanut butter, jelly, etc.",
       basePrice: 2.31,
-      modifierGroupIds: ["breakfast_extras", "breakfast_sides"],
+      modifierGroupIds: ["spreads"],
       defaults: {
-        breakfast_extras: [],
-        breakfast_sides: [],
+        spreads: ["no_spread"],
       },
       status: "available",
       order: 130,
@@ -396,7 +321,7 @@ const breakfast = {
     {
       itemId: "avo_toast",
       name: "Avocado Toast",
-      description: "Avocado spread on your choice of bagel.",
+      description: "Avocado spread on your choice of bagel, topped with tomato and Everything seasoning.",
       basePrice: 4.5,
       pricingRules: {
         protein: {
@@ -412,17 +337,13 @@ const breakfast = {
         "bagel",
         "breakfast_protein",
         "cheese",
-        "breakfast_extras",
         "extras",
-        "breakfast_sides",
       ],
       defaults: {
         bagel: [],
         breakfast_protein: [],
         cheese: [],
-        breakfast_extras: [],
-        extras: ["avocado"],
-        breakfast_sides: [],
+        extras: ["tomato", "avocado"],
       },
       status: "available",
       order: 150,

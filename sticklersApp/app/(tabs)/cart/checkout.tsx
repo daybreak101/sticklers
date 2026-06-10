@@ -48,7 +48,8 @@ export default function CheckoutScreen() {
       const data = snapshot.data();
       const tax = data?.tax ?? 0;
       const totalTax = Math.ceil(cart.totalPrice * tax * 100) / 100;
-      const totalWithTaxes = Math.ceil((cart.totalPrice + totalTax) * 100) / 100;
+      const totalWithTaxes =
+        Math.ceil((cart.totalPrice + totalTax) * 100) / 100;
       setTax(tax);
       setTotalTax(totalTax);
       setTotalWithTax(totalWithTaxes);
@@ -170,12 +171,23 @@ export default function CheckoutScreen() {
             />
 
             <ThemedView style={{ paddingBottom: 100 }}>
-              <ThemedText>Total Items: {cartQuantity}</ThemedText>
-              <ThemedText>
+              <ThemedText style={{ fontStyle: "italic", paddingBottom: 10, paddingHorizontal: 10 }}>
                 Please note: if paying with a card, you will be charged a
                 processing fee.
               </ThemedText>
               <View style={{ paddingLeft: 100 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingVertical: 10,
+                  }}
+                >
+                  <ThemedText>Total Items: </ThemedText>
+                  <ThemedText style={{ paddingRight: 10 }}>
+                    {cartQuantity}
+                  </ThemedText>
+                </View>
                 <View
                   style={{
                     flexDirection: "row",

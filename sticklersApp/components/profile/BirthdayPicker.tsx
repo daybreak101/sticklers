@@ -19,8 +19,8 @@ export default function BirthdayPicker({ maxAge = 13, birthday, setBirthday }: B
   maximumDate.setFullYear(maximumDate.getFullYear() - maxAge);
 
   return (
-    <ThemedView style={{ paddingHorizontal: 1, paddingBottom: 30 }}>
-      <ThemedText style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
+    <ThemedView style={{ paddingHorizontal: 1, paddingBottom: 10 }}>
+      <ThemedText style={{ paddingHorizontal: 5, paddingBottom: 2 }}>
         Birthday (optional)
       </ThemedText>
 
