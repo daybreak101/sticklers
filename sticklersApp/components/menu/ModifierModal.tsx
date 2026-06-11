@@ -1,4 +1,4 @@
-import { Alert, Modal, Pressable, StyleSheet, View } from "react-native";
+import { Alert, FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
@@ -7,17 +7,23 @@ import { globalStyles } from "@/styles/global";
 import ScheduleOrder from "../cart/ScheduleOrder";
 import { useHours } from "@/context/HoursContext";
 import { formatBusinessTime, formatDay } from "@/lib/formatTime";
-import { ModifierOption } from "@/types/menu";
+import { ModifierGroup, ModifierOption } from "@/types/menu";
 
 type ScheduleModalProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   modifiers: ModifierOption[];
+  group: ModifierGroup;
+  handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
 };
 
-export default function ModifierModal({ show, setShow, modifiers }: ScheduleModalProps) {
-
-
+export default function ModifierModal({
+  show,
+  setShow,
+  modifiers,
+  group,
+  handleSelectionChange,
+}: ScheduleModalProps) {
   return (
     <Modal
       transparent={true}
@@ -38,17 +44,17 @@ export default function ModifierModal({ show, setShow, modifiers }: ScheduleModa
           ]}
         >
           <ThemedText style={[globalStyles.title, styles.header]}>
-            Schedule Pickup
+            Select Option
           </ThemedText>
-          <ScheduleOrder />
           <ThemedText
             style={[
               styles.message,
               { textTransform: "uppercase", paddingTop: 10 },
             ]}
           >
-            Store Hours
+            {group.name}
           </ThemedText>
+        
           <View
             style={{
               paddingHorizontal: 40,
@@ -57,23 +63,30 @@ export default function ModifierModal({ show, setShow, modifiers }: ScheduleModa
               borderRadius: 10,
             }}
           >
-            {modifiers.map((mod, index) => (
-              <View
-                key={index}
-                style={[
-                  {
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                    paddingVertical: 10,
-                  },
-                ]}
-              >
-    
-              </View>
-            ))}
+            <FlatList 
+              data={modifiers}
+              renderItem={({ item }) => (
+                <Pressable
+                  key={item.id}
+                  style={[
+                    {
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      paddingVertical: 10,
+                    },
+                  ]}
+                  onPress={() => {
+                    handleSelectionChange(group, item.id);
+                    setShow(false);
+                  }}
+                >
+                  <ThemedText>{item.name}</ThemedText>
+                  <ThemedText>{item.price}</ThemedText>
+                </Pressable>
+              )}
+            />
           </View>
-          <View style={styles.buttonSection}>
-          </View>
+          <View style={styles.buttonSection}></View>
         </ThemedView>
       </ThemedView>
     </Modal>

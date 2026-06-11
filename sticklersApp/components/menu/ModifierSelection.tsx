@@ -7,15 +7,11 @@ import { ThemedText } from "../defaults/themed-text";
 import ModifierModal from "./ModifierModal";
 
 export default function ModifierOptionCheckboxComponent({
-  item,
   group,
-  index,
   selectedModifiers,
   handleSelectionChange,
 }: {
-  item: Item;
   group: ModifierGroup;
-  index: number;
   selectedModifiers: SelectedModifiers;
   handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
 }) {
@@ -23,9 +19,10 @@ export default function ModifierOptionCheckboxComponent({
     ModifierOption[]
   >([]);
   const [show, setShow] = useState(false);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<ModifierOption | null>(null);
 
   useEffect(() => {
+    if(group.type === "multi") return;
     setRemainingModifiers(
       group.options.filter(
         (option) => !selectedModifiers[group.id]?.includes(option.id),
@@ -35,22 +32,30 @@ export default function ModifierOptionCheckboxComponent({
 
   return (
     <View>
-      <ModifierModal show={show} setShow={setShow} modifiers={[selected, ...remainingModifiers]} />
+      <ModifierModal
+        show={show}
+        setShow={setShow}
+        modifiers={
+          selected ? [selected, ...remainingModifiers] : remainingModifiers
+        }
+        group={group}
+        handleSelectionChange={handleSelectionChange}
+      />
       {selectedModifiers[group.id]?.map((optionId) => (
         <Pressable
           key={optionId}
           style={styles.optionContainer}
           onPress={() => {
-            setSelected(optionId);
+            setSelected(group.options.find((o) => o.id === optionId) ?? null);
             setShow(true);
           }}
         >
-            <ThemedText style={styles.optionText}>
-                {group.options.find((o) => o.id === optionId)?.name} - {group.options.find((o) => o.id === optionId)?.price}
-            </ThemedText>
+          <ThemedText style={styles.optionText}>
+            {group.options.find((o) => o.id === optionId)?.name} -{" "}
+            {group.options.find((o) => o.id === optionId)?.price}
+          </ThemedText>
         </Pressable>
       ))}
-
     </View>
   );
 }

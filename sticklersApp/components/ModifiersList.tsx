@@ -5,6 +5,7 @@ import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
 import { ThemedText } from "./defaults/themed-text";
 import ModifierSelectionComponent from "./ModifierSelectionComponent";
+import ModifierSelection from "./menu/ModifierSelection";
 
 export default function ModifiersList({
   selectedModifiers,
@@ -147,10 +148,17 @@ export default function ModifiersList({
         <ThemedText style={styles.headerText}>Modifiers</ThemedText>
       </View>
 
-      {(filteredModifiers || []).map((group) => (
-        <ModifierSelectionComponent
+        {(modifiers || []).map((group) => (
+        //(filteredModifiers || []).map((group) => (
+        // <ModifierSelectionComponent
+        //   key={group.id}
+        //   item={item}
+        //   group={group}
+        //   handleSelectionChange={handleSelectionChange}
+        //   selectedModifiers={selectedModifiers}
+        // />
+        <ModifierSelection
           key={group.id}
-          item={item}
           group={group}
           handleSelectionChange={handleSelectionChange}
           selectedModifiers={selectedModifiers}
