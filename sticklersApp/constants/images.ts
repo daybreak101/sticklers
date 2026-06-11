@@ -17,26 +17,26 @@ export const images: Record<string, any> = {
   specialtyBottledSoda: require("../assets/Specialty-Bottled-Soda.png"),
 
   //sandwiches
-  //tba
-  //turkey
-  //ham
+  tba: require("../assets/tba.png"),
+  turkey: require("../assets/turkey.jpg"),
+  ham: require("../assets/ham.jpg"),
   trafficJam: require("../assets/traffic-jam.jpg"),
-  //italian
-  //meatball
-  //blt
-  //roast beef
-  //tuna
-  //chicken salad
-  //veggie
-  //turkey cheddar bacon
-  //chicken bacon ranch
-  //chicken buffalo
-  //pastrami
-  //arizona club
-  //blt w avocado
-  //grilled cheese
-  //chicken parm
-  //pick 2
+  italian: require("../assets/italian.png"),
+  meatball: require("../assets/meatball.jpg"),
+  blt: require("../assets/blt.png"),
+  roastBeef: require("../assets/roast-beef.png"),
+  tuna: require("../assets/tuna.jpg"),
+  chickenSalad: require("../assets/chicken-salad.jpg"),
+  veggie: require("../assets/veggie.jpg"),
+  tcb: require("../assets/tcb.jpg"),
+  chickenBaconRanch: require("../assets/chicken-bacon-ranch.jpg"),
+  buffalo: require("../assets/buffalo.jpg"),
+  pastrami: require("../assets/pastrami.jpg"),
+  azClub: require("../assets/az-club.jpg"),
+  blta: require("../assets/blta.jpg"),
+  grilledCheese: require("../assets/grilled-cheese.jpg"),
+  chickenParm: require("../assets/chicken-parm.jpg"),
+  pick2: require("../assets/pick2.jpg"),
 
   //salads
   //small salad

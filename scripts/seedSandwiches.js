@@ -45,6 +45,7 @@ const sandwiches = {
       },
       status: "available",
       order: 10,
+      image: "tba"
     },
     {
       itemId: "ty_sandwich",
@@ -72,6 +73,7 @@ const sandwiches = {
       },
       status: "available",
       order: 20,
+      image: "turkey"
     },
     {
       itemId: "h_sandwich",
@@ -98,6 +100,7 @@ const sandwiches = {
       },
       status: "available",
       order: 30,
+      image: "ham"
     },
     {
       itemId: "tj_sandwich",
@@ -153,6 +156,7 @@ const sandwiches = {
       },
       status: "available",
       order: 50,
+      image: "italian"
     },
     {
       itemId: "mb_sandwich",
@@ -180,6 +184,7 @@ const sandwiches = {
       },
       status: "available",
       order: 60,
+      image: "meatball"
     },
     {
       itemId: "blt_sandwich",
@@ -206,6 +211,7 @@ const sandwiches = {
       },
       status: "available",
       order: 70,
+      image: "blt"
     },
     {
       itemId: "rb_sandwich",
@@ -232,6 +238,7 @@ const sandwiches = {
       },
       status: "available",
       order: 80,
+      image: "roastBeef"
     },
     {
       itemId: "tuna_sandwich",
@@ -258,6 +265,7 @@ const sandwiches = {
       },
       status: "available",
       order: 90,
+      image: "tuna"
     },
     {
       itemId: "cs_sandwich",
@@ -285,6 +293,7 @@ const sandwiches = {
       },
       status: "available",
       order: 100,
+      image: "chickenSalad"
     },
     {
       itemId: "veggie_sandwich",
@@ -312,6 +321,7 @@ const sandwiches = {
       },
       status: "available",
       order: 110,
+      image: "veggie"
     },
     {
       itemId: "tcb_sandwich",
@@ -338,6 +348,7 @@ const sandwiches = {
       },
       status: "available",
       order: 120,
+      image: "tcb"
     },
     {
       itemId: "cbr_sandwich",
@@ -364,6 +375,7 @@ const sandwiches = {
       },
       status: "available",
       order: 130,
+      image: "chickenBaconRanch"
     },
     {
       itemId: "buff_sandwich",
@@ -391,6 +403,7 @@ const sandwiches = {
       },
       status: "available",
       order: 140,
+      image: "buffalo"
     },
     {
       itemId: "pas_sandwich",
@@ -417,6 +430,7 @@ const sandwiches = {
       },
       status: "available",
       order: 150,
+      image: "pastrami"
     },
     {
       itemId: "az_sandwich",
@@ -443,6 +457,7 @@ const sandwiches = {
       },
       status: "available",
       order: 160,
+      image: "azClub"
     },
     {
       itemId: "blta_sandwich",
@@ -469,6 +484,7 @@ const sandwiches = {
       },
       status: "available",
       order: 170,
+      image: "blta"
     },
     {
       itemId: "gc_sandwich",
@@ -491,6 +507,7 @@ const sandwiches = {
       },
       status: "available",
       order: 180,
+      image: "grilledCheese"
     },
     {
       itemId: "parm_sandwich",
@@ -518,6 +535,7 @@ const sandwiches = {
       },
       status: "available",
       order: 190,
+      image: "chickenParm"
     },
     {
       itemId: "pick2_sandwich",
@@ -551,6 +569,7 @@ const sandwiches = {
       },
       status: "available",
       order: 200,
+      image: "pick2"
     },
   ],
 };
