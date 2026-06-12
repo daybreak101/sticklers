@@ -5,6 +5,7 @@ import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
 import { ThemedText } from "../defaults/themed-text";
 import SingleModifierSelection from "./SingleModifierSelection";
+import MultiModifierSelection from "./MultiModifierSelection";
 
 export default function ModifiersList({
   selectedModifiers,
@@ -131,14 +132,27 @@ export default function ModifiersList({
       </View>
 
       {(filteredModifiers || []).map((group) => (
-        <SingleModifierSelection
-          key={group.id}
-          item={item}
-          group={group}
-          handleSelectionChange={handleSelectionChange}
-          selectedModifiers={selectedModifiers}
-        />
-      ))}
+        <>
+          {group.type === "single" ? (
+            <SingleModifierSelection
+              key={group.id}
+              item={item}
+              group={group}
+              handleSelectionChange={handleSelectionChange}
+              selectedModifiers={selectedModifiers}
+            />
+          ) : (
+            <MultiModifierSelection
+              key={group.id}
+              item={item}
+              group={group}
+              handleSelectionChange={handleSelectionChange}
+              selectedModifiers={selectedModifiers}
+            />
+          )}
+        </>
+      ))} 
+ 
     </View>
   );
 }
