@@ -1,4 +1,11 @@
-import { Alert, FlatList, Modal, Pressable, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Modal,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import React from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
@@ -7,9 +14,10 @@ import { globalStyles } from "@/styles/global";
 import ScheduleOrder from "../cart/ScheduleOrder";
 import { useHours } from "@/context/HoursContext";
 import { formatBusinessTime, formatDay } from "@/lib/formatTime";
-import { ModifierGroup, ModifierOption } from "@/types/menu";
+import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
 
 type SingleModifierModalProps = {
+  menuItem: Item;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   modifiers: ModifierOption[];
@@ -18,12 +26,32 @@ type SingleModifierModalProps = {
 };
 
 export default function SingleModifierModal({
+  menuItem,
   show,
   setShow,
   modifiers,
   group,
   handleSelectionChange,
 }: SingleModifierModalProps) {
+  const returnPrice = (option: ModifierOption | null): string => {
+    if (!option) return "";
+    let displayPrice = group.priceType === "add" ? "+$" : "$";
+    if (group.priceType === "define") {
+      displayPrice += menuItem.pricingRules[group.id][option.id].toFixed(2);
+    } else if (option.price === null) {
+      displayPrice += menuItem.basePrice?.toFixed(2);
+    } else if (option.price !== 0) {
+      if (menuItem.defaults[group.id].includes(option.id)) {
+        return "Included";
+      }
+      displayPrice += option.price?.toFixed(2);
+    } else {
+      return "";
+    }
+
+    return displayPrice;
+  };
+
   return (
     <Modal
       transparent={true}
@@ -54,26 +82,27 @@ export default function SingleModifierModal({
           >
             {group.name}
           </ThemedText>
-        
+
           <View
             style={{
               paddingHorizontal: 40,
               paddingVertical: 10,
               backgroundColor: "rgba(0,0,0,0.5)",
               borderRadius: 10,
-              maxHeight: "80%"
+              maxHeight: "80%",
             }}
           >
-            <FlatList 
+            <FlatList
               data={modifiers}
               renderItem={({ item }) => (
                 <Pressable
                   key={item.id}
                   style={[
                     {
-                      justifyContent: "space-between",
+                      justifyContent: "space-evenly",
                       flexDirection: "row",
                       paddingVertical: 10,
+                      width: "100%",
                     },
                   ]}
                   onPress={() => {
@@ -81,8 +110,9 @@ export default function SingleModifierModal({
                     setShow(false);
                   }}
                 >
-                  <ThemedText>{item.name}</ThemedText>
-                  <ThemedText>{item.price}</ThemedText>
+                  <ThemedText style={styles.optionText}>{item.name}</ThemedText>
+                  <View style={{ flex: 1 }}></View>
+                  <ThemedText style={styles.optionPrice}>{returnPrice(item)}</ThemedText>
                 </Pressable>
               )}
             />
@@ -145,5 +175,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+  },
+   optionText: {
+    fontSize: 15,
+    alignSelf: "center",
+  },
+  optionPrice: {
+    fontSize: 16,
+    fontWeight: 600,
+    color: "rgb(232, 70, 70)",
   },
 });

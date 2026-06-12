@@ -39,6 +39,9 @@ export default function SingleModifierSelectionComponent({
     } else if (option.price === null) {
       displayPrice += item.basePrice?.toFixed(2);
     } else if (option.price !== 0) {
+      if(item.defaults[group.id].includes(option.id)) {
+        return "Included";
+      }
       displayPrice += option.price?.toFixed(2);
     } else {
       return "";
@@ -50,6 +53,7 @@ export default function SingleModifierSelectionComponent({
   return (
     <View>
       <SingleModifierModal
+        menuItem={item}
         show={show}
         setShow={setShow}
         modifiers={modifiers}
@@ -66,10 +70,11 @@ export default function SingleModifierSelectionComponent({
               setShow(true);
             }}
           >
-            <View style={[styles.optionText, { flexDirection: "row", justifyContent: "space-around"}]}>
+            <View style={[styles.optionText, { flexDirection: "row", justifyContent: "space-between", width: "100%", paddingHorizontal: "10%" }]}>
               <ThemedText style={styles.optionText}>
                 {group.options.find((o) => o.id === optionId)?.name}
               </ThemedText>
+
               <ThemedText style={styles.optionPrice}>
                 {returnPrice(
                   group.options.find((o) => o.id === optionId) ?? null,
