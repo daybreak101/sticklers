@@ -9,7 +9,7 @@ import { useHours } from "@/context/HoursContext";
 import { formatBusinessTime, formatDay } from "@/lib/formatTime";
 import { ModifierGroup, ModifierOption } from "@/types/menu";
 
-type ScheduleModalProps = {
+type SingleModifierModalProps = {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   modifiers: ModifierOption[];
@@ -17,13 +17,13 @@ type ScheduleModalProps = {
   handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
 };
 
-export default function ModifierModal({
+export default function SingleModifierModal({
   show,
   setShow,
   modifiers,
   group,
   handleSelectionChange,
-}: ScheduleModalProps) {
+}: SingleModifierModalProps) {
   return (
     <Modal
       transparent={true}
@@ -61,6 +61,7 @@ export default function ModifierModal({
               paddingVertical: 10,
               backgroundColor: "rgba(0,0,0,0.5)",
               borderRadius: 10,
+              maxHeight: "80%"
             }}
           >
             <FlatList 
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   modal: {
     borderRadius: 20,
     paddingHorizontal: 5,
-    paddingVertical: 20,
+    paddingTop: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

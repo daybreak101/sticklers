@@ -3,9 +3,8 @@ import React, { use, useEffect, useMemo, useRef, useState } from "react";
 import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
-import { ThemedText } from "./defaults/themed-text";
-import ModifierSelectionComponent from "./ModifierSelectionComponent";
-import ModifierSelection from "./menu/SingleModifierSelection";
+import { ThemedText } from "../defaults/themed-text";
+import SingleModifierSelection from "./SingleModifierSelection";
 
 export default function ModifiersList({
   selectedModifiers,
@@ -31,23 +30,6 @@ export default function ModifiersList({
 
   const loadModifiers = async () => {
     const modifiers = await getModifierGroups();
-    // const groups =
-    //   (item.modifierGroupIds?.map((id) =>
-    //     modifiers.find((m) => m.id === id),
-    //   ) as ModifierGroup[]) ;
-
-    // temp code
-    // console.log("requested IDs:", item.modifierGroupIds);
-
-    // const tempgroups = item.modifierGroupIds?.map((id) => {
-    //   const found = modifiers.find((m) => m.id === id);
-
-    //   if (!found) {
-    //     console.error("MISSING MODIFIER GROUP:", id);
-    //   }
-
-    //   return found;
-    // });
 
     const groups =
       item.modifierGroupIds
@@ -148,24 +130,15 @@ export default function ModifiersList({
         <ThemedText style={styles.headerText}>Modifiers</ThemedText>
       </View>
 
-      {
-        //(modifiers || []).map((group) => (
-        (filteredModifiers || []).map((group) => (
-          <ModifierSelectionComponent
-            key={group.id}
-            item={item}
-            group={group}
-            handleSelectionChange={handleSelectionChange}
-            selectedModifiers={selectedModifiers}
-          />
-          // <ModifierSelection
-          //   key={group.id}
-          //   group={group}
-          //   handleSelectionChange={handleSelectionChange}
-          //   selectedModifiers={selectedModifiers}
-          // />
-        ))
-      }
+      {(filteredModifiers || []).map((group) => (
+        <SingleModifierSelection
+          key={group.id}
+          item={item}
+          group={group}
+          handleSelectionChange={handleSelectionChange}
+          selectedModifiers={selectedModifiers}
+        />
+      ))}
     </View>
   );
 }

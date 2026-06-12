@@ -29,6 +29,7 @@ import ItemPrice from "@/components/ItemPrice";
 import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
+import ModifierList2 from "@/components/menu/ModifierList2";
 
 export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
   const { cart, addItem, showToast } = useCart();
@@ -339,7 +340,12 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
             {item.basePrice && (
               <Text style={styles.price}>${item.basePrice?.toFixed(2)}</Text>
             )}
-            <ModifiersList
+            {/* <ModifiersList
+              selectedModifiers={selectedModifiers ?? {}}
+              item={item}
+              setSelectedModifiers={setSelectedModifiers}
+            /> */}
+            <ModifierList2
               selectedModifiers={selectedModifiers ?? {}}
               item={item}
               setSelectedModifiers={setSelectedModifiers}
