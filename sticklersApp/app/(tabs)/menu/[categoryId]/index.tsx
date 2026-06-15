@@ -1,14 +1,11 @@
-import { FlatList, Text, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { globalStyles } from "@/styles/global";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/defaults/themed-text";
 import { Category } from "@/types/menu";
 import { useEffect, useState } from "react";
 import { getMenuCategories } from "@/lib/menuStorage";
 import { ThemedView } from "@/components/defaults/themed-view";
-import CategoryOption from "@/components/CategoryOption";
 import ItemOption from "@/components/ItemOption";
 export default function CategoryScreen() {
   const { categoryId } = useLocalSearchParams();
@@ -17,6 +14,7 @@ export default function CategoryScreen() {
 
   useEffect(() => {
     loadCategory();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadCategory = async () => {

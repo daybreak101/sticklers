@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { use, useEffect, useMemo, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
@@ -26,6 +26,7 @@ export default function ModifiersList({
 
   useEffect(() => {
     loadModifiers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item]);
 
   const loadModifiers = async () => {
@@ -99,6 +100,7 @@ export default function ModifiersList({
 
       return changed ? updated : prev; //prevents infinite loop
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastChange]);
 
   const handleSelectionChange = (group: ModifierGroup, optionId: string) => {
@@ -132,21 +134,12 @@ export default function ModifiersList({
 
       {(filteredModifiers || []).map((group) => (
         <View key={group.id}>
-          {/* {group.type === "single" ? ( */}
           <ModifierSelection
             item={item}
             group={group}
             handleSelectionChange={handleSelectionChange}
             selectedModifiers={selectedModifiers}
           />
-          {/* ) : (
-            <MultiModifierSelection
-              item={item}
-              group={group}
-              handleSelectionChange={handleSelectionChange}
-              selectedModifiers={selectedModifiers}
-            />
-          )} */}
         </View>
       ))}
     </View>

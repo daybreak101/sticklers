@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import React from 'react'
 
 export default function recentOrders() {
@@ -9,4 +9,3 @@ export default function recentOrders() {
   )
 }
 
-const styles = StyleSheet.create({})

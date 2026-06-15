@@ -1,17 +1,16 @@
-import { Button, Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { auth, db } from "@/lib/firebaseConfig";
+import { auth } from "@/lib/firebaseConfig";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedText } from "@/components/defaults/themed-text";
-import { sendEmailVerification, signOut, verifyBeforeUpdateEmail } from "firebase/auth";
+import { sendEmailVerification, signOut } from "firebase/auth";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
-import { doc, setDoc } from "firebase/firestore";
 
 export default function VerifyEmail() {
-  const { user, profile, refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const router = useRouter();
   const [error, setError] = useState("");
 
@@ -56,12 +55,11 @@ export default function VerifyEmail() {
             <ThemedText style={styles.buttonText}>{`I've Verified`}</ThemedText>
           </Pressable>
 
-        
-            <Pressable onPress={resendVerification} style={styles.button}>
-              <ThemedText style={styles.buttonText}>
-                Resend Verification
-              </ThemedText>
-            </Pressable>
+          <Pressable onPress={resendVerification} style={styles.button}>
+            <ThemedText style={styles.buttonText}>
+              Resend Verification
+            </ThemedText>
+          </Pressable>
 
           <Pressable onPress={logout} style={styles.button}>
             <ThemedText style={styles.buttonText}>Log Out</ThemedText>
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    width: "100%"
+    width: "100%",
   },
   buttonText: {
     color: "#fff",

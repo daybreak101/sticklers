@@ -1,6 +1,6 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
-import { Stack, useRouter } from "expo-router";
+import {  useRouter } from "expo-router";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
 import { ThemedText } from "@/components/defaults/themed-text";
@@ -16,7 +16,7 @@ export default function OrderConfirmationScreen() {
   // TODO: save order to recent orders
 
   const router = useRouter();
-  const { cart, clearCart, setPreviousOrder, previousOrder } = useCart();
+  const { clearCart, setPreviousOrder, previousOrder } = useCart();
   const { reset } = useHours();
 
   const returnToMenu = () => {

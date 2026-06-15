@@ -3,7 +3,7 @@ import { ThemedView } from "@/components/defaults/themed-view";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Stack, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function IndexLayout() {

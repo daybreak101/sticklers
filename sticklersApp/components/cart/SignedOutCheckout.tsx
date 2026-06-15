@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import React from "react";
 import { ThemedText } from "../defaults/themed-text";
 import { useRouter } from "expo-router";

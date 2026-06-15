@@ -5,7 +5,6 @@ import { useAuth } from "@/context/AuthContext";
 import { globalStyles } from "@/styles/global";
 import { Redirect } from "expo-router";
 import React from "react";
-import { KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 export default function ProfileScreen() {
   const { user } = useAuth();

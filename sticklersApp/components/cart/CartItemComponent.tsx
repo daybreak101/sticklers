@@ -1,5 +1,4 @@
 import {
-  ImageBackground,
   StyleSheet,
   Text,
   View,

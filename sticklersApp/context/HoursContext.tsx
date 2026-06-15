@@ -45,6 +45,7 @@ export const HoursProvider = ({ children }: any) => {
             setScheduledDate,
             reset
         }),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [hours, scheduledTime, scheduledDate]
     )
 

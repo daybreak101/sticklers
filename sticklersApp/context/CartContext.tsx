@@ -6,7 +6,6 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  use,
   useContext,
   useEffect,
   useMemo,
@@ -14,7 +13,6 @@ import {
   useState,
 } from "react";
 import { View, Text } from "react-native";
-import { useHours } from "./HoursContext";
 type CartContextType = {
   cart: Cart;
   addItem: (item: CartItem) => void;
@@ -42,6 +40,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     calculateTotalPrice();
     calculateTotalItems();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart.items]);
 
   const addItem = (item: CartItem) => {
@@ -218,6 +217,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setPreviousOrder,
       checkAvailability,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [cart, previousOrder],
   );
   return (

@@ -1,9 +1,7 @@
-import ParallaxScrollView from "@/components/defaults/parallax-scroll-view";
 import { ThemedText } from "@/components/defaults/themed-text";
 import { ThemedView } from "@/components/defaults/themed-view";
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, View } from "react-native";
 import { globalStyles } from "@/styles/global";
 import { getHours, getMenuCategories } from "@/lib/menuStorage";
 import { Category } from "@/types/menu";
@@ -16,10 +14,11 @@ export default function HomeScreen() {
   const [data, setData] = useState<Category[]>([]);
   const [modalVisible, setModalVisible] = useState(true);
 
-  const { hours, setHours } = useHours();
+  const { setHours } = useHours();
 
   useEffect(() => {
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadData = async () => {

@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   ImageBackground,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -32,7 +31,7 @@ import ModifierList2 from "@/components/menu/ModifierList2";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
-  const { cart, addItem, showToast } = useCart();
+  const { addItem, showToast } = useCart();
 
   const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifiers>(
     {},
@@ -80,6 +79,7 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
     //   setLoading(false);
     // }, 10000);
     setLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadItem = async () => {

@@ -1,12 +1,5 @@
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import React, { use, useEffect, useState } from "react";
+import { View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { ThemedText } from "@/components/defaults/themed-text";
 import { ThemedView } from "@/components/defaults/themed-view";
@@ -15,14 +8,12 @@ import { useCart } from "@/context/CartContext";
 import { Stack, useRouter } from "expo-router";
 import SignedOutCheckout from "@/components/cart/SignedOutCheckout";
 import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
 import InputField from "@/components/defaults/InputField";
 import ReusableButton from "@/components/defaults/ReusableButton";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import ScheduleOrder from "@/components/cart/ScheduleOrder";
 import { Order } from "@/types/cart";
 import { useHours } from "@/context/HoursContext";
 import useCurrentMinute from "@/hooks/useCurrentMinute";
@@ -32,13 +23,9 @@ export default function CheckoutScreen() {
   const { user, profile } = useAuth();
   const { cart, setPreviousOrder, checkAvailability } = useCart();
   const router = useRouter();
-  const { scheduledTime, setScheduledTime, scheduledDate, setScheduledDate } =
+  const { scheduledTime, scheduledDate } =
     useHours();
 
-  const [cartQuantity, setCartQuantity] = useState(cart.totalItems);
-  const [totalPrice, setTotalPrice] = useState(
-    `$${cart.totalPrice.toFixed(2)}`,
-  );
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [totalTax, setTotalTax] = useState(0);
@@ -56,7 +43,7 @@ export default function CheckoutScreen() {
       setTotalWithTax(totalWithTaxes);
     };
     fetchTax();
-  }, []);
+  }, [cart.totalPrice]);
 
   const currentMinute = useCurrentMinute();
   useEffect(() => {
@@ -67,6 +54,7 @@ export default function CheckoutScreen() {
     }
     const time = now.getHours() * 100 + now.getMinutes();
     checkAvailability(time);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMinute, scheduledTime]);
 
   const schema = z.object({
@@ -197,7 +185,7 @@ export default function CheckoutScreen() {
                 >
                   <ThemedText>Total Items: </ThemedText>
                   <ThemedText style={{ paddingRight: 10 }}>
-                    {cartQuantity}
+                    {cart.totalItems}
                   </ThemedText>
                 </View>
                 <View

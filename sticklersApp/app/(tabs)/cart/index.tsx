@@ -1,9 +1,8 @@
 import { ThemedText } from "@/components/defaults/themed-text";
 import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { FlatList, StyleSheet, View, Text, Pressable } from "react-native";
-import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, View, Text } from "react-native";
+import { useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import CartItemComponent from "@/components/cart/CartItemComponent";
 import { useRouter } from "expo-router";
@@ -14,7 +13,7 @@ import { useHours } from "@/context/HoursContext";
 
 export default function CartScreen() {
   const { cart, checkAvailability } = useCart();
-  const { scheduledTime, setScheduledTime, scheduledDate, setScheduledDate } =
+  const { scheduledTime } =
     useHours();
   const router = useRouter();
   const currentMinute = useCurrentMinute();
@@ -27,6 +26,7 @@ export default function CartScreen() {
     }
     const time = now.getHours() * 100 + now.getMinutes();
     checkAvailability(time);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMinute, scheduledTime]) 
 
   return (

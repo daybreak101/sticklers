@@ -1,9 +1,7 @@
 import {
   CartItem,
   CustomerInfo,
-  NonDefaultModifiers,
   Order,
-  SelectedModifiers,
 } from "@/types/cart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

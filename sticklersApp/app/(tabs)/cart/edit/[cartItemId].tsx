@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   ImageBackground,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,7 +13,6 @@ import { ThemedView } from "@/components/defaults/themed-view";
 import { globalStyles } from "@/styles/global";
 import { Category, Item, ModifierGroup } from "@/types/menu";
 import {
-  Stack,
   useFocusEffect,
   useLocalSearchParams,
   useNavigation,
@@ -25,7 +23,6 @@ import { ThemedText } from "@/components/defaults/themed-text";
 import { CartItem, NonDefaultModifiers, SelectedModifiers } from "@/types/cart";
 import { useCart } from "@/context/CartContext";
 import ItemPrice from "@/components/ItemPrice";
-import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -98,7 +95,8 @@ export default function EditItemPage() {
       };
 
       init();
-    }, [cartItem]), // important
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cartItem]),
   );
 
   const loadItem = async () => {

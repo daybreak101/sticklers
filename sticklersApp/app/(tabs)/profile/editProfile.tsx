@@ -1,12 +1,7 @@
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-
 import { globalStyles } from "@/styles/global";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-import { auth, db } from "@/lib/firebaseConfig";
+import { db } from "@/lib/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "expo-router";

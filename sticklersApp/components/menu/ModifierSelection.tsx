@@ -1,10 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
-import { Checkbox } from "expo-checkbox";
 import { SelectedModifiers } from "@/types/cart";
 import { ThemedText } from "../defaults/themed-text";
-import SingleModifierModal from "./ModifierModal";
 import { globalStyles } from "@/styles/global";
 import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "../defaults/ReusableButton";
@@ -32,6 +30,7 @@ export default function ModifierSelectionComponent({
   useEffect(() => {
     if (!selected) return;
     handleSelectionChange(group, selected.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   const returnPrice = (option: ModifierOption | null, index: number): string => {
@@ -170,9 +169,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderBottomWidth: 0.5,
-    borderBottomColor: globalStyles.themeRedBright.color,
+   // borderBottomColor: globalStyles.themeRedBright.color,
     borderTopWidth: 0.5,
-    borderTopColor: globalStyles.themeRedBright.color,
+    //borderTopColor: globalStyles.themeRedBright.color,
+    backgroundColor: "rgba(160, 160, 160, 0.5)",
   },
   checkbox: {},
   optionContainer: {

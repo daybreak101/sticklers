@@ -32,6 +32,14 @@ export default function ScheduleModal({ show, setShow }: ScheduleModalProps) {
     ) {
       Alert.alert("Unavailable", "Pickup time is too late.");
       return;
+    } 
+    // FIX: also needs to check if scheduled time is ASAP
+    else if (
+      now.getDate() === scheduledDate.getDate() &&
+      time < (hours[now.getDay()].open ?? 0)
+    ) {
+      Alert.alert("Unavailable", "Store is not open yet.");
+      return;
     }
 
     setShow(false);

@@ -2,7 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ImageBackground,
   Pressable,
 } from "react-native";
@@ -19,7 +18,7 @@ export default function CategoryOption({ category }: { category: Category }) {
   const router = useRouter();
   const imageKey: string | undefined = category.image;
 
-  const { scheduledTime, setScheduledTime } = useHours();
+  const { scheduledTime } = useHours();
   const [isDisabled, setIsDisabled] = useState(false);
 
   const startTime = formatBusinessTime(

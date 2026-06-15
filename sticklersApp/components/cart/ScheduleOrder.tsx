@@ -4,7 +4,6 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -28,7 +27,6 @@ export default function ScheduleOrder() {
     hours,
   } = useHours();
 
-  const [error, setError] = useState("");
   const [showCalender, setShowCalender] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -107,14 +105,12 @@ export default function ScheduleOrder() {
       ]);
     }
   };
-  const closeModal = () => {
-    setError("");
-  };
 
   const currentMinute = useCurrentMinute();
 
   useEffect(() => {
     refreshTimeSlots();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMinute, scheduledDate]);
 
   return (

@@ -1,19 +1,15 @@
 import {
-  Alert,
   FlatList,
   Modal,
   Pressable,
   StyleSheet,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { globalStyles } from "@/styles/global";
-import ScheduleOrder from "../cart/ScheduleOrder";
-import { useHours } from "@/context/HoursContext";
-import { formatBusinessTime, formatDay } from "@/lib/formatTime";
 import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SelectedModifiers } from "@/types/cart";

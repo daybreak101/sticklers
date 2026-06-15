@@ -51,14 +51,6 @@ export type ModifierGroupId =
   | "dressing"
   | "hot_coffee_size";
 
-type BreadOptionId =
-  | "french"
-  | "wheat"
-  | "gluten_free"
-  | "spinach_wrap"
-  | "croissant"
-  | "flatbread";
-
 export type ModifierOption = {
   id: string;
   name: string;
