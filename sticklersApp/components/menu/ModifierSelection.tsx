@@ -7,6 +7,7 @@ import { globalStyles } from "@/styles/global";
 import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "../defaults/ReusableButton";
 import ModifierModal from "./ModifierModal";
+import Animated, { LinearTransition, SlideInLeft, SlideOutLeft } from "react-native-reanimated";
 
 export default function ModifierSelectionComponent({
   item,
@@ -30,10 +31,13 @@ export default function ModifierSelectionComponent({
   useEffect(() => {
     if (!selected) return;
     handleSelectionChange(group, selected.id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  const returnPrice = (option: ModifierOption | null, index: number): string => {
+  const returnPrice = (
+    option: ModifierOption | null,
+    index: number,
+  ): string => {
     if (!option) return "";
     let displayPrice = group.priceType === "add" ? "+$" : "$";
     if (group.priceType === "define") {
@@ -46,9 +50,15 @@ export default function ModifierSelectionComponent({
       }
       displayPrice += option.price?.toFixed(2);
     } else {
-      if (item.pricingRules[group.id] && index >= item.pricingRules[group.id].includedCount &&
-        item.pricingRules[group.id].includedCount < selectedModifiers[group.id]?.length) {
-        return displayPrice + item.pricingRules[group.id].extraItemPrice?.toFixed(2);
+      if (
+        item.pricingRules[group.id] &&
+        index >= item.pricingRules[group.id].includedCount &&
+        item.pricingRules[group.id].includedCount <
+          selectedModifiers[group.id]?.length
+      ) {
+        return (
+          displayPrice + item.pricingRules[group.id].extraItemPrice?.toFixed(2)
+        );
       }
       return "";
     }
@@ -97,7 +107,8 @@ export default function ModifierSelectionComponent({
 
                 <ThemedText style={styles.optionPrice}>
                   {returnPrice(
-                    group.options.find((o) => o.id === optionId) ?? null, index
+                    group.options.find((o) => o.id === optionId) ?? null,
+                    index,
                   )}
                 </ThemedText>
               </View>
@@ -105,6 +116,53 @@ export default function ModifierSelectionComponent({
           </View>
         ))}
       {group.type === "multi" && (
+        <Animated.View style={styles.optionRow}>
+          <Animated.FlatList
+            itemLayoutAnimation={LinearTransition.delay(300)}
+            data={selectedModifiers[group.id]}
+            keyExtractor={(optionId) => optionId}
+            renderItem={({ item, index }) => (
+              <Animated.View
+                entering={SlideInLeft.duration(300).delay(0)}
+                exiting={SlideOutLeft.duration(300).delay(0)}
+                style={[
+                  styles.optionContainer,
+                  {
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    paddingLeft: 45,
+                  },
+                ]}
+              >
+                <ThemedText style={styles.optionText}>
+                  {group.options.find((o) => o.id === item)?.name}
+                </ThemedText>
+                <View style={{ flex: 1 }}></View>
+                <ThemedText style={[styles.optionPrice, { paddingRight: 10 }]}>
+                  {returnPrice(
+                    group.options.find((o) => o.id === item) ?? null,
+                    index,
+                  )}
+                </ThemedText>
+                <Pressable
+                  onPress={() => {
+                    handleSelectionChange(group, item);
+                  }}
+                >
+                  <MaterialIcons
+                    name="cancel"
+                    size={24}
+                    color="#727272"
+                    style={{ paddingRight: 10 }}
+                  />
+                </Pressable>
+              </Animated.View>
+            )}
+          />
+        </Animated.View>
+      )}
+      {/* {group.type === "multi" && (
         <View style={styles.optionRow}>
           {selectedModifiers[group.id]?.map((optionId, index) => (
             <View
@@ -143,7 +201,7 @@ export default function ModifierSelectionComponent({
             </View>
           ))}
         </View>
-      )}
+      )} */}
       {group.type === "multi" &&
         selectedModifiers[group.id]?.length !== modifiers.length && (
           <ReusableButton
@@ -169,7 +227,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderBottomWidth: 0.5,
-   // borderBottomColor: globalStyles.themeRedBright.color,
+    // borderBottomColor: globalStyles.themeRedBright.color,
     borderTopWidth: 0.5,
     //borderTopColor: globalStyles.themeRedBright.color,
     backgroundColor: "rgba(160, 160, 160, 0.5)",
@@ -180,7 +238,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
     borderRadius: 10,
-    borderWidth: 0.5,
+    borderWidth: 3,
     borderColor: globalStyles.themeRedBright.color,
   },
   optionRow: {

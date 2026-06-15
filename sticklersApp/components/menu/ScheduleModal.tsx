@@ -36,6 +36,7 @@ export default function ScheduleModal({ show, setShow }: ScheduleModalProps) {
     // FIX: also needs to check if scheduled time is ASAP
     else if (
       now.getDate() === scheduledDate.getDate() &&
+      !scheduledTime &&
       time < (hours[now.getDay()].open ?? 0)
     ) {
       Alert.alert("Unavailable", "Store is not open yet.");
