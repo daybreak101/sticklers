@@ -153,7 +153,7 @@ export default function ScheduleOrder() {
         transparent={true}
         animationType="slide"
         visible={showDropdown}
-        onRequestClose={() => setShowDropdown(false)}
+        //onRequestClose={() => setShowDropdown(false)}
       >
         <ThemedView style={styles.modalContainer}>
           <ThemedView

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -15,24 +15,29 @@ import ScheduleOrder from "../cart/ScheduleOrder";
 import { useHours } from "@/context/HoursContext";
 import { formatBusinessTime, formatDay } from "@/lib/formatTime";
 import { Item, ModifierGroup, ModifierOption } from "@/types/menu";
+import { MaterialIcons } from "@expo/vector-icons";
+import { SelectedModifiers } from "@/types/cart";
+import ReusableButton from "../defaults/ReusableButton";
 
-type SingleModifierModalProps = {
+type ModifierModalProps = {
   menuItem: Item;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   modifiers: ModifierOption[];
   group: ModifierGroup;
   handleSelectionChange: (group: ModifierGroup, optionId: string) => void;
+  selectedModifiers: SelectedModifiers;
 };
 
-export default function SingleModifierModal({
+export default function ModifierModal({
   menuItem,
   show,
   setShow,
   modifiers,
   group,
   handleSelectionChange,
-}: SingleModifierModalProps) {
+  selectedModifiers,
+}: ModifierModalProps) {
   const returnPrice = (option: ModifierOption | null): string => {
     if (!option) return "";
     let displayPrice = group.priceType === "add" ? "+$" : "$";
@@ -46,6 +51,10 @@ export default function SingleModifierModal({
       }
       displayPrice += option.price?.toFixed(2);
     } else {
+      // if (menuItem.pricingRules[group.id] &&
+      //   menuItem.pricingRules[group.id].includedCount <= selectedModifiers[group.id]?.length) {
+      //   return displayPrice + menuItem.pricingRules[group.id].extraItemPrice?.toFixed(2);
+      // }
       return "";
     }
 
@@ -68,6 +77,7 @@ export default function SingleModifierModal({
                 { light: "#fff", dark: "#343434" },
                 "background",
               ),
+              paddingBottom: 20
             },
           ]}
         >
@@ -89,11 +99,21 @@ export default function SingleModifierModal({
               paddingVertical: 10,
               backgroundColor: "rgba(0,0,0,0.5)",
               borderRadius: 10,
-              maxHeight: "80%",
+              maxHeight: "70%",
             }}
           >
             <FlatList
               data={modifiers}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    borderBottomColor: "rgba(255, 255, 255, 0.2)",
+                    borderBottomWidth: 0.5,
+                    marginVertical: 10,
+                  }}
+                />
+              )}
+              showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <Pressable
                   key={item.id}
@@ -107,17 +127,40 @@ export default function SingleModifierModal({
                   ]}
                   onPress={() => {
                     handleSelectionChange(group, item.id);
-                    setShow(false);
+                    if (group.type === "single") {
+                      setShow(false);
+                    }
                   }}
                 >
+                  {group.type === "multi" &&
+                    selectedModifiers[group.id]?.includes(item.id) && (
+                      <MaterialIcons
+                        name="check"
+                        size={24}
+                        color="white"
+                        style={{ paddingRight: 10 }}
+                      />
+                    )}
                   <ThemedText style={styles.optionText}>{item.name}</ThemedText>
                   <View style={{ flex: 1 }}></View>
-                  <ThemedText style={styles.optionPrice}>{returnPrice(item)}</ThemedText>
+                  <ThemedText style={styles.optionPrice}>
+                    {returnPrice(item)}
+                  </ThemedText>
                 </Pressable>
               )}
             />
           </View>
-          <View style={styles.buttonSection}></View>
+          {group.type === "multi" && (
+            <View style={styles.buttonSection}>
+              <ReusableButton
+                submit={() => {
+                  setShow(false);
+                }}
+                buttonText="Done"
+                buttonStyles={{ width: "50%" }}
+              />
+            </View>
+          )}
         </ThemedView>
       </ThemedView>
     </Modal>
@@ -176,7 +219,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-   optionText: {
+  optionText: {
     fontSize: 15,
     alignSelf: "center",
   },

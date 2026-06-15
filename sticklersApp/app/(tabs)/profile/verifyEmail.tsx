@@ -49,12 +49,6 @@ export default function VerifyEmail() {
         <ThemedText style={styles.text}>
           Please verify your email before continuing.
         </ThemedText>
-        {/* <ThemedText style={styles.text}>
-          {error && "Failed to verify email"}
-        </ThemedText> */}
-        {/* <Button title="I've Verified" onPress={checkVerification} />
-        <Button title="Resend Verification" onPress={resendVerification} />
-        <Button title="Logout" onPress={logout} /> */}
         <ThemedView style={styles.buttonSection}>
           <ThemedText style={styles.error}>{error}</ThemedText>
 
@@ -90,6 +84,7 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     paddingVertical: 20,
+    width: "75%",
     alignItems: "center",
     gap: 20,
   },
@@ -98,6 +93,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
+    width: "100%"
   },
   buttonText: {
     color: "#fff",

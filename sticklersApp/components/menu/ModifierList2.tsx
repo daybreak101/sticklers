@@ -4,8 +4,7 @@ import { SelectedModifiers } from "@/types/cart";
 import { Item, ModifierGroup } from "@/types/menu";
 import { getModifierGroups } from "@/lib/menuStorage";
 import { ThemedText } from "../defaults/themed-text";
-import SingleModifierSelection from "./SingleModifierSelection";
-import MultiModifierSelection from "./MultiModifierSelection";
+import ModifierSelection from "./ModifierSelection";
 
 export default function ModifiersList({
   selectedModifiers,
@@ -132,27 +131,24 @@ export default function ModifiersList({
       </View>
 
       {(filteredModifiers || []).map((group) => (
-        <>
-          {group.type === "single" ? (
-            <SingleModifierSelection
-              key={group.id}
-              item={item}
-              group={group}
-              handleSelectionChange={handleSelectionChange}
-              selectedModifiers={selectedModifiers}
-            />
-          ) : (
+        <View key={group.id}>
+          {/* {group.type === "single" ? ( */}
+          <ModifierSelection
+            item={item}
+            group={group}
+            handleSelectionChange={handleSelectionChange}
+            selectedModifiers={selectedModifiers}
+          />
+          {/* ) : (
             <MultiModifierSelection
-              key={group.id}
               item={item}
               group={group}
               handleSelectionChange={handleSelectionChange}
               selectedModifiers={selectedModifiers}
             />
-          )}
-        </>
-      ))} 
- 
+          )} */}
+        </View>
+      ))}
     </View>
   );
 }

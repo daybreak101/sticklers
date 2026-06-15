@@ -26,6 +26,7 @@ import ScheduleOrder from "@/components/cart/ScheduleOrder";
 import { Order } from "@/types/cart";
 import { useHours } from "@/context/HoursContext";
 import useCurrentMinute from "@/hooks/useCurrentMinute";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function CheckoutScreen() {
   const { user, profile } = useAuth();
@@ -134,7 +135,12 @@ export default function CheckoutScreen() {
       <Stack.Screen options={{ title: "Checkout" }} />
       {user && user.emailVerified ? (
         <>
-          <ScrollView style={{ flex: 1 }}>
+          <KeyboardAwareScrollView
+            style={{ flex: 1 }}
+            keyboardShouldPersistTaps="handled"
+            enableOnAndroid
+            extraScrollHeight={100}
+          >
             <ThemedText style={[globalStyles.title, { padding: 10 }]}>
               Pickup Details
             </ThemedText>
@@ -171,7 +177,13 @@ export default function CheckoutScreen() {
             />
 
             <ThemedView style={{ paddingBottom: 100 }}>
-              <ThemedText style={{ fontStyle: "italic", paddingBottom: 10, paddingHorizontal: 10 }}>
+              <ThemedText
+                style={{
+                  fontStyle: "italic",
+                  paddingBottom: 10,
+                  paddingHorizontal: 10,
+                }}
+              >
                 Please note: if paying with a card, you will be charged a
                 processing fee.
               </ThemedText>
@@ -227,7 +239,7 @@ export default function CheckoutScreen() {
                 </View>
               </View>
             </ThemedView>
-          </ScrollView>
+          </KeyboardAwareScrollView>
           <ReusableButton
             submit={handleSubmit(onSubmit)}
             buttonText={`Place Order   •   $${totalWithTax}`}

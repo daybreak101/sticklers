@@ -38,21 +38,10 @@ export default function InputField({
   isPassword = false,
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const visible = useSharedValue(0); // 0 = off, 1 = on
 
   const onPress = () => {
-    const next = !showPassword;
-    setShowPassword(next);
-    visible.value = next ? 1 : 0;
+    setShowPassword((prev) => !prev);
   };
-
-  const eyeStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(visible.value, { duration: 200 }),
-  }));
-
-  const eyeOffStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(visible.value ? 0 : 1, { duration: 200 }),
-  }));
 
   return (
     <View style={{ paddingHorizontal: 1 }}>
@@ -79,23 +68,27 @@ export default function InputField({
               value={value}
               secureTextEntry={isPassword && !showPassword}
               onBlur={onBlur}
+              onTouchStart={(e) => e.stopPropagation()}
             />
           )}
         />
         {isPassword && (
           <Pressable onPress={onPress} style={styles.eyeButton}>
             <View style={styles.eyeWrapper}>
-              <Animated.View style={[eyeOffStyle, styles.eyeAbsolute]}>
-                <MaterialIcons name="visibility-off" size={24} color="#777" />
-              </Animated.View>
-              <Animated.View style={[eyeStyle, styles.eyeAbsolute]}>
-                <MaterialIcons name="visibility" size={24} color="#aaa" />
+              <Animated.View style={styles.eyeAbsolute}>
+                <MaterialIcons
+                  name={showPassword ? "visibility" : "visibility-off"}
+                  size={24}
+                  color={showPassword ? "#aaa" : "#777"}
+                />
               </Animated.View>
             </View>
           </Pressable>
         )}
       </View>
-      <ThemedText style={styles.error}>{errors[controlValue] ? errors[controlValue].message : ""}</ThemedText>
+      <ThemedText style={styles.error}>
+        {errors[controlValue] ? errors[controlValue].message : ""}
+      </ThemedText>
     </View>
   );
 }
@@ -106,7 +99,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingHorizontal: 15,
     paddingVertical: 5,
-    textAlign: "right"
+    textAlign: "right",
   },
   inputContainer: {
     flexDirection: "row",

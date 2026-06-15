@@ -17,6 +17,7 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ReusableButton from "../defaults/ReusableButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SignUp() {
   const [birthday, setBirthday] = useState<Date | null>(null);
@@ -102,7 +103,11 @@ export default function SignUp() {
       <View>
         <ThemedText style={styles.headerTitle}>Create An Account</ThemedText>
       </View>
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={100}
+      >
         <View style={styles.inputSection}>
           <InputField
             control={control}
@@ -153,10 +158,14 @@ export default function SignUp() {
             <View>
               <ThemedText style={styles.error}>{error}</ThemedText>
             </View>
-            <ReusableButton submit={handleSubmit(submit)} buttonText="Sign Up" buttonStyles={{ alignSelf: "center", width: "50%" }} />
+            <ReusableButton
+              submit={handleSubmit(submit)}
+              buttonText="Sign Up"
+              buttonStyles={{ alignSelf: "center", width: "50%" }}
+            />
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </ThemedView>
   );
 }

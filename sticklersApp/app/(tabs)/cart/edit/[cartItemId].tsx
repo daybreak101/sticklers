@@ -22,13 +22,14 @@ import {
 import { getMenuCategories, getModifierGroups } from "@/lib/menuStorage";
 import { images } from "@/constants/images";
 import { ThemedText } from "@/components/defaults/themed-text";
-import ModifiersList from "@/components/ModifiersList";
 import { CartItem, NonDefaultModifiers, SelectedModifiers } from "@/types/cart";
 import { useCart } from "@/context/CartContext";
 import ItemPrice from "@/components/ItemPrice";
 import { nanoid } from "nanoid";
 import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ModifierList2 from "@/components/menu/ModifierList2";
 
 export default function EditItemPage() {
   const params = useLocalSearchParams();
@@ -313,101 +314,114 @@ export default function EditItemPage() {
 
   return (
     <>
-      <ThemedView
-        style={[
-          globalStyles.page,
-          {
-            position: "relative",
-            justifyContent: "space-between",
-            paddingBottom: 10,
-          },
-        ]}
-      >
-        {loading ? (
-          <ActivityIndicator
-            size="large"
-            color="white"
-            style={styles.mainLoad}
-          />
-        ) : (
-          <ScrollView>
-            <ImageBackground
-              source={images[imageKey ?? "logo"]}
-              style={styles.image}
-              resizeMode="cover"
-            ></ImageBackground>
-            <ThemedText style={styles.description}>
-              {item.description}
-            </ThemedText>
-            {item.basePrice && (
-              <Text style={styles.price}>${item.basePrice?.toFixed(2)}</Text>
-            )}
-            <ModifiersList
-              selectedModifiers={selectedModifiers ?? {}}
-              item={item}
-              setSelectedModifiers={setSelectedModifiers}
+      <SafeAreaView style={globalStyles.safeArea}>
+        <ThemedView
+          style={[
+            globalStyles.page,
+            {
+              position: "relative",
+              justifyContent: "space-between",
+              paddingBottom: 10,
+            },
+          ]}
+        >
+          {loading ? (
+            <ActivityIndicator
+              size="large"
+              color="white"
+              style={styles.mainLoad}
             />
-            <View>
-              <View style={styles.headerBanner}>
-                <ThemedText style={styles.headerText}>
-                  Special Requests
-                </ThemedText>
-              </View>
-              <View style={styles.specialRequests}>
-                <TextInput
-                  style={[
-                    styles.specialRequestsInput,
-                    specialRequests.length === 0 && { fontStyle: "italic" },
-                  ]}
-                  placeholder="lightly toasted, cold meat, cold cheese, etc."
-                  placeholderTextColor={"gray"}
-                  multiline={true}
-                  numberOfLines={4}
-                  onChangeText={(text) => setSpecialRequests(text)}
-                />
-              </View>
-            </View>
-          </ScrollView>
-        )}
-        <View style={styles.bottomBar}>
-          <ItemPrice totalPrice={totalPriceWithQuantity} />
-          <View style={styles.bottomBarBottom}>
-            <View
-              style={[
-                styles.buttonContainer,
-                { flexDirection: "row", gap: 10 },
-              ]}
+          ) : (
+            <KeyboardAwareScrollView
+              keyboardShouldPersistTaps="handled"
+              enableOnAndroid
+              extraScrollHeight={100}
             >
-              <Pressable
-                onPress={() => {
-                  if (quantity > 1) setQuantity(quantity - 1);
-                }}
-                style={styles.button}
-              >
-                <MaterialIcons name="remove" size={20} color="white" />
-              </Pressable>
-              <Text style={[styles.buttonText, { width: 30 }]}>{quantity}</Text>
-              <Pressable
-                onPress={() => {
-                  if (quantity < 99) setQuantity(quantity + 1);
-                }}
-                style={styles.button}
-              >
-                <MaterialIcons name="add" size={20} color="white" />
-              </Pressable>
-            </View>
-            {loading ? (
-              <ActivityIndicator
-                size="large"
-                color="white"
-                style={styles.rightButtonContainer}
+              <ImageBackground
+                source={images[imageKey ?? "logo"]}
+                style={styles.image}
+                resizeMode="cover"
+              ></ImageBackground>
+              <ThemedText style={styles.description}>
+                {item.description}
+              </ThemedText>
+              {item.basePrice && (
+                <Text style={styles.price}>${item.basePrice?.toFixed(2)}</Text>
+              )}
+              <ModifierList2
+                selectedModifiers={selectedModifiers ?? {}}
+                item={item}
+                setSelectedModifiers={setSelectedModifiers}
               />
-            ) : (
-              <ReusableButton submit={pushUpdates} buttonText={cartItem ? "Update Item" : "Add to Cart"} buttonStyles={styles.rightButtonContainer} textStyles={styles.buttonText} />
-            )}
+              <View>
+                <View style={styles.headerBanner}>
+                  <ThemedText style={styles.headerText}>
+                    Special Requests
+                  </ThemedText>
+                </View>
+                <View style={styles.specialRequests}>
+                  <TextInput
+                    style={[
+                      styles.specialRequestsInput,
+                      specialRequests.length === 0 && { fontStyle: "italic" },
+                    ]}
+                    placeholder="lightly toasted, cold meat, cold cheese, etc."
+                    placeholderTextColor={"gray"}
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={(text) => setSpecialRequests(text)}
+                  />
+                </View>
+              </View>
+            </KeyboardAwareScrollView>
+          )}
+          <View style={styles.bottomBar}>
+            <ItemPrice totalPrice={totalPriceWithQuantity} />
+            <View style={styles.bottomBarBottom}>
+              <View
+                style={[
+                  styles.buttonContainer,
+                  { flexDirection: "row", gap: 10 },
+                ]}
+              >
+                <Pressable
+                  onPress={() => {
+                    if (quantity > 1) setQuantity(quantity - 1);
+                  }}
+                  style={styles.button}
+                >
+                  <MaterialIcons name="remove" size={20} color="white" />
+                </Pressable>
+                <Text style={[styles.buttonText, { width: 30 }]}>
+                  {quantity}
+                </Text>
+                <Pressable
+                  onPress={() => {
+                    if (quantity < 99) setQuantity(quantity + 1);
+                  }}
+                  style={styles.button}
+                >
+                  <MaterialIcons name="add" size={20} color="white" />
+                </Pressable>
+              </View>
+              {loading ? (
+                <ActivityIndicator
+                  size="large"
+                  color="white"
+                  style={styles.rightButtonContainer}
+                />
+              ) : (
+                <ReusableButton
+                  submit={pushUpdates}
+                  buttonText={cartItem ? "Update Item" : "Add to Cart"}
+                  buttonStyles={styles.rightButtonContainer}
+                  textStyles={styles.buttonText}
+                />
+              )}
+            </View>
           </View>
-        </View>
-      </ThemedView>
+        </ThemedView>
+      </SafeAreaView>
     </>
   );
 }

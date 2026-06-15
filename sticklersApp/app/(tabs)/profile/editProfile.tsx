@@ -21,6 +21,7 @@ import { useAuth } from "@/context/AuthContext";
 import ChangeEmail from "@/components/profile/ChangeEmail";
 import ChangePassword from "@/components/profile/ChangePassword";
 import ReusableButton from "@/components/defaults/ReusableButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function EditProfile() {
   const { user, profile } = useAuth();
@@ -86,7 +87,11 @@ export default function EditProfile() {
 
   return (
     <ThemedView style={styles.screen}>
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={100}
+      >
         <View style={styles.inputSection}>
           <InputField
             control={control}
@@ -115,12 +120,16 @@ export default function EditProfile() {
             <View>
               <ThemedText style={styles.error}>{error}</ThemedText>
             </View>
-            <ReusableButton submit={handleSubmit(submit)} buttonText="Save Changes" buttonStyles={{ alignSelf: "center", width: "50%" }} />
+            <ReusableButton
+              submit={handleSubmit(submit)}
+              buttonText="Save Changes"
+              buttonStyles={{ alignSelf: "center", width: "50%" }}
+            />
           </View>
           <ChangeEmail />
           <ChangePassword />
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </ThemedView>
   );
 }
