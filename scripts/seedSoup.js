@@ -36,6 +36,7 @@ const soups = {
       status: "available",
       availability: "lunch_only",
       order: 10,
+      image: "soupOfTheDay"
     },
     {
       itemId: "chicken_noodle_soup",
@@ -54,6 +55,7 @@ const soups = {
       status: "available",
       availability: "lunch_only",
       order: 20,
+      image: "noodleSoup"
     },
     {
       itemId: "homemade_chili",
@@ -73,6 +75,7 @@ const soups = {
       status: "available",
       availability: "lunch_only",
       order: 30,
+      image: "chili"
     },
   ],
 };

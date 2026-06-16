@@ -1,5 +1,5 @@
 import { Alert, Modal, Pressable, StyleSheet, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
 import { useThemeColor } from "@/hooks/use-theme-color";
@@ -14,8 +14,13 @@ type ScheduleModalProps = {
 };
 
 export default function ScheduleModal({ show, setShow }: ScheduleModalProps) {
-  const { scheduledDate, setScheduledDate, scheduledTime, setScheduledTime, hours } =
-    useHours();
+  const {
+    scheduledDate,
+    setScheduledDate,
+    scheduledTime,
+    setScheduledTime,
+    hours,
+  } = useHours();
 
   const onAccept = () => {
     if (!scheduledDate) return;
@@ -32,7 +37,7 @@ export default function ScheduleModal({ show, setShow }: ScheduleModalProps) {
     ) {
       Alert.alert("Unavailable", "Pickup time is too late.");
       return;
-    } 
+    }
     // FIX: also needs to check if scheduled time is ASAP
     else if (
       now.getDate() === scheduledDate.getDate() &&
