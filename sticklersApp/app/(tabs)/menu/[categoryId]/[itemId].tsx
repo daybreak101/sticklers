@@ -1,7 +1,9 @@
 import {
   ActivityIndicator,
   ImageBackground,
+  KeyboardAvoidingView,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -29,6 +31,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import ModifierList2 from "@/components/menu/ModifierList2";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
   const { addItem, showToast } = useCart();
@@ -329,10 +332,9 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
               style={styles.mainLoad}
             />
           ) : (
-            <KeyboardAwareScrollView
+            <Animated.ScrollView
               keyboardShouldPersistTaps="handled"
-              enableOnAndroid
-              extraScrollHeight={100}
+              // layout={LinearTransition.delay(300).duration(300)}
             >
               <ImageBackground
                 source={images[imageKey ?? "logo"]}
@@ -350,13 +352,15 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                 item={item}
                 setSelectedModifiers={setSelectedModifiers}
               />
-              <View>
+              <Animated.View
+                layout={LinearTransition.duration(300)}
+              >
                 <View style={styles.headerBanner}>
                   <ThemedText style={styles.headerText}>
                     Special Requests
                   </ThemedText>
                 </View>
-                <View style={styles.specialRequests}>
+                <KeyboardAvoidingView style={styles.specialRequests}>
                   <TextInput
                     style={[
                       styles.specialRequestsInput,
@@ -368,9 +372,9 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                     numberOfLines={4}
                     onChangeText={(text) => setSpecialRequests(text)}
                   />
-                </View>
-              </View>
-            </KeyboardAwareScrollView>
+                </KeyboardAvoidingView>
+              </Animated.View>
+            </Animated.ScrollView>
           )}
           <View style={styles.bottomBar}>
             <ItemPrice totalPrice={totalPriceWithQuantity} />

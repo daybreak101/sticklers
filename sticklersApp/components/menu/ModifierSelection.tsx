@@ -7,7 +7,12 @@ import { globalStyles } from "@/styles/global";
 import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "../defaults/ReusableButton";
 import ModifierModal from "./ModifierModal";
-import Animated, { LinearTransition, SlideInLeft, SlideOutLeft } from "react-native-reanimated";
+import Animated, {
+  FadeOut,
+  LinearTransition,
+  SlideInLeft,
+  SlideOutLeft,
+} from "react-native-reanimated";
 
 export default function ModifierSelectionComponent({
   item,
@@ -67,7 +72,7 @@ export default function ModifierSelectionComponent({
   };
 
   return (
-    <View>
+    <Animated.View layout={LinearTransition.duration(300)}>
       <ModifierModal
         menuItem={item}
         show={show}
@@ -77,10 +82,14 @@ export default function ModifierSelectionComponent({
         handleSelectionChange={handleSelectionChange}
         selectedModifiers={selectedModifiers}
       />
-      <ThemedText style={styles.title}>{group.name}</ThemedText>
+      <Animated.View
+        layout={LinearTransition.duration(300)}
+      >
+        <ThemedText style={styles.title}>{group.name}</ThemedText>
+      </Animated.View>
       {group.type === "single" &&
         selectedModifiers[group.id]?.map((optionId, index) => (
-          <View key={optionId} style={styles.optionRow}>
+          <Animated.View key={optionId} style={styles.optionRow} layout={LinearTransition.duration(300)}>
             <Pressable
               style={styles.optionContainer}
               onPress={() => {
@@ -113,60 +122,16 @@ export default function ModifierSelectionComponent({
                 </ThemedText>
               </View>
             </Pressable>
-          </View>
+          </Animated.View>
         ))}
       {group.type === "multi" && (
         <Animated.View style={styles.optionRow}>
-          <Animated.FlatList
-            itemLayoutAnimation={LinearTransition.delay(300)}
-            data={selectedModifiers[group.id]}
-            keyExtractor={(optionId) => optionId}
-            renderItem={({ item, index }) => (
-              <Animated.View
-                entering={SlideInLeft.duration(300).delay(0)}
-                exiting={SlideOutLeft.duration(300).delay(0)}
-                style={[
-                  styles.optionContainer,
-                  {
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    paddingLeft: 45,
-                  },
-                ]}
-              >
-                <ThemedText style={styles.optionText}>
-                  {group.options.find((o) => o.id === item)?.name}
-                </ThemedText>
-                <View style={{ flex: 1 }}></View>
-                <ThemedText style={[styles.optionPrice, { paddingRight: 10 }]}>
-                  {returnPrice(
-                    group.options.find((o) => o.id === item) ?? null,
-                    index,
-                  )}
-                </ThemedText>
-                <Pressable
-                  onPress={() => {
-                    handleSelectionChange(group, item);
-                  }}
-                >
-                  <MaterialIcons
-                    name="cancel"
-                    size={24}
-                    color="#727272"
-                    style={{ paddingRight: 10 }}
-                  />
-                </Pressable>
-              </Animated.View>
-            )}
-          />
-        </Animated.View>
-      )}
-      {/* {group.type === "multi" && (
-        <View style={styles.optionRow}>
           {selectedModifiers[group.id]?.map((optionId, index) => (
-            <View
+            <Animated.View
               key={optionId}
+              layout={LinearTransition.duration(300)}
+              entering={SlideInLeft.duration(400).delay(0)}
+              exiting={FadeOut.duration(200).delay(0)}
               style={[
                 styles.optionContainer,
                 {
@@ -183,7 +148,8 @@ export default function ModifierSelectionComponent({
               <View style={{ flex: 1 }}></View>
               <ThemedText style={[styles.optionPrice, { paddingRight: 10 }]}>
                 {returnPrice(
-                  group.options.find((o) => o.id === optionId) ?? null, index
+                  group.options.find((o) => o.id === optionId) ?? null,
+                  index,
                 )}
               </ThemedText>
               <Pressable
@@ -198,26 +164,28 @@ export default function ModifierSelectionComponent({
                   style={{ paddingRight: 10 }}
                 />
               </Pressable>
-            </View>
+            </Animated.View>
           ))}
-        </View>
-      )} */}
+        </Animated.View>
+      )}
       {group.type === "multi" &&
         selectedModifiers[group.id]?.length !== modifiers.length && (
-          <ReusableButton
-            submit={() => {
-              setSelected(null);
-              setShow(true);
-            }}
-            buttonText={`Add more ${group.name}`}
-            buttonStyles={{
-              width: "95%",
-              marginBottom: 10,
-              alignSelf: "center",
-            }}
-          />
+          <Animated.View layout={LinearTransition.duration(300)}>
+            <ReusableButton
+              submit={() => {
+                setSelected(null);
+                setShow(true);
+              }}
+              buttonText={`Add more ${group.name}`}
+              buttonStyles={{
+                width: "95%",
+                marginBottom: 10,
+                alignSelf: "center",
+              }}
+            />
+          </Animated.View>
         )}
-    </View>
+    </Animated.View>
   );
 }
 

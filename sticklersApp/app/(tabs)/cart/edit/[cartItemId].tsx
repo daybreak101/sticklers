@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   ImageBackground,
+  KeyboardAvoidingView,
   Pressable,
   StyleSheet,
   Text,
@@ -27,6 +28,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ModifierList2 from "@/components/menu/ModifierList2";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export default function EditItemPage() {
   const params = useLocalSearchParams();
@@ -330,10 +332,8 @@ export default function EditItemPage() {
               style={styles.mainLoad}
             />
           ) : (
-            <KeyboardAwareScrollView
+            <Animated.ScrollView
               keyboardShouldPersistTaps="handled"
-              enableOnAndroid
-              extraScrollHeight={100}
             >
               <ImageBackground
                 source={images[imageKey ?? "logo"]}
@@ -351,13 +351,15 @@ export default function EditItemPage() {
                 item={item}
                 setSelectedModifiers={setSelectedModifiers}
               />
-              <View>
+              <Animated.View
+                layout={LinearTransition.duration(300)}
+              >
                 <View style={styles.headerBanner}>
                   <ThemedText style={styles.headerText}>
                     Special Requests
                   </ThemedText>
                 </View>
-                <View style={styles.specialRequests}>
+                <KeyboardAvoidingView style={styles.specialRequests}>
                   <TextInput
                     style={[
                       styles.specialRequestsInput,
@@ -369,9 +371,9 @@ export default function EditItemPage() {
                     numberOfLines={4}
                     onChangeText={(text) => setSpecialRequests(text)}
                   />
-                </View>
-              </View>
-            </KeyboardAwareScrollView>
+                </KeyboardAvoidingView>
+              </Animated.View>
+            </Animated.ScrollView>
           )}
           <View style={styles.bottomBar}>
             <ItemPrice totalPrice={totalPriceWithQuantity} />
