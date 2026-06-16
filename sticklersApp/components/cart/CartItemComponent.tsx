@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   specialRequests: {
     padding: 10,
     borderRadius: 10,
-    backgroundColor: "rgba(104, 33, 29)",
+    backgroundColor: "rgb(104, 33, 29)",
     color: "white",
     fontSize: 14,
     fontStyle: "italic",

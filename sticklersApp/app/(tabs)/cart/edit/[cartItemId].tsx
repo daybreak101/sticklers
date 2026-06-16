@@ -334,6 +334,7 @@ export default function EditItemPage() {
           ) : (
             <Animated.ScrollView
               keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ paddingBottom: 200 }}
             >
               <ImageBackground
                 source={images[imageKey ?? "logo"]}
@@ -359,7 +360,7 @@ export default function EditItemPage() {
                     Special Requests
                   </ThemedText>
                 </View>
-                <KeyboardAvoidingView style={styles.specialRequests}>
+                <View style={styles.specialRequests}>
                   <TextInput
                     style={[
                       styles.specialRequestsInput,
@@ -371,7 +372,7 @@ export default function EditItemPage() {
                     numberOfLines={4}
                     onChangeText={(text) => setSpecialRequests(text)}
                   />
-                </KeyboardAvoidingView>
+                </View>
               </Animated.View>
             </Animated.ScrollView>
           )}
@@ -496,7 +497,7 @@ const styles = StyleSheet.create({
   totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
   headerBanner: {
     padding: 10,
-    backgroundColor: "rgba(104, 33, 29)",
+    backgroundColor: "rgb(104, 33, 29)",
   },
   headerText: {
     color: "white",

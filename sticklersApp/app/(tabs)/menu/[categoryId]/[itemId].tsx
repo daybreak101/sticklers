@@ -334,7 +334,7 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
           ) : (
             <Animated.ScrollView
               keyboardShouldPersistTaps="handled"
-              // layout={LinearTransition.delay(300).duration(300)}
+              contentContainerStyle={{ paddingBottom: 200 }}
             >
               <ImageBackground
                 source={images[imageKey ?? "logo"]}
@@ -360,7 +360,7 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                     Special Requests
                   </ThemedText>
                 </View>
-                <KeyboardAvoidingView style={styles.specialRequests}>
+                <View style={styles.specialRequests}>
                   <TextInput
                     style={[
                       styles.specialRequestsInput,
@@ -372,7 +372,7 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                     numberOfLines={4}
                     onChangeText={(text) => setSpecialRequests(text)}
                   />
-                </KeyboardAvoidingView>
+                </View>
               </Animated.View>
             </Animated.ScrollView>
           )}
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
   totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
   headerBanner: {
     padding: 10,
-    backgroundColor: "rgba(104, 33, 29)",
+    backgroundColor: "rgb(104, 33, 29)",
   },
   headerText: {
     color: "white",
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
   specialRequests: {
     paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 30,
+    paddingBottom: 150,
     borderRadius: 10,
   },
 });

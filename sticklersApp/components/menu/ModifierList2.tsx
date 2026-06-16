@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
   headerBanner: {
     padding: 10,
-    backgroundColor: "rgba(104, 33, 29)",
+    backgroundColor: "rgb(104, 33, 29)",
   },
   headerText: {
     color: "white",
