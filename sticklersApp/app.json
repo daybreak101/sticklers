@@ -19,9 +19,11 @@
     },
 
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rferna25.sticklersapp"
     },
     "android": {
+      "package": "com.rferna25.sticklersapp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
