@@ -574,8 +574,11 @@ const sandwiches = {
   ],
 };
 
-export async function seed() {
-  await setDoc(doc(db, "menuCategories", "sandwiches"), sandwiches);
+export async function seed(db) {
+  await db.collection("menuCategories")
+    .doc("sandwiches")
+    .set(sandwiches);
+
   console.log("Menu sandwiches seeded");
 }
 

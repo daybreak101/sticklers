@@ -354,25 +354,47 @@ const dressingModifiers = {
   ],
 };
 
-export async function seed() {
-  //await setDoc(doc(db, "menuCategories", "sandwiches"), sandwiches);
-  await setDoc(doc(db, "modifierGroups", "bread"), breadModifiers);
-  await setDoc(doc(db, "modifierGroups", "size"), sizeModifiers);
-  await setDoc(doc(db, "modifierGroups", "protein"), proteinModifiers);
-  await setDoc(doc(db, "modifierGroups", "cheese"), cheeseModifiers);
-  await setDoc(doc(db, "modifierGroups", "extras"), extrasModifiers);
-  ////
+export async function seed(db) {
+  // await db.collection("menuCategories")
+  //   .doc("sandwiches")
+  //   .set(sandwiches);
 
-  await setDoc(doc(db, "modifierGroups", "greens"), greensModifiers);
-  await setDoc(
-    doc(db, "modifierGroups", "salad_toppings"),
-    saladToppingsModifiers,
-  );
-  await setDoc(
-    doc(db, "modifierGroups", "salad_protein"),
-    saladProteinModifiers,
-  );
-  await setDoc(doc(db, "modifierGroups", "dressing"), dressingModifiers);
+  await db.collection("modifierGroups")
+    .doc("bread")
+    .set(breadModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("size")
+    .set(sizeModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("protein")
+    .set(proteinModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("cheese")
+    .set(cheeseModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("extras")
+    .set(extrasModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("greens")
+    .set(greensModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("salad_toppings")
+    .set(saladToppingsModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("salad_protein")
+    .set(saladProteinModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("dressing")
+    .set(dressingModifiers);
+
   console.log("Menu modifiers seeded");
 }
 

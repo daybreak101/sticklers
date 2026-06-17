@@ -112,10 +112,19 @@ const soupSizeModifiers = {
   ],
 };
 
-export async function seed() {
-  await setDoc(doc(db, "menuCategories", "soups"), soups);
-  await setDoc(doc(db, "modifierGroups", "soup_size"), soupSizeModifiers);
-  await setDoc(doc(db, "modifierGroups", "chili_toppings"), chiliToppingsModifiers);
+export async function seed(db) {
+  await db.collection("menuCategories")
+    .doc("soups")
+    .set(soups);
+
+  await db.collection("modifierGroups")
+    .doc("soup_size")
+    .set(soupSizeModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("chili_toppings")
+    .set(chiliToppingsModifiers);
+
   console.log("Menu soups seeded");
 }
 //seed();

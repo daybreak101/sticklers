@@ -2,7 +2,7 @@
   "name": "scripts",
   "version": "1.0.0",
   "description": "",
-  "main": "seedMenu.js",
+  "main": "seedAll.cjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +12,7 @@
   "type": "module",
   "dependencies": {
     "dotenv": "^17.3.1",
-    "firebase": "^12.11.0"
+    "firebase": "^12.11.0",
+    "firebase-admin": "^14.0.0"
   }
 }

@@ -1,16 +1,18 @@
-import "dotenv/config";
 export default {
   expo: {
-    name: "sticklersApp",
+    name: "Sticklers",
     slug: "sticklersApp",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/sticklers-logo.png",
     scheme: "sticklersapp",
-    userInterfaceStyle: "automatic",
+    userInterfaceStyle: "dark",
     newArchEnabled: true,
 
     extra: {
+      eas: {
+        projectId: "b8f48c8e-b0dc-4965-a9cc-fe469a828a57",
+      },
       firebaseApiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
       firebaseAuthDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
       firebaseProjectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
@@ -22,8 +24,10 @@ export default {
 
     ios: {
       supportsTablet: true,
+      bundleIdentifier: "com.rferna25.sticklers",
     },
     android: {
+      package: "com.rferna25.sticklers",
       adaptiveIcon: {
         backgroundColor: "#E6F4FE",
         foregroundImage: "./assets/images/android-icon-foreground.png",
@@ -38,11 +42,12 @@ export default {
       favicon: "./assets/images/favicon.png",
     },
     plugins: [
+      "@react-native-community/datetimepicker",
       "expo-router",
-      [
+      [    
         "expo-splash-screen",
         {
-          image: "./assets/images/splash-icon.png",
+          image: "./assets/sticklers-logo.png",
           imageWidth: 200,
           resizeMode: "contain",
           backgroundColor: "#ffffff",

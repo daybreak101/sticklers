@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { ThemedView } from "../defaults/themed-view";
 import { ThemedText } from "../defaults/themed-text";
@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { FirebaseError } from "firebase/app";
 import ReusableButton from "../defaults/ReusableButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function SignIn() {
   // const [email, setEmail] = useState("");
@@ -46,12 +47,14 @@ export default function SignIn() {
       );
       const idToken = await userCred.user.getIdToken();
     } catch (err: any) {
-      if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+      if (
+        err.code === "auth/wrong-password" ||
+        err.code === "auth/invalid-credential"
+      ) {
         setError("Incorrect email or password");
       } else if (err.code === "auth/too-many-requests") {
         setError("Too many attempts");
-      } 
-      else {
+      } else {
         setError(err.message);
       }
     } finally {
@@ -61,35 +64,45 @@ export default function SignIn() {
 
   return (
     <ThemedView style={styles.screen}>
-      <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>Sign In</ThemedText>
-        <ThemedText style={styles.headerSubtitle}>
-          Welcome back, you&apos;ve been missed!
-        </ThemedText>
-      </View>
-      <View style={styles.inputSection}>
-        <InputField
-          control={control}
-          controlValue="email"
-          errors={errors}
-          label="Email"
-          icon="email"
-        />
-        <InputField
-          control={control}
-          controlValue="password"
-          errors={errors}
-          label="Password"
-          icon="lock"
-          isPassword
-        />
-      </View>
-      <View style={styles.buttonSection}>
-        <View>
-          <ThemedText style={styles.error}>{error}</ThemedText>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={100}
+      >
+        <View style={styles.header}>
+          <ThemedText style={styles.headerTitle}>Sign In</ThemedText>
+          <ThemedText style={styles.headerSubtitle}>
+            Welcome back, you&apos;ve been missed!
+          </ThemedText>
         </View>
-        <ReusableButton submit={handleSubmit(submit)} buttonText="Sign In" buttonStyles={{ alignSelf: "center", width: "50%" }} />
-      </View>
+        <View style={styles.inputSection}>
+          <InputField
+            control={control}
+            controlValue="email"
+            errors={errors}
+            label="Email"
+            icon="email"
+          />
+          <InputField
+            control={control}
+            controlValue="password"
+            errors={errors}
+            label="Password"
+            icon="lock"
+            isPassword
+          />
+        </View>
+        <View style={styles.buttonSection}>
+          <View>
+            <ThemedText style={styles.error}>{error}</ThemedText>
+          </View>
+          <ReusableButton
+            submit={handleSubmit(submit)}
+            buttonText="Sign In"
+            buttonStyles={{ alignSelf: "center", width: "50%" }}
+          />
+        </View>
+        </KeyboardAwareScrollView>
     </ThemedView>
   );
 }

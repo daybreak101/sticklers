@@ -3,14 +3,6 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 import dotenv from "dotenv";
 dotenv.config();
 
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 const bagelModifiers = {
   id: "bagel",
@@ -264,19 +256,27 @@ const oatmealToppingsModifiers = {
   ],
 };
 
-export async function seed() {
-  await setDoc(doc(db, "modifierGroups", "bagel"), bagelModifiers);
-  await setDoc(
-    doc(db, "modifierGroups", "breakfast_protein"),
-    breakfastProteinModifiers,
-  );
-  await setDoc(doc(db, "modifierGroups", "spreads"), spreadsModifiers);
-  await setDoc(doc(db, "modifierGroups", "hashbrown"), hashbrownModifiers);
-  await setDoc(
-    doc(db, "modifierGroups", "oatmeal_toppings"),
-    oatmealToppingsModifiers,
-  );
+export async function seed(db) {
+  await db.collection("modifierGroups")
+    .doc("bagel")
+    .set(bagelModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("breakfast_protein")
+    .set(breakfastProteinModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("spreads")
+    .set(spreadsModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("hashbrown")
+    .set(hashbrownModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("oatmeal_toppings")
+    .set(oatmealToppingsModifiers);
+
   console.log("Menu bf modifiers seeded");
 }
 
-//seed();

@@ -27,7 +27,10 @@ const businessInfo = {
 
 
 
-export async function seed() {
-  await setDoc(doc(db, "business", "businessInfo"), businessInfo);
-  console.log("Schedule seeded");
+export async function seed(db) {
+  await db.collection("business")
+    .doc("businessInfo")
+    .set(businessInfo);
+
+  console.log("Business info seeded");
 }

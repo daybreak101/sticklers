@@ -363,24 +363,39 @@ const dripFlavorModifiers = {
   ],
 }
 
-export async function seed() {
-  await setDoc(doc(db, "menuCategories", "hot_coffee"), hot);
-  await setDoc(
-    doc(db, "modifierGroups", "espresso_shots"),
-    espressoShotsModifiers,
-  );
-  await setDoc(
-    doc(db, "modifierGroups", "hot_coffee_size"),
-    hotCoffeeModifiers,
-  );
-  await setDoc(doc(db, "modifierGroups", "syrup"), syrupModifiers);
-  await setDoc(doc(db, "modifierGroups", "milk"), milkModifiers);
-  await setDoc(
-    doc(db, "modifierGroups", "coffee_extras"),
-    coffeeExtrasModifiers,
-  );
-  await setDoc(doc(db, "modifierGroups", "drip_flavor"), dripFlavorModifiers);
-  await setDoc(doc(db, "modifierGroups", "mocha"), mochaModifiers);
+export async function seed(db) {
+  await db.collection("menuCategories")
+    .doc("hot_coffee")
+    .set(hot);
+
+  await db.collection("modifierGroups")
+    .doc("espresso_shots")
+    .set(espressoShotsModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("hot_coffee_size")
+    .set(hotCoffeeModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("syrup")
+    .set(syrupModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("milk")
+    .set(milkModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("coffee_extras")
+    .set(coffeeExtrasModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("drip_flavor")
+    .set(dripFlavorModifiers);
+
+  await db.collection("modifierGroups")
+    .doc("mocha")
+    .set(mochaModifiers);
+
   console.log("Menu hot seeded");
 }
 

@@ -61,7 +61,7 @@ const breakfast = {
         extras: [],
       },
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -344,8 +344,11 @@ const breakfast = {
   ],
 };
 
-export async function seed() {
-  await setDoc(doc(db, "menuCategories", "breakfast"), breakfast);
+export async function seed(db) {
+  await db.collection("menuCategories")
+    .doc("breakfast")
+    .set(breakfast);
+
   console.log("Menu breakfast seeded");
 }
 

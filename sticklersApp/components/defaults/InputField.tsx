@@ -5,6 +5,7 @@ import { ThemedText } from "./themed-text";
 import Animated from "react-native-reanimated";
 import { useThemeColor } from "@/hooks/use-theme-color";
 import { Controller } from "react-hook-form";
+import { globalStyles } from "@/styles/global";
 
 type InputFieldProps = {
   control: any;
@@ -26,6 +27,7 @@ export default function InputField({
   isPassword = false,
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const onPress = () => {
     setShowPassword((prev) => !prev);
@@ -38,7 +40,7 @@ export default function InputField({
         style={[
           styles.inputContainer,
           {
-            borderColor: useThemeColor({ light: "#aaa", dark: "#fff" }, "text"),
+            borderColor: focused ? globalStyles.themeYellow.color : "#aaa",
           },
         ]}
       >
@@ -55,8 +57,12 @@ export default function InputField({
               onChangeText={onChange}
               value={value}
               secureTextEntry={isPassword && !showPassword}
-              onBlur={onBlur}
+              onBlur={() => {
+                onBlur();
+                setFocused(false);
+              }}
               onTouchStart={(e) => e.stopPropagation()}
+              onFocus={(e) => setFocused(true)}
             />
           )}
         />

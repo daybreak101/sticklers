@@ -34,7 +34,7 @@ export default function BirthdayPicker({ maxAge = 13, birthday, setBirthday }: B
           paddingVertical: 14,
           borderWidth: 1,
           borderRadius: 10,
-          borderColor: useThemeColor({ light: "#aaa", dark: "#fff" }, "text"),
+          borderColor: "#aaa",
         }}
       >
         <MaterialIcons name="cake" size={24} color="#aaa" />

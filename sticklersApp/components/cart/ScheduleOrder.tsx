@@ -134,8 +134,11 @@ export default function ScheduleOrder() {
           display="calendar"
           minimumDate={minimumDate}
           maximumDate={maximumDate}
-          onDismiss={() => setShowCalender(false)}
-          onValueChange={(_, selectedDate) => {
+          onChange={(event, selectedDate) => {
+            if(event.type === "dismissed"){
+              setShowCalender(false);
+              return;
+            }
             if (!selectedDate) return;
             setShowCalender(false);
 

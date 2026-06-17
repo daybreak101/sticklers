@@ -211,9 +211,15 @@ const icedCoffeeModifiers = {
   ],
 };
 
-export async function seed() {
-  await setDoc(doc(db, "menuCategories", "iced_coffee"), iced);
-  await setDoc(doc(db, "modifierGroups", "iced_coffee_size"), icedCoffeeModifiers);
+export async function seed(db) {
+  await db.collection("menuCategories")
+    .doc("iced_coffee")
+    .set(iced);
+
+  await db.collection("modifierGroups")
+    .doc("iced_coffee_size")
+    .set(icedCoffeeModifiers);
+
   console.log("Menu iced seeded");
 }
 
