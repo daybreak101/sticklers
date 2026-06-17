@@ -18,11 +18,11 @@ export const images: Record<string, any> = {
   specialtyBottledSoda: require("../assets/Specialty-Bottled-Soda.png"),
 
   //sandwiches
-  tba: require("../assets/sandwiches/tba.png"),
+  tba: require("../assets/sandwiches/tba.jpg"),
   turkey: require("../assets/sandwiches/turkey.jpg"),
   ham: require("../assets/sandwiches/ham.jpg"),
   trafficJam: require("../assets/sandwiches/traffic-jam.jpg"),
-  italian: require("../assets/sandwiches/italian.png"),
+  italian: require("../assets/sandwiches/italian.jpg"),
   meatball: require("../assets/sandwiches/meatball.jpg"),
   blt: require("../assets/sandwiches/blt.png"),
   roastBeef: require("../assets/sandwiches/roast-beef.png"),
