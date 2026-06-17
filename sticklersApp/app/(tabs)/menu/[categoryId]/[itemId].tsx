@@ -1,7 +1,9 @@
 import {
   ActivityIndicator,
   ImageBackground,
+  KeyboardAvoidingView,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -29,6 +31,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import ModifierList2 from "@/components/menu/ModifierList2";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
   const { addItem, showToast } = useCart();
@@ -329,10 +332,9 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
               style={styles.mainLoad}
             />
           ) : (
-            <KeyboardAwareScrollView
+            <Animated.ScrollView
               keyboardShouldPersistTaps="handled"
-              enableOnAndroid
-              extraScrollHeight={100}
+              contentContainerStyle={{ paddingBottom: 200 }}
             >
               <ImageBackground
                 source={images[imageKey ?? "logo"]}
@@ -350,7 +352,9 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                 item={item}
                 setSelectedModifiers={setSelectedModifiers}
               />
-              <View>
+              <Animated.View
+                layout={LinearTransition.duration(300)}
+              >
                 <View style={styles.headerBanner}>
                   <ThemedText style={styles.headerText}>
                     Special Requests
@@ -369,8 +373,8 @@ export default function ItemPage({ cartItem }: { cartItem?: CartItem }) {
                     onChangeText={(text) => setSpecialRequests(text)}
                   />
                 </View>
-              </View>
-            </KeyboardAwareScrollView>
+              </Animated.View>
+            </Animated.ScrollView>
           )}
           <View style={styles.bottomBar}>
             <ItemPrice totalPrice={totalPriceWithQuantity} />
@@ -493,7 +497,7 @@ const styles = StyleSheet.create({
   totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
   headerBanner: {
     padding: 10,
-    backgroundColor: "rgba(104, 33, 29)",
+    backgroundColor: "rgb(104, 33, 29)",
   },
   headerText: {
     color: "white",
@@ -514,7 +518,7 @@ const styles = StyleSheet.create({
   specialRequests: {
     paddingHorizontal: 10,
     paddingTop: 10,
-    paddingBottom: 30,
+    paddingBottom: 150,
     borderRadius: 10,
   },
 });

@@ -20,6 +20,7 @@ const breakfast = {
     startTime: 600,
     endTime: 1030,
   },
+  image: "breakfast",
   items: [
     {
       itemId: "breakfast_sandwich",
@@ -34,7 +35,7 @@ const breakfast = {
         extras: [],
       },
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -45,6 +46,7 @@ const breakfast = {
       },
       status: "available",
       order: 10,
+      image: "eggBagelSandwich"
     },
     {
       itemId: "mini_breakfast_sandwich",
@@ -70,6 +72,7 @@ const breakfast = {
       },
       status: "available",
       order: 20,
+      image: "miniBreakfastSandwich"
     },
     {
       itemId: "spread_bagel",
@@ -83,7 +86,7 @@ const breakfast = {
         spreads: ["cream_cheese"],
       },
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -94,6 +97,7 @@ const breakfast = {
       },
       status: "available",
       order: 30,
+      image: "bagelSpread"
     },
     {
       itemId: "breakfast_burrito",
@@ -114,7 +118,7 @@ const breakfast = {
         hashbrown: [],
       },
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -125,6 +129,7 @@ const breakfast = {
       },
       status: "available",
       order: 50,
+      image: "breakfastBurrito"
     },
     {
       itemId: "breakfast_bowl",
@@ -139,7 +144,7 @@ const breakfast = {
         "hashbrown",
       ],
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -156,6 +161,7 @@ const breakfast = {
       },
       status: "available",
       order: 60,
+      image: "breakfastBowl"
     },
     {
       itemId: "hb_bowl",
@@ -169,7 +175,7 @@ const breakfast = {
         "extras",
       ],
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -185,6 +191,7 @@ const breakfast = {
       },
       status: "available",
       order: 70,
+      image: "hashbowl"
     },
     {
       itemId: "breakfast_quesadilla",
@@ -198,7 +205,7 @@ const breakfast = {
         "extras",
       ],
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
@@ -214,6 +221,7 @@ const breakfast = {
       },
       status: "available",
       order: 80,
+      image: "bfQuesadilla"
     },
     {
       itemId: "bct",
@@ -235,13 +243,14 @@ const breakfast = {
         extras: ["tomato"],
       },
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 1,
           extraItemPrice: 1.94,
         },
       },
       status: "available",
       order: 90,
+      image: "bct"
     },
     {
       itemId: "oatmeal",
@@ -255,6 +264,7 @@ const breakfast = {
       },
       status: "available",
       order: 100,
+      image: "oatmeal"
     },
     {
       itemId: "hashbrown",
@@ -263,6 +273,7 @@ const breakfast = {
       basePrice: 1.3,
       status: "available",
       order: 110,
+      image: "hashbrown"
     },
     {
       itemId: "loaded_hashbrown",
@@ -271,6 +282,7 @@ const breakfast = {
       basePrice: 2.5,
       status: "available",
       order: 111,
+      image: "loadedHash"
     },
     {
       itemId: "english_muffin",
@@ -283,40 +295,7 @@ const breakfast = {
       },
       status: "available",
       order: 130,
-    },
-    {
-      itemId: "cool_bird",
-      name: "The Cool Bird",
-      description: "Bagel with cream cheese, cucumber, jelly, and turkey.",
-      basePrice: 6.5,
-      modifierGroupIds: [
-        "breakfast_protein",
-        "cream_cheese",
-        "cheese",
-        "breakfast_extras",
-        "extras",
-        "breakfast_sides",
-      ],
-      pricingRules: {
-        protein: {
-          includedCount: 1,
-          extraItemPrice: 1.94,
-        },
-        cheese: {
-          includedCount: 1,
-          extraItemPrice: 1,
-        },
-      },
-      defaults: {
-        breakfast_protein: ["turkey"],
-        cream_cheese: ["cream_cheese"],
-        cheese: [],
-        breakfast_extras: ["strawberry_jelly"],
-        extras: ["cucumber"],
-        breakfast_sides: [],
-      },
-      status: "available",
-      order: 140,
+      image: "englishMuffin"
     },
     {
       itemId: "avo_toast",
@@ -324,7 +303,7 @@ const breakfast = {
       description: "Avocado spread on your choice of bagel, topped with tomato and Everything seasoning.",
       basePrice: 4.5,
       pricingRules: {
-        protein: {
+        breakfast_protein: {
           includedCount: 0,
           extraItemPrice: 1.94,
         },
@@ -347,6 +326,7 @@ const breakfast = {
       },
       status: "available",
       order: 150,
+      image: "avoToast"
     },
     {
       itemId: "rice_pudding",
@@ -359,6 +339,7 @@ const breakfast = {
       },
       status: "available",
       order: 160,
+      image: "arrozConLeche"
     },
   ],
 };

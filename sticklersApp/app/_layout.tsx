@@ -6,13 +6,14 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AuthProvider } from "@/context/AuthContext";
 import { HoursProvider } from "@/context/HoursContext";
+import { KeyboardAvoidingView } from "react-native";
 
 export default function RootLayout() {
   return (
     <AuthProvider>
       <CartProvider>
         <HoursProvider>
-          <Stack screenOptions={{ headerShown: false }} />
+            <Stack screenOptions={{ headerShown: false }} />
         </HoursProvider>
       </CartProvider>
     </AuthProvider>

@@ -110,8 +110,20 @@ export default function ScheduleOrder() {
 
   useEffect(() => {
     refreshTimeSlots();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMinute, scheduledDate]);
+
+  // useEffect(() => {
+  //   const now = new Date();
+  //   const time = now.getHours() * 100 + now.getMinutes();
+  //   if (
+  //     !scheduledTime &&
+  //     scheduledDate?.getDate() === new Date().getDate() &&
+  //     time > (hours[now.getDay()].close ?? 0)
+  //   ) {
+  //     setShowCalender(true);
+  //   }
+  // }, []);
 
   return (
     <ThemedView>
@@ -207,7 +219,23 @@ export default function ScheduleOrder() {
           buttonStyles={{ alignSelf: "center", width: "50%" }}
         />
         <ReusableButton
-          submit={() => setShowDropdown(true)}
+          submit={() => {
+            const now = new Date();
+            const time = now.getHours() * 100 + now.getMinutes();
+            if (
+              !scheduledTime &&
+              scheduledDate?.getDate() === new Date().getDate() &&
+              time > (hours[now.getDay()].close ?? 0)
+            ) {
+              Alert.alert(
+                "Unavailable",
+                "Store is closed for the day. Please select a different day.",
+              );
+              return;
+            }
+
+            setShowDropdown(true);
+          }}
           buttonText={
             scheduledTime
               ? new Intl.DateTimeFormat("en-US", {

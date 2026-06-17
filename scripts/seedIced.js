@@ -40,6 +40,7 @@ const iced = {
       },
       status: "available",
       order: 10,
+      image: "coldBrew"
     },
     {
       itemId: "iced_matcha",
@@ -61,6 +62,7 @@ const iced = {
       },
       order: 50,
       status: "available",
+      image: "icedMatcha"
     },
     {
       itemId: "iced_americano",
@@ -81,6 +83,7 @@ const iced = {
       },
       order: 70,
       status: "available",
+      image: "icedAmericano"
     },
     {
       itemId: "iced_latte",
@@ -102,6 +105,7 @@ const iced = {
       },
       order: 20,
       status: "available",
+      image: "icedLatte"
     },
     {
       itemId: "iced_london_fog",
@@ -123,6 +127,7 @@ const iced = {
       },
       order: 90,
       status: "available",
+      image: "icedLondonFog"
     },
     {
       itemId: "iced_mocha",
@@ -145,6 +150,7 @@ const iced = {
       },
       order: 30,
       status: "available",
+      image: "icedMocha"
     },
     {
       itemId: "iced_chai",
@@ -166,6 +172,7 @@ const iced = {
       },
       order: 40,
       status: "available",
+      image: "icedChai"
     },
     {
       itemId: "iced_macchiato",
@@ -187,6 +194,7 @@ const iced = {
       },
       order: 80,
       status: "available",
+      image: "icedMacchiato"
     },
   ],
 };

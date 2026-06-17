@@ -43,7 +43,7 @@ export default function OrderConfirmationScreen() {
             <ThemedText>Thank you for ordering with Sticklers!</ThemedText>
             <ThemedText>Our team is currently preparing your order.</ThemedText>
           </View>
-          <View style={{ flex: 1, paddingHorizontal: 10 }}>
+          <View style={{ flex: 1, paddingHorizontal: 10, paddingBottom: 100 }}>
             <ThemedText style={{ paddingBottom: 10, paddingTop: 30, textDecorationLine: "underline" }}>ORDER DETAILS</ThemedText>
             <ThemedText>Order ID: {previousOrder?.id}</ThemedText>
             {previousOrder?.timeSlot && (

@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   ImageBackground,
+  KeyboardAvoidingView,
   Pressable,
   StyleSheet,
   Text,
@@ -27,6 +28,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import ReusableButton from "@/components/defaults/ReusableButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ModifierList2 from "@/components/menu/ModifierList2";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export default function EditItemPage() {
   const params = useLocalSearchParams();
@@ -330,10 +332,9 @@ export default function EditItemPage() {
               style={styles.mainLoad}
             />
           ) : (
-            <KeyboardAwareScrollView
+            <Animated.ScrollView
               keyboardShouldPersistTaps="handled"
-              enableOnAndroid
-              extraScrollHeight={100}
+              contentContainerStyle={{ paddingBottom: 200 }}
             >
               <ImageBackground
                 source={images[imageKey ?? "logo"]}
@@ -351,7 +352,9 @@ export default function EditItemPage() {
                 item={item}
                 setSelectedModifiers={setSelectedModifiers}
               />
-              <View>
+              <Animated.View
+                layout={LinearTransition.duration(300)}
+              >
                 <View style={styles.headerBanner}>
                   <ThemedText style={styles.headerText}>
                     Special Requests
@@ -370,8 +373,8 @@ export default function EditItemPage() {
                     onChangeText={(text) => setSpecialRequests(text)}
                   />
                 </View>
-              </View>
-            </KeyboardAwareScrollView>
+              </Animated.View>
+            </Animated.ScrollView>
           )}
           <View style={styles.bottomBar}>
             <ItemPrice totalPrice={totalPriceWithQuantity} />
@@ -494,7 +497,7 @@ const styles = StyleSheet.create({
   totalText: { fontSize: 20, textAlign: "center", paddingLeft: 10 },
   headerBanner: {
     padding: 10,
-    backgroundColor: "rgba(104, 33, 29)",
+    backgroundColor: "rgb(104, 33, 29)",
   },
   headerText: {
     color: "white",

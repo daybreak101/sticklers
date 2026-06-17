@@ -39,6 +39,7 @@ const hot = {
       },
       order: 50,
       status: "available",
+      image: "hotMatcha"
     },
     {
       itemId: "hot_chocolate",
@@ -72,6 +73,7 @@ const hot = {
       defaults: {},
       status: "hidden",
       order: 120,
+      image: "hotWater"
     },
     {
       itemId: "caffe_mocha",
@@ -94,6 +96,7 @@ const hot = {
       },
       status: "available",
       order: 30,
+      image: "caffeMocha"
     },
     {
       itemId: "hot_chai",
@@ -116,6 +119,7 @@ const hot = {
       },
       status: "available",
       order: 40,
+      image: "hotChai"
     },
     {
       itemId: "coffee",
@@ -158,6 +162,7 @@ const hot = {
       },
       status: "available",
       order: 80,
+      image: "hotMacchiato"
     },
     {
       itemId: "caffe_latte",
@@ -179,6 +184,7 @@ const hot = {
       },
       status: "available",
       order: 20,
+      image: "caffeLatte"
     },
     {
       itemId: "cappuccino",
@@ -201,6 +207,7 @@ const hot = {
       },
       status: "available",
       order: 60,
+      image: "cappuccino"
     },
     {
       itemId: "espresso",
@@ -218,6 +225,7 @@ const hot = {
       },
       status: "available",
       order: 110,
+      image: "espressoShot"
     },
     {
       itemId: "americano",
@@ -236,6 +244,7 @@ const hot = {
         },
       },
       order: 70,
+      image: "hotAmericano"
     },
     {
       itemId: "hot_london_fog",
@@ -257,6 +266,7 @@ const hot = {
         },
       },
       order: 90,
+      image: "hotLondonFog"
     },
   ],
 };

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/use-theme-color';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
@@ -19,7 +20,9 @@ export function ThemedText({
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
   return (
-    <Text
+    <Animated.Text
+      entering={FadeIn.duration(300)}
+      exiting={FadeOut.duration(300)}
       style={[
         { color },
         type === 'default' ? styles.default : undefined,

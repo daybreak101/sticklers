@@ -15,16 +15,16 @@ export const globalStyles = StyleSheet.create({
     textTransform: "uppercase",
   },
   themeRed: {
-    color: "rgba(104, 33, 29)",
+    color: "rgb(104, 33, 29)",
   },
   themeRedBright: {
     color: "rgb(160, 70, 60)",
   },
   themeYellow: {
-    color: "rgba(255, 244, 5)",
+    color: "rgb(255, 244, 5)",
   },
   themeBlack: {
-    color: "rgba(1, 1, 0)",
+    color: "rgb(1, 1, 0)",
   },
   tabBarStyle: {
     backgroundColor: "#333",
