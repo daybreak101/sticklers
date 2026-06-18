@@ -29,10 +29,8 @@ export default {
     android: {
       package: "com.rferna25.sticklers",
       adaptiveIcon: {
-        backgroundColor: "#E6F4FE",
-        foregroundImage: "./assets/images/android-icon-foreground.png",
-        backgroundImage: "./assets/images/android-icon-background.png",
-        monochromeImage: "./assets/images/android-icon-monochrome.png",
+        backgroundColor: "#080808",
+        foregroundImage: "./assets/sticklers-logo.png",
       },
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
