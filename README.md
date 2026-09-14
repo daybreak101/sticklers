@@ -1,11 +1,11 @@
-#Sticklers Mobile App
+# Sticklers Mobile App
 
 A mobile restaurant ordering app built with React Native, Expo, and Firebase. The app simulates the ordering process with scheduling pickup, browsing menu, customizing 
 items, managing the cart, and creating and editing the user's profile.
 
 > Note: This project is a personal application built for demonstration and learning purposes. It is not affiliated with or intended for commercial use by the restaurant.
 
-##Features:
+## Features:
 - User authentication with Firebase (Register, Sign In, Log Out, etc)
 - Browsing menu options fetched from Firebase
 - Customizing menu items
@@ -13,7 +13,7 @@ items, managing the cart, and creating and editing the user's profile.
 - Local caching to reduce Firebase reads
 - Customize and view profile details
 
-##Tech Stack
+## Tech Stack
 - React Native
 - Expo
 - Expo Router
@@ -22,14 +22,14 @@ items, managing the cart, and creating and editing the user's profile.
 - Cloud Firestore
 - AsyncStorage
 
-##Getting Started
+## Getting Started
 Prerequisites
 - Node.js
 - npm
 - Expo CLI / Expo development tools
 - Android Studio or an Android device for testing
 
-##Installation
+## Installation
 Clone the repository and install the dependencies:
 ```
 git clone https://github.com/daybreak101/sticklers.git
