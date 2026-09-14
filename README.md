@@ -5,6 +5,32 @@ items, managing the cart, and creating and editing the user's profile.
 
 > Note: This project is a personal application built for demonstration and learning purposes. It is not affiliated with or intended for commercial use by the restaurant.
 
+## Screenshots
+Menu
+<table>
+  <tr>
+    <td><img src="screenshots/menu.jpg" width="250"></td>
+    <td><img src="screenshots/customize.jpg" width="250"></td>
+    <td><img src="screenshots/category.jpg" width="250"></td>
+  </tr>
+</table>
+
+Schedule, Cart and Checkout
+<table>
+  <tr>
+    <td><img src="screenshots/schedule.jpg" width="250"></td>
+    <td><img src="screenshots/cart.jpg" width="250"></td>
+    <td><img src="screenshots/checkout.jpg" width="250"></td>
+  </tr>
+</table>
+
+Profile
+<table>
+  <tr>
+    <td><img src="screenshots/profile.jpg" width="250"></td>
+  </tr>
+</table>
+
 ## Features:
 - User authentication with Firebase (Register, Sign In, Log Out, etc)
 - Browsing menu options fetched from Firebase
