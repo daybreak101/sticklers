@@ -9,9 +9,9 @@ items, managing the cart, and creating and editing the user's profile.
 Menu
 <table>
   <tr>
-    <td><img src="screenshots/menu.jpg" width="250"></td>
-    <td><img src="screenshots/customize.jpg" width="250"></td>
+    <td><img src="screenshots/menu.jpg" width="250"></td> 
     <td><img src="screenshots/category.jpg" width="250"></td>
+    <td><img src="screenshots/customize.jpg" width="250"></td>
   </tr>
 </table>
 
